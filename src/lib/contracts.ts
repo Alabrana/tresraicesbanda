@@ -1,7 +1,7 @@
 import { existsSync, realpathSync, statSync } from 'node:fs';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { z } from 'astro/zod';
-import { isCivilDate } from './civil-date';
+import { isCivilDate } from './civil-date.ts';
 
 const PUBLIC_IMAGES_ROOT = resolve(process.cwd(), 'public/images');
 const ALLOWED_IMAGE_EXTENSIONS = new Set([

@@ -3,7 +3,7 @@ import {
   compareCivilDates,
   getCivilDateInTimeZone,
   isCivilDate,
-} from './civil-date';
+} from './civil-date.ts';
 
 export type ShowStatus = 'scheduled' | 'cancelled' | 'rescheduled';
 

@@ -37,10 +37,10 @@ Requiere Node.js 22.23.4 o superior y pnpm 12.21.0. Con NVM, activar la versión
 ```bash
 nvm use
 pnpm install
-pnpm build
+pnpm validate
 ```
 
-La salida se genera en `dist/`. Para trabajar con recarga local:
+`pnpm validate` ejecuta las pruebas de contratos y fechas, el chequeo de Astro y la compilación estática en `dist/`. Para trabajar con recarga local:
 
 ```bash
 pnpm dev

@@ -25,6 +25,7 @@
 | D-019 | pnpm 12 como gestor único de paquetes y Tailwind CSS 4 como núcleo de estilos; CSS manual reservado para tokens, base y efectos específicos | Aprobada |
 | D-020 | La experiencia pública se implementa Mobile First; navegación compacta con menú accesible en móvil y enlaces horizontales desde tableta/escritorio | Aprobada |
 | D-021 | Sistema tipográfico «Rock Industrial»: Oswald 700 para títulos, navegación y botones; IBM Plex Sans 400 para textos | Aprobada |
+| D-022 | Fechas editoriales como días civiles `YYYY-MM-DD`, validadores compartidos y una política única de eventos recalculada en navegador según `America/Santiago` | Aprobada |
 
 ## Por definir antes o durante implementación
 

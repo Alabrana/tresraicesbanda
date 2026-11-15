@@ -50,3 +50,13 @@ Nombre de archivo define slug permanente. Frontmatter obligatorio: `title`, `dat
 - Crear un selector de imágenes local que liste las carpetas; **no** servicio de subida remoto.
 - Todos los campos y sus dependencias se validan antes del guardado general, y después se verifican durante el build.
 - Las rutas, correos y fotos reales se incorporan únicamente desde material confirmado.
+
+## Validaciones técnicas compartidas
+
+- Las fechas editoriales permanecen como cadenas civiles `YYYY-MM-DD`; no se convierten implícitamente en instantes UTC.
+- Fecha y hora se validan semánticamente, incluyendo años bisiestos y rangos `00:00`–`23:59`.
+- IDs y slugs usan minúsculas ASCII, números y guiones simples.
+- Enlaces públicos admiten únicamente HTTP/HTTPS; los videos deben apuntar a un ID válido en YouTube.
+- Los IDs son únicos dentro de cada colección editorial.
+- Una imagen debe ser un archivo existente con extensión permitida y permanecer dentro de `public/images` después de normalizar y resolver la ruta real.
+- Inicio y `/en-vivo` consumen la misma clasificación de eventos. El navegador vuelve a evaluarla con `America/Santiago` cuando cambia el día, sin backend ni recompilación diaria.

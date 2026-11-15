@@ -87,7 +87,7 @@ test('rechaza IDs duplicados en colecciones JSON', () => {
 
 test('acepta imágenes web reales dentro de public/images', () => {
   assert.equal(
-    imagePathSchema.safeParse('/images/logos/tres-raices-oficial.png').success,
+    imagePathSchema.safeParse('/images/logos/logoprincipalHorizontal.webp').success,
     true,
   );
 });

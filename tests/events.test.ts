@@ -4,7 +4,11 @@ import {
   formatCivilDate,
   getCivilDateInTimeZone,
 } from '../src/lib/civil-date.ts';
-import { classifyShows, type ClassifiableShow } from '../src/lib/events.ts';
+import {
+  classifyShows,
+  type ClassifiableShow,
+  watchShowClassification,
+} from '../src/lib/events.ts';
 
 test('formatea una fecha editorial en es-CL sin cambiar el día', () => {
   assert.equal(formatCivilDate('2026-11-15'), '15-11-2026');
@@ -66,4 +70,56 @@ test('una scheduled pasa al historial al cambiar el día civil chileno', () => {
 
   assert.equal(classifyShows(shows, '2026-11-15').upcoming.length, 1);
   assert.equal(classifyShows(shows, '2026-11-16').past.length, 1);
+});
+
+test('el reloj ligero reclasifica cuando cambia el día chileno', () => {
+  const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
+  const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
+  let intervalCallback = () => {};
+  let visibilityCallback = () => {};
+  let instant = new Date('2026-11-16T02:30:00.000Z');
+  const observedDates: string[] = [];
+
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: {
+      clearInterval: () => {},
+      setInterval: (callback: () => void) => {
+        intervalCallback = callback;
+        return 1;
+      },
+    },
+  });
+  Object.defineProperty(globalThis, 'document', {
+    configurable: true,
+    value: {
+      addEventListener: (_event: string, callback: () => void) => {
+        visibilityCallback = callback;
+      },
+      removeEventListener: () => {},
+      visibilityState: 'visible',
+    },
+  });
+
+  try {
+    const stop = watchShowClassification(
+      [{ id: 'tocata', date: '2026-11-15', time: '23:59', status: 'scheduled', visible: true }],
+      ({ today }) => observedDates.push(today),
+      { now: () => instant },
+    );
+
+    assert.deepEqual(observedDates, ['2026-11-15']);
+    intervalCallback();
+    assert.deepEqual(observedDates, ['2026-11-15']);
+
+    instant = new Date('2026-11-16T03:01:00.000Z');
+    visibilityCallback();
+    assert.deepEqual(observedDates, ['2026-11-15', '2026-11-16']);
+    stop();
+  } finally {
+    if (originalWindow) Object.defineProperty(globalThis, 'window', originalWindow);
+    else Reflect.deleteProperty(globalThis, 'window');
+    if (originalDocument) Object.defineProperty(globalThis, 'document', originalDocument);
+    else Reflect.deleteProperty(globalThis, 'document');
+  }
 });
