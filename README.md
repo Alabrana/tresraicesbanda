@@ -2,7 +2,7 @@
 
 Repositorio base de planificación para la web oficial de **Tres Raíces**, banda de rock de Talcahuano, Chile.
 
-> **Estado:** documentación inicial. **Todavía no contiene una aplicación Astro** ni scripts ejecutables. El proyecto comenzará a implementarse con Codex en VS Code, siguiendo la documentación aprobada.
+> **Estado:** Fase 1 implementada. El repositorio contiene una base Astro estática, rutas públicas estructurales y contratos de contenido validados durante el build. El diseño público completo y el editor local aún no están implementados.
 
 ## Principios no negociables
 
@@ -30,9 +30,25 @@ Repositorio base de planificación para la web oficial de **Tres Raíces**, band
 
 `assets/originales/` conserva las imágenes aportadas por la banda como **fuente de referencia**, no como recursos web optimizados. No alterar ni redibujar los logos oficiales ni inventar rostros. Durante la implementación, generar versiones web optimizadas en `public/images/` y referenciarlas en los archivos de contenido; no copiar indiscriminadamente originales pesados.
 
-## Primer paso en VS Code
+## Desarrollo local
 
-Abrir esta carpeta en VS Code. Consultar [`docs/PROMPT_INICIAL_CODEX.md`](docs/PROMPT_INICIAL_CODEX.md) y pegarlo en Codex para iniciar **solo la fase 1**, con cambios pequeños y revisables.
+Requiere Node.js 22.23.4 o superior y pnpm 12.21.0. Con NVM, activar la versión fijada en `.nvmrc`; después instalar dependencias y comprobar la salida estática:
+
+```bash
+nvm use
+pnpm install
+pnpm build
+```
+
+La salida se genera en `dist/`. Para trabajar con recarga local:
+
+```bash
+pnpm dev
+```
+
+El contenido se mantiene en `src/content/` y `src/data/`; las copias web de imágenes viven en `public/images/`. Tailwind CSS 4 compone la base visual mediante utilidades y tokens en `src/styles/global.css`. No existe todavía un editor local y ningún editor forma parte de `dist`.
+
+## Preparar GitHub
 
 ### Preparar Git y GitHub (en Terminal de VS Code)
 
@@ -45,7 +61,7 @@ git remote add origin https://github.com/TU_USUARIO/TU_REPOSITORIO.git
 git push -u origin main
 ```
 
-No ingresar tokens de GitHub en el código ni subir secretos. Si Git solicita identificación, configurar `git config --global user.name` y `git config --global user.email` con tus datos reales. La integración con Cloudflare Pages se hará **después** de tener una primera compilación estática verificada.
+No ingresar tokens de GitHub en el código ni subir secretos. Si Git solicita identificación, configurar `git config --global user.name` y `git config --global user.email` con tus datos reales. La integración con Cloudflare Pages se hará en la Fase 4.
 
 ## Convención de trabajo
 

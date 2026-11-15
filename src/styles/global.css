@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "TR Oswald";
+  src: url("../assets/fonts/oswald-700-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TR IBM Plex Sans";
+  src: url("../assets/fonts/ibm-plex-sans-400-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: var(--font-body);
+  --color-coal-950: #101213;
+  --color-iron-900: #181c1e;
+  --color-iron-700: #31383b;
+  --color-ash-100: #e5e1d8;
+  --color-ash-400: #a9afb0;
+  --color-petrol-500: #386779;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --font-display: "TR Oswald", Impact, sans-serif;
+    --font-body: "TR IBM Plex Sans", Arial, sans-serif;
+    --font-display-weight: 700;
+    --font-display-tracking: 0.015em;
+  }
+
+  html {
+    background: var(--color-coal-950);
+    overflow-x: clip;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-coal-950);
+    color: var(--color-ash-100);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-petrol-500);
+    outline-offset: 4px;
+  }
+}
+
+:where(h1, h2, h3, h4, h5, h6, nav a, button, [data-display-type]) {
+  font-family: var(--font-display);
+  font-weight: var(--font-display-weight);
+}
+
+:where(h1, h2, h3, h4, h5, h6, [data-display-type]) {
+  letter-spacing: var(--font-display-tracking);
+  text-wrap: balance;
+}

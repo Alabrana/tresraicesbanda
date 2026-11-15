@@ -1,0 +1,12 @@
+---
+import PageHeader from '../components/PageHeader.astro';
+import { network } from '../data/content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Network">
+  <PageHeader eyebrow="Bandas amigas" title="Network" description="Vínculos de la escena y bandas amigas." />
+  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
+    {network.bands.length === 0 && <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Las bandas amigas se incorporarán cuando sus datos y logos sean confirmados.</p>}
+  </section>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import PageHeader from '../components/PageHeader.astro';
+import { media } from '../data/content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Media">
+  <PageHeader title="Media" description="Música y videos de Tres Raíces." />
+  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
+    {media.videos.length === 0 && <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Aún no hay videos confirmados para publicar.</p>}
+  </section>
+</BaseLayout>

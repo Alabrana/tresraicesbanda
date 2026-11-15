@@ -1,0 +1,28 @@
+{
+  "intro": "",
+  "history": "",
+  "groupPhoto": "",
+  "members": [
+    {
+      "id": "victor",
+      "name": "Víctor",
+      "instrument": "Bajo y voz",
+      "photo": "/images/band/victor.jpg",
+      "bio": ""
+    },
+    {
+      "id": "alex",
+      "name": "Alex",
+      "instrument": "Guitarra",
+      "photo": "/images/band/alex.jpg",
+      "bio": ""
+    },
+    {
+      "id": "pato",
+      "name": "Pato",
+      "instrument": "Batería",
+      "photo": "/images/band/pato.jpg",
+      "bio": ""
+    }
+  ]
+}

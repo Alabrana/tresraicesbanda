@@ -1,0 +1,38 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import ibmPlexSansUrl from '../assets/fonts/ibm-plex-sans-400-latin.woff2?url';
+import oswaldUrl from '../assets/fonts/oswald-700-latin.woff2?url';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Sitio oficial de Tres Raíces, rock desde Talcahuano.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preload" href={oswaldUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={ibmPlexSansUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="icon" type="image/png" href="/images/logos/tres-raices-abreviado.png" />
+    <title>{title} | Tres Raíces</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

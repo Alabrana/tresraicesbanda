@@ -1,0 +1,126 @@
+---
+const links = [
+  ['La Banda', '/banda/'],
+  ['Media', '/media/'],
+  ['En Vivo', '/en-vivo/'],
+  ['News', '/news/'],
+  ['Galería', '/galeria/'],
+  ['Network', '/network/'],
+];
+
+const isHome = Astro.url.pathname === '/';
+---
+
+<header
+  data-site-header
+  data-scrolled="false"
+  class:list={[
+    'group sticky top-0 z-50 w-full border-b backdrop-blur-md transition-[background-color,border-color,box-shadow] duration-300',
+    isHome ? 'border-transparent bg-coal-950/45' : 'border-iron-700 bg-coal-950/95',
+    'data-[scrolled=true]:border-iron-700 data-[scrolled=true]:bg-coal-950/90 data-[scrolled=true]:shadow-[0_8px_30px_rgba(0,0,0,0.35)]',
+  ]}
+>
+  <div class="mx-auto w-full max-w-[70rem] px-4 sm:px-6 lg:px-8">
+    <div class="flex min-h-16 items-center justify-between gap-4 transition-[min-height] duration-300 group-data-[scrolled=true]:min-h-14 md:min-h-20 md:gap-8 md:group-data-[scrolled=true]:min-h-16">
+      <a class="shrink-0" href="/" aria-label="Tres Raíces — Inicio">
+        <img
+          class="h-auto w-28 transition-[width] duration-300 group-data-[scrolled=true]:w-24 md:w-32 md:group-data-[scrolled=true]:w-28"
+          src="/images/logos/tres-raices-oficial.png"
+          width="280"
+          height="168"
+          alt="Tres Raíces"
+        />
+      </a>
+
+      <button
+        type="button"
+        class="flex size-11 shrink-0 items-center justify-center border border-iron-700 bg-iron-900 text-ash-100 transition-colors hover:border-petrol-500 hover:text-white md:hidden"
+        aria-label="Abrir menú principal"
+        aria-expanded="false"
+        aria-controls="mobile-navigation"
+        data-menu-toggle
+      >
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+          <path data-menu-open-icon d="M4 6h16M4 12h16M4 18h16"></path>
+          <path class="hidden" data-menu-close-icon d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+
+      <nav class="hidden md:block" aria-label="Navegación principal">
+        <ul class="flex items-center gap-3 lg:gap-5">
+          {links.map(([label, href]) => (
+            <li>
+              <a class="block py-3 text-xs text-ash-400 no-underline transition-colors hover:text-ash-100 lg:text-sm" href={href}>{label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <nav
+    id="mobile-navigation"
+    class="absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-y border-iron-700 bg-coal-950/98 shadow-2xl md:hidden"
+    aria-label="Navegación móvil"
+    hidden
+    data-mobile-navigation
+  >
+    <ul class="mx-auto w-full max-w-[70rem] px-4 py-3 sm:px-6">
+      {links.map(([label, href]) => (
+        <li class="border-b border-iron-700/70 last:border-b-0">
+          <a class="block min-h-12 py-3 text-base font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:text-petrol-500" href={href} data-mobile-link>{label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+
+  if (header instanceof HTMLElement) {
+    const toggle = header.querySelector('[data-menu-toggle]');
+    const menu = header.querySelector('[data-mobile-navigation]');
+    const openIcon = header.querySelector('[data-menu-open-icon]');
+    const closeIcon = header.querySelector('[data-menu-close-icon]');
+    const mobileLinks = header.querySelectorAll('[data-mobile-link]');
+
+    const setMenuOpen = (isOpen: boolean) => {
+      if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) return;
+
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú principal' : 'Abrir menú principal');
+      menu.hidden = !isOpen;
+
+      if (openIcon instanceof Element) openIcon.classList.toggle('hidden', isOpen);
+      if (closeIcon instanceof Element) closeIcon.classList.toggle('hidden', !isOpen);
+    };
+
+    if (toggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
+      toggle.addEventListener('click', () => {
+        setMenuOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+
+      mobileLinks.forEach((link) => link.addEventListener('click', () => setMenuOpen(false)));
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+          setMenuOpen(false);
+          toggle.focus();
+        }
+      });
+
+      const desktopQuery = window.matchMedia('(min-width: 768px)');
+      desktopQuery.addEventListener('change', (event) => {
+        if (event.matches) setMenuOpen(false);
+      });
+    }
+
+    const updateHeader = () => {
+      header.dataset.scrolled = String(window.scrollY > 16);
+    };
+
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+  }
+</script>

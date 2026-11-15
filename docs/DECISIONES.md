@@ -21,6 +21,10 @@
 | D-015 | Integrantes fijos Víctor, Alex y Pato, pero sus datos son editables | Aprobada |
 | D-016 | Selector visual de imágenes copiadas previamente a carpetas locales | Aprobada |
 | D-017 | El editor local NO es una ruta disponible en el sitio público | Aprobada |
+| D-018 | Node.js 22.23.4 mínimo y Astro 7.4.12 como base técnica segura de la implementación | Aprobada |
+| D-019 | pnpm 12 como gestor único de paquetes y Tailwind CSS 4 como núcleo de estilos; CSS manual reservado para tokens, base y efectos específicos | Aprobada |
+| D-020 | La experiencia pública se implementa Mobile First; navegación compacta con menú accesible en móvil y enlaces horizontales desde tableta/escritorio | Aprobada |
+| D-021 | Sistema tipográfico «Rock Industrial»: Oswald 700 para títulos, navegación y botones; IBM Plex Sans 400 para textos | Aprobada |
 
 ## Por definir antes o durante implementación
 

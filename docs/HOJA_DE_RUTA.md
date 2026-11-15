@@ -10,13 +10,13 @@
 
 ## Fase 1 — Astro mínimo y contratos
 
-- [ ] Crear proyecto Astro en la raíz **sin sobrescribir documentación**.
-- [ ] Configurar `output: 'static'`.
-- [ ] Crear layouts, rutas públicas vacías/estructurales, estilos base.
-- [ ] Definir colecciones y esquemas Markdown/JSON según contratos.
-- [ ] Crear muestras técnicas claramente identificadas como placeholders o usar solamente contenido real confirmado.
-- [ ] Incorporar assets oficiales optimizados según manual.
-- [ ] Validar `npm run build` y confirmar que `dist` NO contiene editor.
+- [x] Crear proyecto Astro en la raíz **sin sobrescribir documentación**.
+- [x] Configurar `output: 'static'`.
+- [x] Crear layouts, rutas públicas vacías/estructurales, estilos base.
+- [x] Definir colecciones y esquemas Markdown/JSON según contratos.
+- [x] Crear muestras técnicas claramente identificadas como placeholders o usar solamente contenido real confirmado.
+- [x] Incorporar assets oficiales optimizados según manual.
+- [x] Validar `npm run build` y confirmar que `dist` NO contiene editor.
 
 **Aceptación:** `npm run build` exitoso y estructura limpia, sin backend, BD ni contenido inventado publicado.
 
