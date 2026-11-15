@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import PageHeader from '../components/PageHeader.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
+import ShowCard from '../components/ShowCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { classifyShows } from '../lib/events';
 
@@ -12,7 +13,97 @@ const showClassification = classifyShows(shows);
 <BaseLayout title="En Vivo">
   {shows.length > 0 && <ShowClassificationState scope="shows" shows={shows} />}
   <PageHeader title="En Vivo" description="Próximas fechas e historial de actuaciones." />
-  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    {showClassification.visible.length === 0 && <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">No hay actuaciones confirmadas para publicar por ahora.</p>}
+  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20" data-live-page>
+    <div class="max-w-3xl" data-live-empty hidden={showClassification.visible.length > 0}>
+      <p class="mb-0 border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">No hay actuaciones confirmadas para publicar por ahora.</p>
+    </div>
+
+    <div class="space-y-12 sm:space-y-16" data-live-content hidden={showClassification.visible.length === 0}>
+      <section aria-labelledby="upcoming-shows-title" data-show-section="upcoming" hidden={showClassification.upcoming.length === 0}>
+        <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+          <div>
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Agenda confirmada</p>
+            <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl" id="upcoming-shows-title">Próximas fechas</h2>
+          </div>
+        </div>
+        <div class="space-y-4 sm:space-y-5" data-show-list="upcoming">
+          {showClassification.upcoming.map((show) => <ShowCard show={show} />)}
+        </div>
+      </section>
+
+      <section aria-labelledby="past-shows-title" data-show-section="past" hidden={showClassification.past.length === 0}>
+        <div class="mb-4 sm:mb-5">
+          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Archivo de ruta</p>
+          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl" id="past-shows-title">Fechas pasadas</h2>
+        </div>
+        <div class="space-y-4 sm:space-y-5" data-show-list="past">
+          {showClassification.past.map((show) => <ShowCard show={show} />)}
+        </div>
+      </section>
+
+      <section aria-labelledby="special-shows-title" data-show-section="special" hidden={showClassification.cancelled.length + showClassification.rescheduled.length === 0}>
+        <div class="mb-4 sm:mb-5">
+          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Información importante</p>
+          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl" id="special-shows-title">Cambios de agenda</h2>
+        </div>
+        <div class="space-y-4 sm:space-y-5" data-show-list="special">
+          {showClassification.cancelled.map((show) => <ShowCard show={show} />)}
+          {showClassification.rescheduled.map((show) => <ShowCard show={show} />)}
+        </div>
+      </section>
+    </div>
+
+    {shows.map((show) => (
+      <template data-show-template={show.id}>
+        <ShowCard show={show} showId={show.id} />
+      </template>
+    ))}
   </section>
 </BaseLayout>
+
+<script>
+  import { classifyShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
+
+  const livePage = document.querySelector<HTMLElement>('[data-live-page]');
+  const source = document.querySelector<HTMLScriptElement>('[data-show-classification-source][data-scope="shows"]');
+
+  if (livePage && source) {
+    const shows = JSON.parse(source.textContent ?? '[]') as ClassifiableShow[];
+    const emptyState = livePage.querySelector<HTMLElement>('[data-live-empty]');
+    const content = livePage.querySelector<HTMLElement>('[data-live-content]');
+    const sections = {
+      upcoming: livePage.querySelector<HTMLElement>('[data-show-section="upcoming"]'),
+      past: livePage.querySelector<HTMLElement>('[data-show-section="past"]'),
+      special: livePage.querySelector<HTMLElement>('[data-show-section="special"]'),
+    };
+    const lists = {
+      upcoming: livePage.querySelector<HTMLElement>('[data-show-list="upcoming"]'),
+      past: livePage.querySelector<HTMLElement>('[data-show-list="past"]'),
+      special: livePage.querySelector<HTMLElement>('[data-show-list="special"]'),
+    };
+
+    const setList = (name: keyof typeof lists, items: ClassifiableShow[]) => {
+      const list = lists[name];
+      const section = sections[name === 'special' ? 'special' : name];
+      if (!list || !section) return;
+
+      list.replaceChildren(...items.flatMap((show) => {
+        const template = livePage.querySelector<HTMLTemplateElement>(`[data-show-template="${show.id}"]`);
+        return template ? [template.content.cloneNode(true)] : [];
+      }));
+      section.hidden = items.length === 0;
+    };
+
+    const render = (classification: ShowClassification<ClassifiableShow>) => {
+      setList('upcoming', classification.upcoming);
+      setList('past', classification.past);
+      setList('special', [...classification.cancelled, ...classification.rescheduled]);
+      const hasShows = classification.visible.length > 0;
+      if (emptyState) emptyState.hidden = hasShows;
+      if (content) content.hidden = !hasShows;
+    };
+
+    render(classifyShows(shows));
+    document.addEventListener('tres-raices:shows-classified', ((event: CustomEvent<ShowClassification<ClassifiableShow>>) => render(event.detail)) as EventListener);
+  }
+</script>

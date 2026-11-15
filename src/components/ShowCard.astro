@@ -1,0 +1,36 @@
+---
+import type { Show } from '../lib/contracts';
+import { formatCivilDate } from '../lib/civil-date';
+
+interface Props {
+  show: Show;
+  showId?: string;
+}
+
+const { show, showId } = Astro.props;
+const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 'rescheduled' ? 'Reprogramada' : null;
+---
+
+<article class="relative min-w-0 overflow-hidden border border-iron-700 bg-iron-900" data-show-card={showId}>
+  {statusLabel && (
+    <p class="absolute top-5 -right-10 z-10 m-0 w-40 rotate-45 border-y border-ash-100/45 bg-coal-950/95 py-1 text-center text-xs font-bold tracking-[0.1em] text-ash-100 uppercase">
+      {statusLabel}
+    </p>
+  )}
+  <div class="grid min-w-0 sm:grid-cols-[minmax(10rem,0.7fr)_1fr]">
+    <img class="aspect-4/3 h-full w-full object-cover sm:aspect-auto" src={show.poster} width="1200" height="900" alt={`Afiche de ${show.title}`} loading="lazy" />
+    <div class="min-w-0 p-4 sm:p-5">
+      <p data-display-type class="mb-2 text-sm tracking-[0.08em] text-petrol-500 uppercase">{formatCivilDate(show.date)} · {show.time}</p>
+      <h3 class="mb-2 text-2xl leading-none font-bold uppercase sm:text-3xl">{show.title}</h3>
+      <p class="mb-1 text-sm text-ash-100 sm:text-base">{show.venue} · {show.city}</p>
+      {show.address && <p class="mb-3 text-sm text-ash-400">{show.address}</p>}
+      {show.description && <p class="mb-3 text-sm text-ash-400">{show.description}</p>}
+      {show.guestBands && show.guestBands.length > 0 && <p class="mb-3 text-sm text-ash-400">Junto a {show.guestBands.join(', ')}.</p>}
+      {show.ticketUrl && show.status === 'scheduled' && (
+        <a class="inline-flex min-h-11 items-center border border-petrol-500 px-4 text-sm font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:bg-petrol-500 hover:text-coal-950" href={show.ticketUrl} target="_blank" rel="noreferrer">
+          Entradas <span class="ml-2" aria-hidden="true">↗</span>
+        </a>
+      )}
+    </div>
+  </div>
+</article>

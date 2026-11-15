@@ -1,11 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import NewsCard from '../../components/NewsCard.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const articles = (await getCollection('news')).sort((a, b) =>
   b.data.date.localeCompare(a.data.date),
 );
+const [featuredArticle, ...remainingArticles] = articles;
 ---
 
 <BaseLayout title="News">
@@ -14,13 +16,23 @@ const articles = (await getCollection('news')).sort((a, b) =>
     {articles.length === 0 ? (
       <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Aún no hay noticias confirmadas para publicar.</p>
     ) : (
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-        {articles.map((article) => (
-          <article class="min-w-0 border border-iron-700 bg-iron-900 p-4 sm:p-5">
-            <h2 class="mb-2 text-xl font-bold sm:text-2xl"><a href={`/news/${article.id}/`}>{article.data.title}</a></h2>
-            <p class="mb-0 text-sm text-ash-400 sm:text-base">{article.data.summary}</p>
-          </article>
-        ))}
+      <div class="space-y-10 sm:space-y-12">
+        {featuredArticle && (
+          <section aria-labelledby="latest-news-title">
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Lo último</p>
+            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:mb-5 sm:text-4xl" id="latest-news-title">Última noticia</h2>
+            <NewsCard article={featuredArticle} featured />
+          </section>
+        )}
+        {remainingArticles.length > 0 && (
+          <section aria-labelledby="previous-news-title">
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Archivo</p>
+            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:mb-5 sm:text-4xl" id="previous-news-title">Noticias anteriores</h2>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+              {remainingArticles.map((article) => <NewsCard article={article} />)}
+            </div>
+          </section>
+        )}
       </div>
     )}
   </section>

@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatCivilDate } from '../lib/civil-date';
+
+interface Props {
+  article: CollectionEntry<'news'>;
+  featured?: boolean;
+}
+
+const { article, featured = false } = Astro.props;
+const href = `/news/${article.id}/`;
+---
+
+<article class:list={[
+  'group min-w-0 overflow-hidden border border-iron-700 bg-iron-900',
+  featured && 'sm:grid sm:grid-cols-[minmax(14rem,0.9fr)_1fr]',
+]}>
+  <a class="block overflow-hidden" href={href} aria-label={`Leer: ${article.data.title}`}>
+    <img
+      class:list={[
+        'aspect-4/3 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]',
+        featured && 'h-full min-h-56 sm:aspect-auto',
+      ]}
+      src={article.data.cover}
+      width="1200"
+      height="900"
+      alt={`Portada: ${article.data.title}`}
+      loading={featured ? 'eager' : 'lazy'}
+    />
+  </a>
+  <div class:list={['min-w-0 p-4 sm:p-5', featured && 'sm:flex sm:flex-col sm:justify-center sm:p-7']}>
+    <time data-display-type class="mb-2 block text-xs tracking-[0.1em] text-petrol-500 uppercase" datetime={article.data.date}>{formatCivilDate(article.data.date)}</time>
+    <h2 class:list={['mb-3 leading-none font-bold uppercase', featured ? 'text-3xl sm:text-4xl' : 'text-2xl']}>
+      <a class="text-ash-100 no-underline transition-colors hover:text-petrol-500" href={href}>{article.data.title}</a>
+    </h2>
+    <p class="mb-4 text-sm text-ash-400 sm:text-base">{article.data.summary}</p>
+    <a class="inline-flex min-h-11 items-center text-sm font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:text-petrol-500" href={href}>
+      Leer noticia <span class="ml-2" aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
