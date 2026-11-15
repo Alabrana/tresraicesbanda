@@ -1,0 +1,1 @@
+Fixture con extensión no permitida para verificar el contrato de imágenes.

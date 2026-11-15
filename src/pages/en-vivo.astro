@@ -1,14 +1,18 @@
 ---
 import { getCollection } from 'astro:content';
 import PageHeader from '../components/PageHeader.astro';
+import ShowClassificationState from '../components/ShowClassificationState.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { classifyShows } from '../lib/events';
 
-const shows = (await getCollection('shows')).filter((show) => show.data.visible);
+const shows = (await getCollection('shows')).map((show) => show.data);
+const showClassification = classifyShows(shows);
 ---
 
 <BaseLayout title="En Vivo">
+  {shows.length > 0 && <ShowClassificationState scope="shows" shows={shows} />}
   <PageHeader title="En Vivo" description="Próximas fechas e historial de actuaciones." />
   <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    {shows.length === 0 && <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">No hay actuaciones confirmadas para publicar por ahora.</p>}
+    {showClassification.visible.length === 0 && <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">No hay actuaciones confirmadas para publicar por ahora.</p>}
   </section>
 </BaseLayout>

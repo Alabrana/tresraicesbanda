@@ -1,13 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ShowClassificationState from '../components/ShowClassificationState.astro';
 import { band, collaborators, gallery, media, network, site } from '../data/content';
 import { getCollection } from 'astro:content';
+import { classifyShows } from '../lib/events';
 
-await Promise.all([getCollection('news'), getCollection('shows')]);
-void [band, collaborators, gallery, media, network, site];
+const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
+const shows = showEntries.map((show) => show.data);
+const showClassification = classifyShows(shows);
+void [articles, band, collaborators, gallery, media, network, showClassification, site];
 ---
 
 <BaseLayout title="Inicio">
+  {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
   <section class="border-b border-iron-700 py-8 sm:py-10 md:py-14 lg:py-16">
     <div class="mx-auto grid w-full max-w-[70rem] items-center gap-6 px-4 sm:px-6 md:grid-cols-[minmax(220px,0.75fr)_1fr] md:gap-10 lg:gap-16 lg:px-8">
       <img class="mx-auto h-auto w-full max-w-56 sm:max-w-64 md:max-w-none" src="/images/logos/tres-raices-oficial.png" width="900" height="540" alt="Tres Raíces" />

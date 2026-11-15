@@ -1,0 +1,38 @@
+---
+import type { ClassifiableShow } from '../lib/events';
+
+interface Props {
+  scope: 'home' | 'shows';
+  shows: ClassifiableShow[];
+}
+
+const { scope, shows } = Astro.props;
+const serializedShows = JSON.stringify(shows).replaceAll('<', '\\u003c');
+---
+
+<script
+  type="application/json"
+  data-show-classification-source
+  data-scope={scope}
+  set:html={serializedShows}
+></script>
+
+<script>
+  import type { ClassifiableShow } from '../lib/events';
+  import { watchShowClassification } from '../lib/events';
+
+  document.querySelectorAll<HTMLScriptElement>('[data-show-classification-source]:not([data-ready])').forEach((source) => {
+    const shows = JSON.parse(source.textContent ?? '[]') as ClassifiableShow[];
+    source.dataset.ready = 'true';
+
+    watchShowClassification(shows, (classification) => {
+      source.dataset.chileDate = classification.today;
+      source.dispatchEvent(
+        new CustomEvent('tres-raices:shows-classified', {
+          bubbles: true,
+          detail: classification,
+        }),
+      );
+    });
+  });
+</script>
