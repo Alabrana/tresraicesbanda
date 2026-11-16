@@ -16,9 +16,9 @@
 - [x] Definir colecciones y esquemas Markdown/JSON según contratos.
 - [x] Crear muestras técnicas claramente identificadas como placeholders o usar solamente contenido real confirmado.
 - [x] Incorporar assets oficiales optimizados según manual.
-- [x] Validar `npm run build` y confirmar que `dist` NO contiene editor.
+- [x] Validar `pnpm run build` y confirmar que `dist` NO contiene editor.
 
-**Aceptación:** `npm run build` exitoso y estructura limpia, sin backend, BD ni contenido inventado publicado.
+**Aceptación:** `pnpm run build` exitoso y estructura limpia, sin backend, BD ni contenido inventado publicado.
 
 ## Fase 2 — Web pública
 
@@ -45,7 +45,7 @@
 ## Fase 4 — Publicación
 
 - [ ] Confirmar contenido y assets definitivos.
-- [ ] Conectar GitHub con Cloudflare Pages (`npm run build` → `dist`).
+- [ ] Conectar GitHub con Cloudflare Pages (`pnpm run build` → `dist`).
 - [ ] Conectar dominio propio y HTTPS.
 - [ ] Probar nueva publicación y eventual rollback por Git.
 - [ ] Documentar operación y mantenimiento en README.

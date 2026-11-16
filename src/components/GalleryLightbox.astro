@@ -1,0 +1,93 @@
+---
+interface GalleryPhoto {
+  id: string;
+  image: string;
+  description: string;
+}
+
+interface Props {
+  photos: GalleryPhoto[];
+}
+
+const { photos } = Astro.props;
+const serializedPhotos = JSON.stringify(photos).replaceAll('<', '\\u003c');
+---
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-gallery>
+  {photos.map((photo, index) => (
+    <button class="group relative block min-w-0 overflow-hidden border border-iron-700 bg-iron-900 text-left" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
+      <img class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" src={photo.image} alt={photo.description} loading="lazy" />
+      <span class="absolute inset-x-0 bottom-0 bg-coal-950/80 p-3 text-sm text-ash-100 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">{photo.description}</span>
+    </button>
+  ))}
+</div>
+
+<script type="application/json" data-gallery-source set:html={serializedPhotos}></script>
+<dialog class="m-auto w-[min(100%-2rem,78rem)] border border-iron-700 bg-coal-950 p-0 text-ash-100 shadow-2xl backdrop:bg-coal-950/85" aria-labelledby="gallery-lightbox-title" data-gallery-dialog>
+  <div class="flex items-center justify-between gap-4 border-b border-iron-700 p-3 sm:p-4">
+    <p class="mb-0 min-w-0 truncate text-sm text-ash-400" id="gallery-lightbox-title" data-gallery-description></p>
+    <button class="flex size-11 shrink-0 items-center justify-center border border-iron-700 text-xl transition-colors hover:border-petrol-500 hover:text-petrol-500" type="button" aria-label="Cerrar fotografía" data-gallery-close>×</button>
+  </div>
+  <div class="relative flex min-h-64 items-center justify-center bg-black sm:min-h-96">
+    <img class="max-h-[75dvh] w-auto max-w-full object-contain" data-gallery-image alt="" />
+    <button class="absolute left-3 flex size-11 items-center justify-center border border-iron-700 bg-coal-950/90 text-ash-100 transition-colors hover:border-petrol-500" type="button" aria-label="Fotografía anterior" data-gallery-previous>←</button>
+    <button class="absolute right-3 flex size-11 items-center justify-center border border-iron-700 bg-coal-950/90 text-ash-100 transition-colors hover:border-petrol-500" type="button" aria-label="Fotografía siguiente" data-gallery-next>→</button>
+  </div>
+</dialog>
+
+<script>
+  interface GalleryPhoto {
+    id: string;
+    image: string;
+    description: string;
+  }
+
+  const gallery = document.querySelector<HTMLElement>('[data-gallery]');
+  const source = document.querySelector<HTMLScriptElement>('[data-gallery-source]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-gallery-dialog]');
+
+  if (gallery && source && dialog) {
+    const photos = JSON.parse(source.textContent ?? '[]') as GalleryPhoto[];
+    const image = dialog.querySelector<HTMLImageElement>('[data-gallery-image]');
+    const description = dialog.querySelector<HTMLElement>('[data-gallery-description]');
+    const closeButton = dialog.querySelector<HTMLButtonElement>('[data-gallery-close]');
+    const previousButton = dialog.querySelector<HTMLButtonElement>('[data-gallery-previous]');
+    const nextButton = dialog.querySelector<HTMLButtonElement>('[data-gallery-next]');
+    let currentIndex = 0;
+
+    const render = () => {
+      const photo = photos[currentIndex];
+      if (!photo || !image) return;
+      image.src = photo.image;
+      image.alt = photo.description;
+      if (description) description.textContent = photo.description;
+      if (previousButton) previousButton.disabled = photos.length < 2;
+      if (nextButton) nextButton.disabled = photos.length < 2;
+    };
+    const close = () => dialog.close();
+    const move = (offset: number) => {
+      currentIndex = (currentIndex + offset + photos.length) % photos.length;
+      render();
+    };
+
+    gallery.addEventListener('click', (event) => {
+      const trigger = (event.target as Element).closest<HTMLButtonElement>('[data-gallery-open]');
+      if (!trigger) return;
+      const index = Number(trigger.dataset.galleryOpen);
+      if (!Number.isInteger(index) || !photos[index]) return;
+      currentIndex = index;
+      render();
+      dialog.showModal();
+    });
+    closeButton?.addEventListener('click', close);
+    previousButton?.addEventListener('click', () => move(-1));
+    nextButton?.addEventListener('click', () => move(1));
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close();
+    });
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') move(-1);
+      if (event.key === 'ArrowRight') move(1);
+    });
+  }
+</script>

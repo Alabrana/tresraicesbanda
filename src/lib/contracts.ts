@@ -75,10 +75,10 @@ function hasHttpProtocol(value: string): boolean {
   }
 }
 
-export function isYouTubeVideoUrl(value: string): boolean {
+export function getYouTubeVideoId(value: string): string | null {
   try {
     const url = new URL(value);
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
 
     const hostname = url.hostname.toLowerCase().replace(/^www\./, '');
     let videoId: string | null = null;
@@ -94,10 +94,14 @@ export function isYouTubeVideoUrl(value: string): boolean {
       }
     }
 
-    return videoId !== null && YOUTUBE_VIDEO_ID_PATTERN.test(videoId);
+    return videoId !== null && YOUTUBE_VIDEO_ID_PATTERN.test(videoId) ? videoId : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+export function isYouTubeVideoUrl(value: string): boolean {
+  return getYouTubeVideoId(value) !== null;
 }
 
 function uniqueIdArray<T extends z.ZodType<{ id: string }>>(itemSchema: T) {
@@ -255,3 +259,4 @@ export const siteSchema = z.object({}).strict();
 
 export type Show = z.infer<typeof showSchema>;
 export type News = z.infer<typeof newsSchema>;
+export type MediaVideo = z.infer<typeof mediaSchema>['videos'][number];

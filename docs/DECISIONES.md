@@ -26,6 +26,7 @@
 | D-020 | La experiencia pública se implementa Mobile First; navegación compacta con menú accesible en móvil y enlaces horizontales desde tableta/escritorio | Aprobada |
 | D-021 | Sistema tipográfico «Rock Industrial»: Oswald 700 para títulos, navegación y botones; IBM Plex Sans 400 para textos | Aprobada |
 | D-022 | Fechas editoriales como días civiles `YYYY-MM-DD`, validadores compartidos y una política única de eventos recalculada en navegador según `America/Santiago` | Aprobada |
+| D-023 | `tresraicesbanda.cl` es el dominio oficial; se usa como `site` de Astro, canonical, sitemap y Open Graph. `www.tresraicesbanda.cl` redirige permanentemente al dominio principal desde Cloudflare. | Aprobada |
 
 ## Por definir antes o durante implementación
 
@@ -33,7 +34,7 @@
 - Esquemas de validación y datos reales aún no facilitados.
 - Gestión visible de eventos cancelados/reprogramados en el listado general.
 - Tratamiento SEO y fechas cuando el visitante deshabilita JS.
-- Dominio real y su DNS en Cloudflare Pages.
+- Conexión manual del dominio y DNS en Cloudflare Pages; dominio oficial ya definido en D-023.
 
 ## Control de cambios
 

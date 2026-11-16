@@ -9,6 +9,8 @@ const links = [
 ];
 
 const isHome = Astro.url.pathname === '/';
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string) => href === '/' ? currentPath === href : currentPath.startsWith(href);
 ---
 
 <header
@@ -50,7 +52,7 @@ const isHome = Astro.url.pathname === '/';
         <ul class="flex items-center gap-3 lg:gap-5">
           {links.map(([label, href]) => (
             <li>
-              <a class="block py-3 text-xs text-ash-400 no-underline transition-colors hover:text-ash-100 lg:text-sm" href={href}>{label}</a>
+              <a class:list={['block py-3 text-xs no-underline transition-colors hover:text-ash-100 lg:text-sm', isCurrent(href) ? 'text-ash-100' : 'text-ash-400']} href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
             </li>
           ))}
         </ul>
@@ -68,7 +70,7 @@ const isHome = Astro.url.pathname === '/';
     <ul class="mx-auto w-full max-w-[70rem] px-4 py-3 sm:px-6">
       {links.map(([label, href]) => (
         <li class="border-b border-iron-700/70 last:border-b-0">
-          <a class="block min-h-12 py-3 text-base font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:text-petrol-500" href={href} data-mobile-link>{label}</a>
+          <a class:list={['block min-h-12 py-3 text-base font-bold tracking-[0.04em] no-underline transition-colors hover:text-petrol-500', isCurrent(href) ? 'text-petrol-500' : 'text-ash-100']} href={href} aria-current={isCurrent(href) ? 'page' : undefined} data-mobile-link>{label}</a>
         </li>
       ))}
     </ul>

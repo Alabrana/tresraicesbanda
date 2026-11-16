@@ -1,14 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsCard from '../components/NewsCard.astro';
+import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
-import { band, collaborators, gallery, media, network, site } from '../data/content';
+import { band, collaborators, gallery, media } from '../data/content';
 import { getCollection } from 'astro:content';
 import { classifyShows } from '../lib/events';
 
 const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
 const shows = showEntries.map((show) => show.data);
 const showClassification = classifyShows(shows);
-void [articles, band, collaborators, gallery, media, network, showClassification, site];
+const latestArticle = [...articles].sort((left, right) => right.data.date.localeCompare(left.data.date))[0];
+const latestVideo = media.videos
+  .filter((video) => video.visible)
+  .sort((left, right) => right.date.localeCompare(left.date))[0];
+const galleryPreview = gallery.photos.filter((photo) => photo.visible).slice(0, 3);
+const visibleCollaborators = collaborators.collaborators.filter((collaborator) => collaborator.visible);
+const hasBandPreview = Boolean(band.intro && band.groupPhoto);
 ---
 
 <BaseLayout title="Inicio">
@@ -19,14 +27,121 @@ void [articles, band, collaborators, gallery, media, network, showClassification
       <div class="text-center md:text-left">
         <p data-display-type class="mb-2 text-[0.8rem] font-bold tracking-[0.12em] text-ash-400 uppercase">Talcahuano · Chile</p>
         <h1 class="mx-auto mb-3 max-w-[12ch] text-[clamp(2.15rem,10.5vw,3.25rem)] leading-[0.94] font-bold uppercase md:mx-0 md:mb-4 md:text-[clamp(3.25rem,6vw,6rem)]">Rock desde Talcahuano</h1>
-        <p class="mx-auto mb-0 max-w-[38rem] text-sm text-ash-400 sm:text-base md:mx-0">La estructura inicial del sitio está lista. El contenido oficial se incorporará cuando sea confirmado.</p>
+        <p class="mx-auto mb-5 max-w-[38rem] text-sm text-ash-400 sm:text-base md:mx-0">Rock desde el puerto, el barrio y las raíces de Talcahuano.</p>
+        <div class="flex flex-col justify-center gap-3 sm:flex-row md:justify-start">
+          <a class="inline-flex min-h-11 items-center justify-center border border-petrol-500 bg-petrol-500 px-5 text-sm font-bold tracking-[0.04em] text-coal-950 no-underline transition-colors hover:bg-transparent hover:text-ash-100" href="/en-vivo/">Ver fechas</a>
+          <a class="inline-flex min-h-11 items-center justify-center border border-iron-700 px-5 text-sm font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/media/">Escuchar y mirar</a>
+        </div>
       </div>
     </div>
   </section>
-  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20" aria-labelledby="fase-title">
-    <h2 class="mb-3 text-xl font-bold sm:text-2xl" id="fase-title">Web oficial en construcción</h2>
-    <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">
-      Esta entrega establece las rutas, componentes y contratos de contenido de la Fase 1. Las secciones finales del Inicio se desarrollarán en la Fase 2.
-    </p>
-  </section>
+
+  {showClassification.nextShow && (
+    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20" data-home-live>
+      <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+        <div>
+          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">En vivo</p>
+          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Próxima fecha</h2>
+        </div>
+        <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
+      </div>
+      <div data-home-live-card><ShowCard show={showClassification.nextShow} /></div>
+      {shows.map((show) => (
+        <template data-home-show-template={show.id}><ShowCard show={show} /></template>
+      ))}
+    </section>
+  )}
+
+  {latestVideo && (
+    <section class="border-y border-iron-700 bg-iron-900/60">
+      <div class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Media</p>
+        <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl">Último video</h2>
+        <article class="border border-iron-700 bg-coal-950 p-5 sm:p-7">
+          <h3 class="mb-2 text-2xl leading-none font-bold uppercase sm:text-3xl">{latestVideo.title}</h3>
+          {latestVideo.description && <p class="mb-4 max-w-2xl text-sm text-ash-400 sm:text-base">{latestVideo.description}</p>}
+          <a class="inline-flex min-h-11 items-center border border-petrol-500 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:bg-petrol-500 hover:text-coal-950" href="/media/">Ver en Media <span class="ml-2" aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </section>
+  )}
+
+  {hasBandPreview && (
+    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div class="grid gap-6 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10">
+        <img class="aspect-4/3 w-full object-cover" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />
+        <div>
+          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">La Banda</p>
+          <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl">Tres Raíces</h2>
+          <p class="mb-5 text-sm text-ash-400 sm:text-base">{band.intro}</p>
+          <a class="inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/banda/">Conocer a la banda <span class="ml-2" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {latestArticle && (
+    <section class="border-y border-iron-700 bg-iron-900/60">
+      <div class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+          <div>
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">News</p>
+            <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Última noticia</h2>
+          </div>
+          <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/news/">Ver todas <span aria-hidden="true">→</span></a>
+        </div>
+        <NewsCard article={latestArticle} featured />
+      </div>
+    </section>
+  )}
+
+  {galleryPreview.length > 0 && (
+    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+        <div>
+          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Galería</p>
+          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Momentos</h2>
+        </div>
+        <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/galeria/">Ver galería <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3 sm:gap-5">
+        {galleryPreview.map((photo) => <img class="aspect-square w-full object-cover" src={photo.image} alt={photo.description} loading="lazy" />)}
+      </div>
+    </section>
+  )}
+
+  {visibleCollaborators.length > 0 && (
+    <section class="border-t border-iron-700 bg-iron-900/60">
+      <div class="mx-auto w-full max-w-[70rem] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <p data-display-type class="mb-4 text-center text-xs tracking-[0.12em] text-ash-400 uppercase">Colaboran</p>
+        <div class="flex flex-wrap items-center justify-center gap-5 sm:gap-8">
+          {visibleCollaborators.map((collaborator) => collaborator.url ? (
+            <a href={collaborator.url} target="_blank" rel="noreferrer" aria-label={`${collaborator.name} (sitio externo)`}><img class="max-h-16 w-auto object-contain" src={collaborator.logo} alt={collaborator.name} loading="lazy" /></a>
+          ) : <img class="max-h-16 w-auto object-contain" src={collaborator.logo} alt={collaborator.name} loading="lazy" />)}
+        </div>
+      </div>
+    </section>
+  )}
 </BaseLayout>
+
+<script>
+  import { classifyShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
+
+  const homeLive = document.querySelector<HTMLElement>('[data-home-live]');
+  const source = document.querySelector<HTMLScriptElement>('[data-show-classification-source][data-scope="home"]');
+
+  if (homeLive && source) {
+    const shows = JSON.parse(source.textContent ?? '[]') as ClassifiableShow[];
+    const card = homeLive.querySelector<HTMLElement>('[data-home-live-card]');
+    const render = (classification: ShowClassification<ClassifiableShow>) => {
+      if (!card) return;
+      const nextShow = classification.nextShow;
+      const template = nextShow ? homeLive.querySelector<HTMLTemplateElement>(`[data-home-show-template="${nextShow.id}"]`) : null;
+      if (template) card.replaceChildren(template.content.cloneNode(true));
+      homeLive.hidden = !nextShow;
+    };
+
+    render(classifyShows(shows));
+    document.addEventListener('tres-raices:shows-classified', ((event: CustomEvent<ShowClassification<ClassifiableShow>>) => render(event.detail)) as EventListener);
+  }
+</script>

@@ -1,0 +1,81 @@
+---
+import { getYouTubeVideoId, type MediaVideo } from '../lib/contracts';
+import { formatCivilDate } from '../lib/civil-date';
+
+interface Props {
+  videos: MediaVideo[];
+}
+
+const { videos } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-video-gallery>
+  {videos.map((video) => {
+    const youtubeId = getYouTubeVideoId(video.youtubeUrl);
+    if (!youtubeId) return null;
+
+    return (
+      <article class="min-w-0 overflow-hidden border border-iron-700 bg-iron-900">
+        <button class="group relative block w-full overflow-hidden text-left" type="button" data-video-open={youtubeId} data-video-title={video.title} aria-haspopup="dialog">
+          <img class="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} width="480" height="360" alt={`Reproducir ${video.title}`} loading="lazy" />
+          <span class="absolute inset-0 flex items-center justify-center bg-coal-950/35 transition-colors group-hover:bg-coal-950/15" aria-hidden="true">
+            <span class="flex size-14 items-center justify-center border border-ash-100 bg-coal-950/90 text-xl text-ash-100">▶</span>
+          </span>
+        </button>
+        <div class="p-4 sm:p-5">
+          <time data-display-type class="mb-2 block text-xs tracking-[0.1em] text-petrol-500 uppercase" datetime={video.date}>{formatCivilDate(video.date)}</time>
+          <h2 class="mb-2 text-2xl leading-none font-bold uppercase">{video.title}</h2>
+          {video.description && <p class="mb-0 text-sm text-ash-400">{video.description}</p>}
+        </div>
+      </article>
+    );
+  })}
+</div>
+
+<dialog class="m-auto w-[min(100%-2rem,70rem)] border border-iron-700 bg-coal-950 p-0 text-ash-100 shadow-2xl backdrop:bg-coal-950/85" aria-labelledby="video-modal-title" data-video-dialog>
+  <div class="flex items-center justify-between gap-4 border-b border-iron-700 p-3 sm:p-4">
+    <h2 class="mb-0 text-xl font-bold uppercase sm:text-2xl" id="video-modal-title" data-video-modal-title>Video</h2>
+    <button class="flex size-11 shrink-0 items-center justify-center border border-iron-700 text-xl transition-colors hover:border-petrol-500 hover:text-petrol-500" type="button" aria-label="Cerrar video" data-video-close>×</button>
+  </div>
+  <div class="aspect-video bg-black" data-video-frame></div>
+</dialog>
+
+<script>
+  const gallery = document.querySelector<HTMLElement>('[data-video-gallery]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-video-dialog]');
+
+  if (gallery && dialog) {
+    const title = dialog.querySelector<HTMLElement>('[data-video-modal-title]');
+    const frame = dialog.querySelector<HTMLElement>('[data-video-frame]');
+    const closeButton = dialog.querySelector<HTMLButtonElement>('[data-video-close]');
+
+    const close = () => {
+      dialog.close();
+      frame?.replaceChildren();
+    };
+
+    gallery.addEventListener('click', (event) => {
+      const trigger = (event.target as Element).closest<HTMLButtonElement>('[data-video-open]');
+      if (!trigger || !frame) return;
+
+      const videoId = trigger.dataset.videoOpen;
+      if (!videoId) return;
+      if (title) title.textContent = trigger.dataset.videoTitle ?? 'Video';
+
+      const iframe = document.createElement('iframe');
+      iframe.className = 'size-full';
+      iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+      iframe.title = trigger.dataset.videoTitle ?? 'Video de Tres Raíces';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      frame.replaceChildren(iframe);
+      dialog.showModal();
+    });
+
+    closeButton?.addEventListener('click', close);
+    dialog.addEventListener('close', () => frame?.replaceChildren());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close();
+    });
+  }
+</script>

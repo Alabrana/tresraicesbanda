@@ -1,6 +1,25 @@
-<footer class="border-t border-iron-700 py-6 text-ash-400 sm:py-8">
-  <div class="mx-auto w-full max-w-[70rem] px-4 sm:px-6 lg:px-8">
-    <p class="mb-1 text-sm sm:text-base"><strong class="text-ash-100">Tres Raíces</strong> · Talcahuano, Chile</p>
-    <p class="mb-0 text-sm">Contacto y redes pendientes de confirmación.</p>
+---
+const links = [
+  ['Inicio', '/'],
+  ['La Banda', '/banda/'],
+  ['Media', '/media/'],
+  ['En Vivo', '/en-vivo/'],
+  ['News', '/news/'],
+  ['Galería', '/galeria/'],
+  ['Network', '/network/'],
+];
+---
+
+<footer class="border-t border-iron-700 py-8 text-ash-400 sm:py-10">
+  <div class="mx-auto grid w-full max-w-[70rem] gap-7 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
+    <div>
+      <p class="mb-1 text-sm sm:text-base"><strong class="text-ash-100">Tres Raíces</strong> · Talcahuano, Chile</p>
+      <p class="mb-0 text-sm">Contacto y redes se incorporarán con datos oficiales confirmados.</p>
+    </div>
+    <nav aria-label="Navegación del pie de página">
+      <ul class="flex max-w-md flex-wrap gap-x-4 gap-y-2 p-0 text-sm" role="list">
+        {links.map(([label, href]) => <li><a class="transition-colors hover:text-petrol-500" href={href}>{label}</a></li>)}
+      </ul>
+    </nav>
   </div>
 </footer>

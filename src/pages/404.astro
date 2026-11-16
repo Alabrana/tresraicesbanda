@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página no encontrada" description="La página solicitada no está disponible en el sitio oficial de Tres Raíces." noIndex>
+  <section class="mx-auto flex min-h-[56vh] w-full max-w-[70rem] items-center px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <div class="max-w-2xl border-l-2 border-petrol-500 pl-5 sm:pl-7">
+      <p data-display-type class="mb-2 text-sm tracking-[0.12em] text-petrol-500 uppercase">Error 404</p>
+      <h1 class="mb-4 text-[clamp(2.5rem,12vw,5rem)] leading-none font-bold uppercase">Página no encontrada</h1>
+      <p class="mb-6 max-w-xl text-sm text-ash-400 sm:text-base">Puede que el enlace haya cambiado o que la página ya no esté disponible.</p>
+      <a class="inline-flex min-h-11 items-center border border-petrol-500 bg-petrol-500 px-5 text-sm font-bold tracking-[0.04em] text-coal-950 no-underline transition-colors hover:bg-transparent hover:text-ash-100" href="/">Volver al inicio</a>
+    </div>
+  </section>
+</BaseLayout>

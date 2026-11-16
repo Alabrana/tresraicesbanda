@@ -5,17 +5,44 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="La Banda">
-  <PageHeader eyebrow="Tres Raíces" title="La Banda" description="Tres músicos de Talcahuano. Historia y biografías pendientes de contenido confirmado." />
+  <PageHeader eyebrow="Tres Raíces" title="La Banda" description="Víctor, Alex y Pato: rock desde Talcahuano." />
   <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-6">
-      {band.members.map((member) => (
-        <article class="min-w-0 border border-iron-700 bg-iron-900 p-4 sm:p-5">
-          <img class="mb-4 aspect-3/4 object-cover" src={member.photo} width="768" height="1024" alt={`${member.name}, ${member.instrument}`} />
-          <h2 class="mb-1 text-xl font-bold sm:text-2xl">{member.name}</h2>
-          <p class="mb-3 text-sm text-ash-400 sm:mb-4 sm:text-base">{member.instrument}</p>
-          {!member.bio && <p class="mb-0 text-sm text-ash-400 sm:text-base">Biografía pendiente de confirmación.</p>}
-        </article>
-      ))}
+    <div class="space-y-10 sm:space-y-14">
+      {(band.intro || band.history || band.groupPhoto) && (
+        <section class="grid gap-6 border-b border-iron-700 pb-10 md:grid-cols-[minmax(16rem,0.9fr)_1fr] md:items-center md:gap-10 sm:pb-14" aria-labelledby="band-history-title">
+          {band.groupPhoto && <img class="aspect-4/3 w-full object-cover" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />}
+          <div>
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Talcahuano, Chile</p>
+            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="band-history-title">Nuestra historia</h2>
+            {band.intro && <p class="mb-4 text-sm text-ash-100 sm:text-base">{band.intro}</p>}
+            {band.history && <p class="mb-0 whitespace-pre-line text-sm text-ash-400 sm:text-base">{band.history}</p>}
+          </div>
+        </section>
+      )}
+
+      <section aria-labelledby="members-title">
+        <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Integrantes</p>
+        <h2 class="mb-5 text-3xl leading-none font-bold uppercase sm:mb-6 sm:text-4xl" id="members-title">Tres Raíces</h2>
+        <div class="space-y-5 sm:space-y-7">
+          {band.members.map((member, index) => (
+            <article class:list={[
+              'grid min-w-0 overflow-hidden border border-iron-700 bg-iron-900 md:grid-cols-2',
+              index % 2 === 1 && 'md:[&>img]:order-2',
+            ]}>
+              <img class="aspect-4/3 h-full w-full object-cover md:aspect-auto" src={member.photo} width="768" height="1024" alt={`${member.name}, ${member.instrument}`} loading="lazy" />
+              <div class="flex min-w-0 flex-col justify-center p-5 sm:p-7">
+                <p data-display-type class="mb-2 text-sm tracking-[0.1em] text-petrol-500 uppercase">{member.instrument}</p>
+                <h3 class="mb-3 text-3xl leading-none font-bold uppercase sm:text-4xl">{member.name}</h3>
+                {member.bio ? (
+                  <p class="mb-0 text-sm text-ash-400 sm:text-base">{member.bio}</p>
+                ) : (
+                  <p class="mb-0 text-sm text-ash-400 sm:text-base">Biografía en preparación.</p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   </section>
 </BaseLayout>

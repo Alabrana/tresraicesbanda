@@ -22,7 +22,13 @@ const { article } = Astro.props;
 const { Content } = await render(article);
 ---
 
-<BaseLayout title={article.data.title} description={article.data.summary}>
+<BaseLayout
+  title={article.data.title}
+  description={article.data.summary}
+  image={article.data.cover}
+  imageAlt={`Portada: ${article.data.title}`}
+  ogType="article"
+>
   <article class="mx-auto min-h-[48vh] w-full max-w-[52rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
     <p data-display-type class="mb-2 text-[0.8rem] font-bold tracking-[0.12em] text-ash-400 uppercase">News</p>
     <h1 class="mb-4 text-[clamp(2rem,10vw,3rem)] leading-[1.05] font-bold md:text-[clamp(3rem,6vw,4.5rem)]">{article.data.title}</h1>

@@ -24,8 +24,8 @@ VS Code / computador del responsable
 ## Producción
 
 - Un solo proyecto Astro estático; no se requieren consultas a API de negocio o BD para renderizar páginas.
-- Cloudflare Pages conecta a GitHub, compila `npm run build` y publica `dist`.
-- El dominio propio se conectará cuando se configure el hosting.
+- Cloudflare Pages conecta a GitHub, compila `pnpm run build` y publica `dist`.
+- El dominio oficial aprobado es `tresraicesbanda.cl`; se conectará manualmente a Cloudflare Pages al configurar el hosting. `www.tresraicesbanda.cl` será secundario y redirigirá al dominio principal.
 - El editor local NO se expone como ruta web publicada ni forma parte de `dist`.
 
 ## Diseño del editor local

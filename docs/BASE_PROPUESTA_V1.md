@@ -173,7 +173,7 @@ Configuración mínima compartida: email de contacto, enlaces sociales y textos 
 | Proyecto | **Un solo repositorio Git** para sitio, contenido y editor local |
 | Web pública | **Astro**, salida completamente estática |
 | Hosting | **Cloudflare Pages** |
-| Dominio | Dominio propio existente; configurar DNS cuando se despliegue |
+| Dominio | `tresraicesbanda.cl`, dominio oficial aprobado; configurar DNS y HTTPS al desplegar |
 | Almacenamiento editorial | Archivos **Markdown y JSON** versionados con Git |
 | Imágenes | Archivos del proyecto, optimizados para la web |
 | Panel | **Herramienta local** dentro del repositorio; no desplegada públicamente |
@@ -261,10 +261,10 @@ Es una **estructura propuesta**, no una obligación de carpetas o nombres de com
 ## 9. Despliegue previsto
 
 - Repositorio GitHub como origen de Cloudflare Pages.
-- Rama de producción propuesta: `main`.
-- Build: `npm run build` (comando de Astro que se configurará en el proyecto).
+- Rama de producción: `main`.
+- Build: `pnpm run build`.
 - Directorio de salida: `dist`.
-- Dominio comprado por la banda conectado mediante DNS; conservar acceso al registrador.
+- Dominio oficial: `tresraicesbanda.cl`; `www.tresraicesbanda.cl` redirige de forma permanente al dominio principal mediante Cloudflare. Conectar ambos manualmente al configurar Pages y conservar acceso al registrador.
 - Mantener el editor local excluido del build público.
 - Verificar cuota y condiciones actuales de Cloudflare Pages al configurar el servicio; no se establece aquí garantía permanente de costo o disponibilidad.
 
@@ -276,7 +276,7 @@ La edición local no exige que GitHub o Cloudflare estén disponibles. La public
 
 Una entrega podrá considerarse alineada con esta propuesta si:
 
-- [ ] `npm run build` produce un sitio público estático que funciona sin API propia ni base de datos.
+- [ ] `pnpm run build` produce un sitio público estático que funciona sin API propia ni base de datos.
 - [ ] Los archivos Markdown y JSON bastan para actualizar contenidos manualmente.
 - [ ] El logo original y las fotografías respetan las reglas del manual creativo.
 - [ ] El inicio respeta el orden de bloques y oculta los que no tienen contenido.
@@ -317,7 +317,7 @@ Estas decisiones de implementación pueden resolverse **sin modificar el alcance
 3. Incorporar esquemas de datos y archivos iniciales sin inventar información.
 4. Construir la web pública con la identidad oficial y las reglas de visualización.
 5. Implementar el editor **local** sobre los mismos contratos.
-6. Probar guardado general, validaciones y `npm run build`.
+6. Probar guardado general, validaciones y `pnpm run build`.
 7. Conectar GitHub → Cloudflare Pages → dominio propio.
 
 **Regla de control de cambios:** cualquier nueva propuesta técnica se contrasta primero con este documento. Si aumenta servicios, costos, complejidad o estados editoriales, debe justificarse con una necesidad concreta de la banda y aprobarse antes de implementarse.

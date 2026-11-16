@@ -2,11 +2,12 @@
 
 Repositorio base de planificación para la web oficial de **Tres Raíces**, banda de rock de Talcahuano, Chile.
 
-> **Estado:** Fase 1 implementada. El repositorio contiene una base Astro estática, rutas públicas estructurales y contratos de contenido validados durante el build. El diseño público completo y el editor local aún no están implementados.
+> **Estado:** Fase 2 en curso. El repositorio contiene una web Astro estática, contratos de contenido validados y componentes públicos en desarrollo. El editor local aún no está implementado.
 
 ## Principios no negociables
 
 - Sitio público **100 % estático** con Astro, publicado en **Cloudflare Pages**.
+- Dominio oficial aprobado: **https://tresraicesbanda.cl**.
 - Contenido editable manualmente mediante **Markdown y JSON** en el propio repositorio.
 - **Sin base de datos ni backend de producción**, sin NestJS, Supabase ni CMS remoto.
 - Editor **exclusivamente local**, para un único responsable; no aparece en el sitio publicado.
@@ -47,6 +48,33 @@ pnpm dev
 ```
 
 El contenido se mantiene en `src/content/` y `src/data/`; las copias web de imágenes viven en `public/images/`. Tailwind CSS 4 compone la base visual mediante utilidades y tokens en `src/styles/global.css`. No existe todavía un editor local y ningún editor forma parte de `dist`.
+
+El dominio configurado en Astro se usa solamente para URLs canónicas, sitemap y metadatos sociales del build. `pnpm dev` continúa sirviendo la web en `http://localhost:4321` y no redirige navegación, recursos ni llamadas locales al dominio público.
+
+## Cloudflare Pages y dominio oficial
+
+La configuración del repositorio está preparada para publicar desde la rama `main` con:
+
+| Ajuste | Valor |
+|---|---|
+| Dominio principal | `tresraicesbanda.cl` |
+| Dominio secundario | `www.tresraicesbanda.cl` |
+| Rama de producción | `main` |
+| Comando de compilación | `pnpm run build` |
+| Directorio de salida | `dist` |
+| Node.js | `22.23.4` |
+| pnpm | `12.21.0` |
+
+### Pasos manuales pendientes
+
+1. En Cloudflare, crear o abrir el proyecto **Pages** conectado al repositorio GitHub y configurar los valores de la tabla anterior. Fijar `PNPM_VERSION=12.21.0` y, si la imagen de build lo permite, `NODE_VERSION=22.23.4`.
+2. En **Workers & Pages → proyecto → Custom domains**, asociar primero `tresraicesbanda.cl`. Para un dominio raíz, Cloudflare requiere que la zona esté en la misma cuenta y que el registrador use los nameservers que Cloudflare entregue.
+3. En el proveedor donde se registró el dominio, sustituir los nameservers únicamente por los indicados por Cloudflare y esperar a que la zona quede activa. No crear registros DNS a ciegas ni cambiar registros existentes antes de que Cloudflare indique qué necesita.
+4. Una vez activo el dominio raíz, asociar `www.tresraicesbanda.cl` en el mismo panel y confirmar el registro DNS solicitado por Cloudflare.
+5. Crear una regla de **Bulk Redirects** de `www.tresraicesbanda.cl` a `https://tresraicesbanda.cl`, con estado `301`, preservando query string y sufijo de ruta. Este redireccionamiento de host se configura en Cloudflare, no en Astro ni en `_redirects`.
+6. Esperar a que ambos hostnames estén activos y que Cloudflare confirme HTTPS. Verificar `https://tresraicesbanda.cl`, el redireccionamiento de `www` y el certificado antes de anunciar el sitio.
+
+No se realizaron cambios de DNS, conexiones a Cloudflare ni despliegues desde este repositorio.
 
 ## Preparar GitHub
 
