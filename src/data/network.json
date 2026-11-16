@@ -1,3 +1,11 @@
 {
-  "bands": []
+  "bands": [
+    {
+      "id": "banda-amiga",
+      "name": "Nombre de la banda",
+      "logo": "/images/band/Grupal.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    }
+  ]
 }

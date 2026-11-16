@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editor local · Tres Raíces</title>
+    <link rel="stylesheet" href="/editor.css" />
+  </head>
+  <body>
+    <header><p class="eyebrow">TRES RAÍCES · HERRAMIENTA LOCAL</p><h1>Editor de contenido</h1><p>Los cambios viven en este navegador hasta usar <strong>Guardar todos los cambios</strong>. Guardar no publica ni ejecuta Git.</p></header>
+    <main>
+      <section class="notice"><strong>Solo localhost.</strong> Este panel no pertenece al sitio público ni se genera en <code>dist</code>.</section>
+      <nav id="tabs" aria-label="Módulos de contenido"></nav>
+      <section class="workspace"><div class="editor-heading"><div><h2 id="module-title"></h2><p id="module-help"></p></div><span id="state" role="status">Cargando…</span></div><label for="content">Contenido del módulo (JSON)</label><textarea id="content" spellcheck="false"></textarea></section>
+      <aside class="guide" aria-labelledby="guide-title"><h2 id="guide-title">Guía del módulo</h2><p id="guide-rules"></p><pre id="guide-example" aria-label="Estructura de referencia"></pre></aside>
+      <section class="images"><div><h2>Imágenes disponibles</h2><p>Selecciona una ruta para insertarla en la posición actual del editor.</p></div><div id="image-list" class="image-list"></div></section>
+      <footer><p id="summary">Sin cambios pendientes.</p><button id="save" type="button" disabled>Guardar todos los cambios</button><button id="reload" type="button">Descartar y recargar</button></footer>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

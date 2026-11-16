@@ -9,8 +9,9 @@
   },
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "editor": "node --experimental-strip-types editor/server.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
-    "test": "node --experimental-strip-types --test tests/contracts.test.ts tests/events.test.ts tests/fixtures.test.ts",
+    "test": "node --experimental-strip-types --test tests/contracts.test.ts tests/events.test.ts tests/fixtures.test.ts tests/editor.test.ts",
     "build": "pnpm run check && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "validate": "pnpm run test && pnpm run build"

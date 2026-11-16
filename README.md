@@ -2,7 +2,7 @@
 
 Repositorio base de planificación para la web oficial de **Tres Raíces**, banda de rock de Talcahuano, Chile.
 
-> **Estado:** Fase 2 en curso. El repositorio contiene una web Astro estática, contratos de contenido validados y componentes públicos en desarrollo. El editor local aún no está implementado.
+> **Estado:** Fase 3 en curso. El repositorio contiene una web Astro estática, contratos de contenido validados y un editor de contenido exclusivamente local.
 
 ## Principios no negociables
 
@@ -47,7 +47,19 @@ pnpm validate
 pnpm dev
 ```
 
-El contenido se mantiene en `src/content/` y `src/data/`; las copias web de imágenes viven en `public/images/`. Tailwind CSS 4 compone la base visual mediante utilidades y tokens en `src/styles/global.css`. No existe todavía un editor local y ningún editor forma parte de `dist`.
+El contenido se mantiene en `src/content/` y `src/data/`; las copias web de imágenes viven en `public/images/`. Tailwind CSS 4 compone la base visual mediante utilidades y tokens en `src/styles/global.css`.
+
+## Editor local
+
+El editor se ejecuta solo en el computador del responsable y se enlaza exclusivamente a `127.0.0.1`. No es una ruta de Astro, no forma parte de `dist` y no publica cambios ni ejecuta Git.
+
+```bash
+pnpm editor
+```
+
+Abrir `http://127.0.0.1:4388`. El panel carga una copia de trabajo de todos los módulos, lista las imágenes existentes de `public/images/` y conserva los cambios en el navegador hasta pulsar **Guardar todos los cambios**. El guardado valida los contratos, evita sobrescribir modificaciones externas y escribe los archivos afectados como una operación coordinada con restauración ante fallos. Después corresponde revisar `git diff`, probar `pnpm dev` y publicar manualmente con Git cuando proceda.
+
+Si `4388` está ocupado por otro proceso local, se puede usar un puerto alternativo, por ejemplo `EDITOR_PORT=4390 pnpm editor`, y abrir la misma dirección con ese puerto.
 
 El dominio configurado en Astro se usa solamente para URLs canónicas, sitemap y metadatos sociales del build. `pnpm dev` continúa sirviendo la web en `http://localhost:4321` y no redirige navegación, recursos ni llamadas locales al dominio público.
 

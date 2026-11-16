@@ -33,12 +33,12 @@
 
 ## Fase 3 — Editor local
 
-- [ ] Iniciar editor con comando propio únicamente en localhost.
-- [ ] Formularios por módulo y selector visual de imágenes existentes.
-- [ ] Detectar modificaciones pendientes entre módulos.
-- [ ] Validar esquema y referencias locales.
-- [ ] Implementar «Guardar todos» coordinado, con restauración ante errores.
-- [ ] Comprobar que editor NO aparece en `dist`.
+- [x] Iniciar editor con comando propio únicamente en localhost.
+- [x] Formularios por módulo y selector visual de imágenes existentes.
+- [x] Detectar modificaciones pendientes entre módulos.
+- [x] Validar esquema y referencias locales.
+- [x] Implementar «Guardar todos» coordinado, con restauración ante errores.
+- [x] Comprobar que editor NO aparece en `dist`.
 
 **Aceptación:** modificar múltiples módulos y guardar juntos, sin publicar ni generar build en cada cambio.
 
