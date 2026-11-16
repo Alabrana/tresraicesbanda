@@ -1,1 +1,25 @@
-{}
+{
+  "contactEmail": "tresraicesbanda@gmail.com",
+  "socialLinks": [
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "url": "https://www.instagram.com/tresraicesbanda"
+    },
+    {
+      "id": "facebook",
+      "name": "Facebook",
+      "url": "https://www.facebook.com/profile.php?id=61589867742279"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "url": "https://www.youtube.com/@tresraicesbanda"
+    },
+    {
+      "id": "tiktok",
+      "name": "TikTok",
+      "url": "https://www.tiktok.com/@tresraicesbanda"
+    }
+  ]
+}

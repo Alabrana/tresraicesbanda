@@ -1,22 +1,30 @@
 ---
 import PageHeader from '../components/PageHeader.astro';
 import VideoModal from '../components/VideoModal.astro';
-import { media } from '../data/content';
+import { media, site } from '../data/content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const platforms = media.platforms.filter((platform) => platform.visible);
 const videos = media.videos
   .filter((video) => video.visible)
-  .sort((left, right) => right.date.localeCompare(left.date));
+  .sort((left, right) => (right.date ?? '').localeCompare(left.date ?? ''));
+const youtubeChannel = site.socialLinks.find((socialLink) => socialLink.id === 'youtube');
 ---
 
 <BaseLayout title="Media">
   <PageHeader title="Media" description="Música y videos de Tres Raíces." />
   <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    {platforms.length === 0 && videos.length === 0 ? (
+    {platforms.length === 0 && videos.length === 0 && !youtubeChannel ? (
       <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Aún no hay música ni videos confirmados para publicar.</p>
     ) : (
       <div class="space-y-12 sm:space-y-16">
+        {youtubeChannel && (
+          <section aria-labelledby="youtube-channel-title">
+            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Canal oficial</p>
+            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="youtube-channel-title">YouTube</h2>
+            <a class="inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href={youtubeChannel.url} target="_blank" rel="noreferrer">Visitar canal oficial <span class="ml-2" aria-hidden="true">↗</span></a>
+          </section>
+        )}
         {platforms.length > 0 && (
           <section aria-labelledby="platforms-title">
             <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Escuchar</p>

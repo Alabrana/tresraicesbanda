@@ -23,7 +23,7 @@ const { videos } = Astro.props;
           </span>
         </button>
         <div class="p-4 sm:p-5">
-          <time data-display-type class="mb-2 block text-xs tracking-[0.1em] text-petrol-500 uppercase" datetime={video.date}>{formatCivilDate(video.date)}</time>
+          {video.date && <time data-display-type class="mb-2 block text-xs tracking-[0.1em] text-petrol-500 uppercase" datetime={video.date}>{formatCivilDate(video.date)}</time>}
           <h2 class="mb-2 text-2xl leading-none font-bold uppercase">{video.title}</h2>
           {video.description && <p class="mb-0 text-sm text-ash-400">{video.description}</p>}
         </div>

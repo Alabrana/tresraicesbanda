@@ -15,8 +15,8 @@ const serializedPhotos = JSON.stringify(photos).replaceAll('<', '\\u003c');
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-gallery>
   {photos.map((photo, index) => (
-    <button class="group relative block min-w-0 overflow-hidden border border-iron-700 bg-iron-900 text-left" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
-      <img class="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" src={photo.image} alt={photo.description} loading="lazy" />
+    <button class="group relative flex aspect-[4/5] min-w-0 items-center justify-center overflow-hidden border border-iron-700 bg-coal-950 text-left" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
+      <img class="h-full w-full object-contain" src={photo.image} alt={photo.description} loading="lazy" />
       <span class="absolute inset-x-0 bottom-0 bg-coal-950/80 p-3 text-sm text-ash-100 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">{photo.description}</span>
     </button>
   ))}

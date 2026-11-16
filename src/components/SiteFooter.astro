@@ -1,4 +1,7 @@
 ---
+import SocialIcon from './SocialIcon.astro';
+import { site } from '../data/content';
+
 const links = [
   ['Inicio', '/'],
   ['La Banda', '/banda/'],
@@ -14,7 +17,23 @@ const links = [
   <div class="mx-auto grid w-full max-w-[70rem] gap-7 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
     <div>
       <p class="mb-1 text-sm sm:text-base"><strong class="text-ash-100">Tres Raíces</strong> · Talcahuano, Chile</p>
-      <p class="mb-0 text-sm">Contacto y redes se incorporarán con datos oficiales confirmados.</p>
+      <p class="mb-3 text-sm">Contacto y contrataciones</p>
+      <ul class="flex flex-wrap gap-x-4 gap-y-3 p-0 text-sm" role="list" aria-label="Redes sociales y contacto">
+        <li>
+          <a class="inline-flex min-h-11 items-center gap-2 text-ash-100 transition-colors hover:text-petrol-500" href={`mailto:${site.contactEmail}`} aria-label="Enviar correo a Tres Raíces">
+            <SocialIcon id="email" />
+            <span>Correo</span>
+          </a>
+        </li>
+        {site.socialLinks.map((socialLink) => (
+          <li>
+            <a class="inline-flex min-h-11 items-center gap-2 text-ash-100 transition-colors hover:text-petrol-500" href={socialLink.url} target="_blank" rel="noreferrer" aria-label={`${socialLink.name} de Tres Raíces (sitio externo)`}>
+              <SocialIcon id={socialLink.id} />
+              <span>{socialLink.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
     <nav aria-label="Navegación del pie de página">
       <ul class="flex max-w-md flex-wrap gap-x-4 gap-y-2 p-0 text-sm" role="list">

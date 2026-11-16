@@ -213,7 +213,7 @@ const videoSchema = z
     id: identifierSchema,
     title: z.string().trim().min(1),
     youtubeUrl: youtubeVideoUrlSchema,
-    date: civilDateSchema,
+    date: civilDateSchema.optional(),
     description: z.string().trim().min(1).optional(),
     visible: z.boolean(),
   })
@@ -255,8 +255,23 @@ export const networkSchema = z
 export const collaboratorsSchema = z
   .object({ collaborators: uniqueIdArray(linkedLogoSchema) })
   .strict();
-export const siteSchema = z.object({}).strict();
+
+const socialLinkSchema = z
+  .object({
+    id: z.enum(['instagram', 'facebook', 'youtube', 'tiktok']),
+    name: z.string().trim().min(1),
+    url: httpUrlSchema,
+  })
+  .strict();
+
+export const siteSchema = z
+  .object({
+    contactEmail: z.email(),
+    socialLinks: uniqueIdArray(socialLinkSchema),
+  })
+  .strict();
 
 export type Show = z.infer<typeof showSchema>;
 export type News = z.infer<typeof newsSchema>;
 export type MediaVideo = z.infer<typeof mediaSchema>['videos'][number];
+export type SiteSocialLink = z.infer<typeof siteSchema>['socialLinks'][number];

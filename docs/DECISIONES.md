@@ -27,6 +27,8 @@
 | D-021 | Sistema tipográfico «Rock Industrial»: Oswald 700 para títulos, navegación y botones; IBM Plex Sans 400 para textos | Aprobada |
 | D-022 | Fechas editoriales como días civiles `YYYY-MM-DD`, validadores compartidos y una política única de eventos recalculada en navegador según `America/Santiago` | Aprobada |
 | D-023 | `tresraicesbanda.cl` es el dominio oficial; se usa como `site` de Astro, canonical, sitemap y Open Graph. `www.tresraicesbanda.cl` redirige permanentemente al dominio principal desde Cloudflare. | Aprobada |
+| D-024 | `site.json` centraliza correo de contacto y redes oficiales. Footer y enlace al canal de Media consumen esa fuente; las plataformas musicales permanecen en `media.json`. | Aprobada |
+| D-025 | La fecha de un video en `media.json` es opcional. Si se informa, se valida como fecha civil y determina el orden; los videos sin fecha permanecen publicables después de los fechados. | Aprobada |
 
 ## Por definir antes o durante implementación
 

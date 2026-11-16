@@ -1,27 +1,27 @@
 {
-  "intro": "",
-  "history": "",
-  "groupPhoto": "",
+  "intro": "Tres Raíces es una banda de rock oriunda de Talcahuano, nacida del encuentro de tres músicos unidos por la fuerza de la música en vivo.",
+  "history": "Con guitarra, bajo, batería y voz, buscamos construir un sonido directo, con carácter y sin perder nuestras raíces.\n\nEl puerto, el barrio y nuestra identidad chorera son parte de lo que somos.\n\nSeguimos avanzando con canciones, ensayos y escenarios, agradecidos de quienes nos acompañan en este camino.",
+  "groupPhoto": "/images/band/Grupal.webp",
   "members": [
     {
       "id": "victor",
       "name": "Víctor",
       "instrument": "Bajo y voz",
-      "photo": "/images/band/victor.jpg",
+      "photo": "/images/band/Victor.webp",
       "bio": ""
     },
     {
       "id": "alex",
       "name": "Alex",
-      "instrument": "Guitarra",
-      "photo": "/images/band/alex.jpg",
+      "instrument": "Guitarra y 2da voz",
+      "photo": "/images/band/Alex.webp",
       "bio": ""
     },
     {
       "id": "pato",
-      "name": "Pato",
+      "name": "Patricio (Pato)",
       "instrument": "Batería",
-      "photo": "/images/band/pato.jpg",
+      "photo": "/images/band/Pato.webp",
       "bio": ""
     }
   ]

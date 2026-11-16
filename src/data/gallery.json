@@ -1,3 +1,22 @@
 {
-  "photos": []
+  "photos": [
+    {
+      "id": "ensayo-victor",
+      "image": "/images/gallery/ensayando-victor.jpeg",
+      "description": "Víctor durante un ensayo de Tres Raíces.",
+      "visible": true
+    },
+    {
+      "id": "ensayo-alex",
+      "image": "/images/gallery/ensayando-alex.jpeg",
+      "description": "Alex trabajando las guitarras en la sala de ensayo.",
+      "visible": true
+    },
+    {
+      "id": "ensayo-pato",
+      "image": "/images/gallery/ensayando-pato.jpeg",
+      "description": "Pato detrás de la batería durante una sesión de ensayo.",
+      "visible": true
+    }
+  ]
 }

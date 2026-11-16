@@ -18,7 +18,9 @@ const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 
     </p>
   )}
   <div class="grid min-w-0 sm:grid-cols-[minmax(10rem,0.7fr)_1fr]">
-    <img class="aspect-4/3 h-full w-full object-cover sm:aspect-auto" src={show.poster} width="1200" height="900" alt={`Afiche de ${show.title}`} loading="lazy" />
+    <div class="aspect-[4/5] bg-coal-950 sm:h-full sm:aspect-auto">
+      <img class="h-full w-full object-contain" src={show.poster} width="1200" height="900" alt={`Afiche de ${show.title}`} loading="lazy" />
+    </div>
     <div class="min-w-0 p-4 sm:p-5">
       <p data-display-type class="mb-2 text-sm tracking-[0.08em] text-petrol-500 uppercase">{formatCivilDate(show.date)} · {show.time}</p>
       <h3 class="mb-2 text-2xl leading-none font-bold uppercase sm:text-3xl">{show.title}</h3>

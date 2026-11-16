@@ -18,6 +18,4 @@ export const media = mediaSchema.parse(mediaSource);
 export const gallery = gallerySchema.parse(gallerySource);
 export const network = networkSchema.parse(networkSource);
 export const collaborators = collaboratorsSchema.parse(collaboratorsSource);
-
-// El contrato global sigue deliberadamente vacío hasta que se confirmen datos reales.
 export const site = siteSchema.parse(siteSource);

@@ -125,9 +125,9 @@ Campos: `intro`, `history`, `groupPhoto`, `members[]` con `id`, `name`, `instrum
 ### 5.4. Media — `src/data/media.json`
 
 `platforms[]`: `id`, `name`, `url`, `visible`.  
-`videos[]`: `id`, `title`, `youtubeUrl`, `date`, `description?`, `visible`.
+`videos[]`: `id`, `title`, `youtubeUrl`, `date?`, `description?`, `visible`.
 
-La información del video se ingresa **manualmente**. Miniaturas YouTube cuando estén disponibles; videos visibles ordenados por fecha descendente; reproducir en **ventana superpuesta**. Inicio muestra el más reciente visible. Plataformas musicales opcionales, mostrar solo enlaces válidos y visibles.
+La información del video se ingresa **manualmente**. `date` es opcional: si existe, debe ser una fecha civil válida y ordena los videos de forma descendente; los videos sin fecha quedan después conservando su orden editorial. Miniaturas YouTube cuando estén disponibles; reproducir en **ventana superpuesta**. Inicio muestra el primer video visible según esta política. Plataformas musicales opcionales, mostrar solo enlaces válidos y visibles.
 
 ### 5.5. Galería — `src/data/gallery.json`
 
@@ -143,7 +143,7 @@ La información del video se ingresa **manualmente**. Miniaturas YouTube cuando 
 
 ### 5.8. Datos globales — `src/data/site.json`
 
-Configuración mínima compartida: email de contacto, enlaces sociales y textos globales si se necesitan. **Estructura exacta pendiente**, sin anticipar campos superfluos.
+Configuración mínima compartida: `contactEmail` y `socialLinks[]` oficiales. Cada red conserva `id`, nombre y URL HTTP/HTTPS; el footer consume esta única fuente. Se podrán agregar plataformas musicales confirmadas en `media.json` cuando corresponda.
 
 ### 5.9. Convenciones
 

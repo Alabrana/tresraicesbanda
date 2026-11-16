@@ -1,4 +1,11 @@
 {
   "platforms": [],
-  "videos": []
+  "videos": [
+    {
+      "id": "bicho-feo-puerto-vivo-fest-3-2026",
+      "title": "Tres Raíces - Bicho Feo (En Vivo) | Puerto Vivo Fest 3 | Concepción, Chile 2026",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ajz26n_vkmg",
+      "visible": true
+    }
+  ]
 }

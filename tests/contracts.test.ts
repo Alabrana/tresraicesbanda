@@ -85,6 +85,21 @@ test('rechaza IDs duplicados en colecciones JSON', () => {
   assert.equal(result.success, false);
 });
 
+test('permite videos sin fecha y valida la fecha cuando se proporciona', () => {
+  const baseVideo = {
+    id: 'video-confirmado',
+    title: 'Video confirmado',
+    youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    visible: true,
+  };
+
+  assert.equal(mediaSchema.safeParse({ platforms: [], videos: [baseVideo] }).success, true);
+  assert.equal(
+    mediaSchema.safeParse({ platforms: [], videos: [{ ...baseVideo, date: '2026-02-30' }] }).success,
+    false,
+  );
+});
+
 test('acepta imágenes web reales dentro de public/images', () => {
   assert.equal(
     imagePathSchema.safeParse('/images/logos/logoprincipalHorizontal.webp').success,

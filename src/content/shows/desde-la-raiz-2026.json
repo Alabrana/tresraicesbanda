@@ -1,0 +1,17 @@
+{
+  "id": "desde-la-raiz-2026",
+  "title": "Desde la Raíz",
+  "date": "2026-11-28",
+  "time": "21:30",
+  "venue": "Zalsipuedes Bar Cultural",
+  "city": "Talcahuano",
+  "address": "Av. Colón 1058",
+  "description": "Apertura de puertas a las 19:30. Preventa: $3.000 CLP. Entrada general: $4.000 CLP.",
+  "poster": "/images/shows/Flyer Zalsi Nov 2026.png",
+  "guestBands": [
+    "Lucius Band",
+    "Santos en la Corte"
+  ],
+  "status": "scheduled",
+  "visible": true
+}

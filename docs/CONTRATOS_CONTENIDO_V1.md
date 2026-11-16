@@ -13,7 +13,7 @@
 | Galería | `src/data/gallery.json` | `photos[]` |
 | Network | `src/data/network.json` | `bands[]` |
 | Colaboradores | `src/data/collaborators.json` | `collaborators[]` |
-| Configuración | `src/data/site.json` | Contacto y enlaces globales; esquema aún por fijar |
+| Configuración | `src/data/site.json` | `contactEmail` y `socialLinks[]` oficiales |
 
 ## En Vivo
 
@@ -33,7 +33,7 @@ Nombre de archivo define slug permanente. Frontmatter obligatorio: `title`, `dat
 
 ## Media
 
-`platforms[]`: `id`, `name`, `url`, `visible`. `videos[]`: `id`, `title`, `youtubeUrl`, `date`, `description?`, `visible`. Ingreso manual, orden descendente por fecha; reproducir en modal superpuesto sin cargar videos hasta interacción.
+`platforms[]`: `id`, `name`, `url`, `visible`. `videos[]`: `id`, `title`, `youtubeUrl`, `date?`, `description?`, `visible`. `date` es opcional; si existe debe ser `YYYY-MM-DD` real. Los videos fechados se ordenan en forma descendente y los que no tienen fecha quedan después en su orden editorial. Reproducir en modal superpuesto sin cargar videos hasta interacción.
 
 ## Galería
 
@@ -42,6 +42,10 @@ Nombre de archivo define slug permanente. Frontmatter obligatorio: `title`, `dat
 ## Network / Colaboradores
 
 `bands[]` y `collaborators[]`: `id`, `name`, `logo`, `url?`, `visible`. Orden del arreglo. Logos originales a color; Network solo en `/network`, colaboradores solo en Inicio.
+
+## Configuración global
+
+`site.json` contiene `contactEmail` y `socialLinks[]`. Cada red incluye `id` (`instagram`, `facebook`, `youtube` o `tiktok`), `name` y `url` HTTP/HTTPS. Es la única fuente para los enlaces mostrados en el footer; el correo se convierte en `mailto:` dentro del componente.
 
 ## Convenciones globales
 

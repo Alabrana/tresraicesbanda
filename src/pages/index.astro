@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
+import VideoModal from '../components/VideoModal.astro';
 import { band, collaborators, gallery, media } from '../data/content';
 import { getCollection } from 'astro:content';
 import { classifyShows } from '../lib/events';
@@ -13,7 +14,7 @@ const showClassification = classifyShows(shows);
 const latestArticle = [...articles].sort((left, right) => right.data.date.localeCompare(left.data.date))[0];
 const latestVideo = media.videos
   .filter((video) => video.visible)
-  .sort((left, right) => right.date.localeCompare(left.date))[0];
+  .sort((left, right) => (right.date ?? '').localeCompare(left.date ?? ''))[0];
 const galleryPreview = gallery.photos.filter((photo) => photo.visible).slice(0, 3);
 const visibleCollaborators = collaborators.collaborators.filter((collaborator) => collaborator.visible);
 const hasBandPreview = Boolean(band.intro && band.groupPhoto);
@@ -57,11 +58,8 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
       <div class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
         <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Media</p>
         <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl">Último video</h2>
-        <article class="border border-iron-700 bg-coal-950 p-5 sm:p-7">
-          <h3 class="mb-2 text-2xl leading-none font-bold uppercase sm:text-3xl">{latestVideo.title}</h3>
-          {latestVideo.description && <p class="mb-4 max-w-2xl text-sm text-ash-400 sm:text-base">{latestVideo.description}</p>}
-          <a class="inline-flex min-h-11 items-center border border-petrol-500 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:bg-petrol-500 hover:text-coal-950" href="/media/">Ver en Media <span class="ml-2" aria-hidden="true">→</span></a>
-        </article>
+        <VideoModal videos={[latestVideo]} />
+        <a class="mt-5 inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/media/">Ver Media <span class="ml-2" aria-hidden="true">→</span></a>
       </div>
     </section>
   )}
@@ -105,7 +103,11 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/galeria/">Ver galería <span aria-hidden="true">→</span></a>
       </div>
       <div class="grid gap-4 sm:grid-cols-3 sm:gap-5">
-        {galleryPreview.map((photo) => <img class="aspect-square w-full object-cover" src={photo.image} alt={photo.description} loading="lazy" />)}
+        {galleryPreview.map((photo) => (
+          <div class="aspect-[4/5] bg-coal-950">
+            <img class="h-full w-full object-contain" src={photo.image} alt={photo.description} loading="lazy" />
+          </div>
+        ))}
       </div>
     </section>
   )}
