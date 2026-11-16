@@ -1,3 +1,39 @@
 {
-  "collaborators": []
+  "collaborators": [
+    {
+      "id": "colaborador1",
+      "name": "Nombre del colaborador",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    },
+    {
+      "id": "colaborador2",
+      "name": "Nombre del colaborador2",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    },
+    {
+      "id": "colaborador3",
+      "name": "Nombre del colaborador3",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    },
+    {
+      "id": "colaborador4",
+      "name": "Nombre del colaborador4",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    },
+    {
+      "id": "colaborador5",
+      "name": "Nombre del colaborador5",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    }
+  ]
 }

@@ -6,6 +6,20 @@
       "logo": "/images/band/Grupal.webp",
       "url": "https://ejemplo.cl",
       "visible": true
+    },
+    {
+      "id": "banda-amiga2",
+      "name": "Nombre de la banda",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
+    },
+    {
+      "id": "banda-amiga3",
+      "name": "Nombre de la banda",
+      "logo": "/images/logos/logoredondo.webp",
+      "url": "https://ejemplo.cl",
+      "visible": true
     }
   ]
 }
