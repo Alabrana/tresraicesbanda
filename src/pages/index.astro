@@ -11,6 +11,17 @@ import { classifyShows } from '../lib/events';
 const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
 const shows = showEntries.map((show) => show.data);
 const showClassification = classifyShows(shows);
+const shortShowDateFormatter = new Intl.DateTimeFormat('es-CL', {
+  day: '2-digit',
+  month: 'short',
+  timeZone: 'UTC',
+});
+const formatShortShowDate = (date: string) => shortShowDateFormatter
+  .format(new Date(`${date}T12:00:00Z`))
+  .replace(/[.-]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLocaleUpperCase('es-CL');
 const latestArticle = [...articles].sort((left, right) => right.data.date.localeCompare(left.data.date))[0];
 const latestVideo = media.videos
   .filter((video) => video.visible)
@@ -27,19 +38,48 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
 
 <BaseLayout title="Inicio">
   {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
-  <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[40rem]">
-    <img class="absolute inset-0 -z-20 size-full object-cover object-center" src={band.groupPhoto} width="2048" height="1366" alt="" aria-hidden="true" />
-    <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.82)_48%,rgba(16,18,19,0.58)_100%)]" aria-hidden="true"></div>
-    <div class="tr-container-wide grid items-center gap-6 py-14 md:grid-cols-[minmax(12rem,0.65fr)_1fr] md:gap-10 md:py-16 lg:gap-16">
-      <img class="mx-auto h-auto w-full max-w-52 drop-shadow-[0_6px_20px_rgba(0,0,0,0.45)] sm:max-w-60 md:max-w-[18rem]" src="/images/logos/logoprincipalHorizontal.webp" width="1620" height="971" alt="Tres Raíces" />
-      <div class="text-center md:text-left">
-        <p class="tr-eyebrow mb-2 text-text-secondary">Talcahuano · Chile</p>
-        <h1 class="mx-auto mb-4 max-w-[12ch] text-[clamp(2.625rem,10vw,3.25rem)] leading-[0.94] font-bold uppercase md:mx-0 md:text-[clamp(4rem,5.4vw,5rem)]">Rock desde Talcahuano</h1>
-        <p class="mx-auto mb-6 max-w-[38rem] text-base leading-relaxed text-text-secondary md:mx-0 md:text-lg">Rock desde el puerto, el barrio y las raíces de Talcahuano.</p>
-        <div class="flex flex-col justify-center gap-3 sm:flex-row md:justify-start">
+  <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[38rem]">
+    <img class="absolute inset-0 -z-30 size-full object-cover object-[68%_42%] sm:object-[62%_42%] lg:object-[center_42%]" src={band.groupPhoto} width="2048" height="1366" alt="" aria-hidden="true" />
+    <div class="absolute inset-0 -z-20 bg-surface-canvas/35" aria-hidden="true"></div>
+    <div class="absolute inset-0 -z-20 bg-accent-petrol/10" aria-hidden="true"></div>
+    <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.86)_42%,rgba(16,18,19,0.48)_72%,rgba(16,18,19,0.34)_100%)] sm:bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.84)_46%,rgba(16,18,19,0.4)_76%,rgba(16,18,19,0.3)_100%)]" aria-hidden="true"></div>
+    <div class="tr-container-wide py-10 sm:py-12 md:py-14 lg:py-16">
+      <div class="max-w-[43rem] text-left">
+        <p class="tr-eyebrow mb-3 text-text-primary">Talcahuano · Chile</p>
+        <h1 class="mb-4 max-w-[9ch] text-[clamp(2.75rem,12vw,3.25rem)] leading-[0.92] font-bold uppercase sm:text-[clamp(3.25rem,9vw,4rem)] lg:text-[clamp(4rem,5.4vw,5rem)]">
+          <span class="block">Rock &amp;</span>
+          <span class="block">Roll del puerto</span>
+        </h1>
+        <p class="mb-6 max-w-[38rem] text-[1.0625rem] leading-relaxed text-text-primary md:text-lg">La misma raíz. Ruido de puerto, Mar y de nuestro territorio.</p>
+        <div class="flex flex-wrap gap-3">
           <a class="tr-button-primary" href="/en-vivo/">Ver fechas</a>
-          <a class="tr-button-secondary bg-surface-canvas/60" href="/media/">Escuchar y mirar</a>
+          <a class="tr-button-secondary bg-surface-canvas/45" href="/media/">Escuchar y mirar</a>
         </div>
+        <div
+          class="mt-6 border-l-2 border-accent-interactive/80 pl-3"
+          data-home-hero-live
+          hidden={!showClassification.nextShow}
+        >
+          <p class="mb-1 text-xs tracking-[0.1em] text-text-secondary uppercase" data-display-type>Próxima fecha</p>
+          <div data-home-hero-live-value>
+            {showClassification.nextShow && (
+              <p class="text-sm leading-snug text-text-primary sm:text-[0.9375rem]">
+                <time datetime={showClassification.nextShow.date}>{formatShortShowDate(showClassification.nextShow.date)}</time>
+                <span aria-hidden="true"> · </span>{showClassification.nextShow.venue}
+                <span aria-hidden="true"> · </span>{showClassification.nextShow.city}
+              </p>
+            )}
+          </div>
+        </div>
+        {shows.map((show) => (
+          <template data-home-hero-show-template={show.id}>
+            <p class="text-sm leading-snug text-text-primary sm:text-[0.9375rem]">
+              <time datetime={show.date}>{formatShortShowDate(show.date)}</time>
+              <span aria-hidden="true"> · </span>{show.venue}
+              <span aria-hidden="true"> · </span>{show.city}
+            </p>
+          </template>
+        ))}
       </div>
     </div>
   </section>
@@ -111,10 +151,10 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         </div>
         <a class="tr-text-link" href="/galeria/">Ver galería <span aria-hidden="true">→</span></a>
       </div>
-      <div class="grid gap-4 sm:grid-cols-3 sm:gap-5">
+      <div class="grid justify-items-center gap-4 sm:grid-cols-3 sm:gap-5">
         {galleryPreview.map((photo) => (
-          <div class="aspect-[3/4] max-h-[25rem] bg-surface-canvas">
-            <img class="h-full w-full object-contain" src={photo.image} alt={photo.description} loading="lazy" />
+          <div class="aspect-[3/4] w-full max-w-[21rem] overflow-hidden bg-surface-canvas sm:max-w-none">
+            <img class="size-full object-cover" src={photo.image} alt={photo.description} loading="lazy" />
           </div>
         ))}
       </div>
@@ -127,8 +167,8 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         <p data-display-type class="mb-4 text-center text-xs tracking-[0.12em] text-ash-400 uppercase">Colaboran</p>
         <div class="flex flex-wrap items-center justify-center gap-5 sm:gap-8">
           {visibleCollaborators.map((collaborator) => collaborator.url ? (
-            <a href={collaborator.url} target="_blank" rel="noreferrer" aria-label={`${collaborator.name} (sitio externo)`}><img class="max-h-16 w-auto object-contain" src={collaborator.logo} alt={collaborator.name} loading="lazy" /></a>
-          ) : <img class="max-h-16 w-auto object-contain" src={collaborator.logo} alt={collaborator.name} loading="lazy" />)}
+            <a class="group" href={collaborator.url} target="_blank" rel="noreferrer" aria-label={`${collaborator.name} (sitio externo)`}><img class="max-h-16 w-auto object-contain opacity-30 grayscale brightness-50 transition-[filter,opacity] duration-300 group-hover:opacity-100 group-hover:grayscale-0 group-hover:brightness-100 group-focus-visible:opacity-100 group-focus-visible:grayscale-0 group-focus-visible:brightness-100" src={collaborator.logo} alt={collaborator.name} loading="lazy" /></a>
+          ) : <img class="max-h-16 w-auto object-contain opacity-30 grayscale brightness-50 transition-[filter,opacity] duration-300 hover:opacity-100 hover:grayscale-0 hover:brightness-100" src={collaborator.logo} alt={collaborator.name} loading="lazy" />)}
         </div>
       </div>
     </section>
@@ -139,17 +179,27 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
   import { classifyShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
 
   const homeLive = document.querySelector<HTMLElement>('[data-home-live]');
+  const heroLive = document.querySelector<HTMLElement>('[data-home-hero-live]');
   const source = document.querySelector<HTMLScriptElement>('[data-show-classification-source][data-scope="home"]');
 
-  if (homeLive && source) {
+  if (source) {
     const shows = JSON.parse(source.textContent ?? '[]') as ClassifiableShow[];
-    const card = homeLive.querySelector<HTMLElement>('[data-home-live-card]');
     const render = (classification: ShowClassification<ClassifiableShow>) => {
-      if (!card) return;
       const nextShow = classification.nextShow;
-      const template = nextShow ? homeLive.querySelector<HTMLTemplateElement>(`[data-home-show-template="${nextShow.id}"]`) : null;
-      if (template) card.replaceChildren(template.content.cloneNode(true));
-      homeLive.hidden = !nextShow;
+
+      if (heroLive) {
+        const value = heroLive.querySelector<HTMLElement>('[data-home-hero-live-value]');
+        const template = nextShow ? document.querySelector<HTMLTemplateElement>(`[data-home-hero-show-template="${nextShow.id}"]`) : null;
+        if (value && template) value.replaceChildren(template.content.cloneNode(true));
+        heroLive.hidden = !nextShow;
+      }
+
+      if (homeLive) {
+        const card = homeLive.querySelector<HTMLElement>('[data-home-live-card]');
+        const template = nextShow ? homeLive.querySelector<HTMLTemplateElement>(`[data-home-show-template="${nextShow.id}"]`) : null;
+        if (card && template) card.replaceChildren(template.content.cloneNode(true));
+        homeLive.hidden = !nextShow;
+      }
     };
 
     render(classifyShows(shows));

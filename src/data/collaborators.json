@@ -1,38 +1,17 @@
 {
   "collaborators": [
     {
-      "id": "colaborador1",
-      "name": "Nombre del colaborador",
+      "id": "1",
+      "name": "Delicias del Mar Tumbes",
       "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
+      "url": "https://www.deliciasdelmartumbes.cl",
       "visible": true
     },
     {
-      "id": "colaborador2",
-      "name": "Nombre del colaborador2",
+      "id": "2",
+      "name": "Gutierres Arquitectos",
       "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
-      "visible": true
-    },
-    {
-      "id": "colaborador3",
-      "name": "Nombre del colaborador3",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
-      "visible": true
-    },
-    {
-      "id": "colaborador4",
-      "name": "Nombre del colaborador4",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
-      "visible": true
-    },
-    {
-      "id": "colaborador5",
-      "name": "Nombre del colaborador5",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
+      "url": "https://www.google.cl",
       "visible": true
     }
   ]

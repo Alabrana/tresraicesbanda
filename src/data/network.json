@@ -1,24 +1,10 @@
 {
   "bands": [
     {
-      "id": "banda-amiga",
-      "name": "Nombre de la banda",
-      "logo": "/images/band/Grupal.webp",
-      "url": "https://ejemplo.cl",
-      "visible": true
-    },
-    {
-      "id": "banda-amiga2",
-      "name": "Nombre de la banda",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
-      "visible": true
-    },
-    {
-      "id": "banda-amiga3",
-      "name": "Nombre de la banda",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://ejemplo.cl",
+      "id": "1",
+      "name": "Mister O",
+      "logo": "/images/network/misterO.avif",
+      "url": "https://linktr.ee/Banda_MISTER_O?utm_source=linktree_profile_share&ltsid=245c03be-7a4b-44e9-a3c4-90f87157b3f5",
       "visible": true
     }
   ]

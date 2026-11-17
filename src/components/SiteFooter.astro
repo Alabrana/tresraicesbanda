@@ -6,20 +6,15 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border-subtle bg-surface-raised/35 text-text-secondary">
-  <div class="tr-container-wide py-8 sm:py-10">
-    <ul class="flex flex-wrap items-center gap-2 p-0 sm:gap-3" role="list" aria-label="Tres Raíces en redes sociales y contacto">
-      <li>
-        <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href="/" title="Inicio" aria-label="Tres Raíces — Inicio">
-          <img class="size-8 object-contain" src="/images/logos/logoredondo.webp" width="300" height="300" alt="" />
-        </a>
-      </li>
-        {site.socialLinks.map((socialLink) => (
-          <li>
-            <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href={socialLink.url} target="_blank" rel="noreferrer" title={socialLink.name} aria-label={`${socialLink.name} de Tres Raíces (sitio externo)`}>
-              <SocialIcon id={socialLink.id} />
-            </a>
-          </li>
-        ))}
+  <div class="tr-container-wide py-9 sm:py-11">
+    <ul class="flex flex-wrap items-center justify-center gap-2 p-0 sm:gap-3" role="list" aria-label="Tres Raíces en redes sociales y contacto">
+      {site.socialLinks.map((socialLink) => (
+        <li>
+          <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href={socialLink.url} target="_blank" rel="noreferrer" title={socialLink.name} aria-label={`${socialLink.name} de Tres Raíces (sitio externo)`}>
+            <SocialIcon id={socialLink.id} />
+          </a>
+        </li>
+      ))}
       <li>
         <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href={`mailto:${site.contactEmail}`} title="Correo" aria-label={`Enviar correo a ${site.contactEmail}`}>
           <SocialIcon id="email" />
@@ -27,9 +22,9 @@ const currentYear = new Date().getFullYear();
       </li>
     </ul>
 
-    <div class="mt-6 flex flex-col gap-2 border-t border-border-subtle pt-5 text-xs tracking-[0.03em] sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+    <div class="mt-5 text-center text-xs tracking-[0.03em] sm:mt-6 sm:text-sm">
       <p class="mb-0">© {currentYear} Tres Raíces. Todos los derechos reservados.</p>
-      <p class="mb-0 text-text-primary">Rock desde Talcahuano.</p>
+      <p class="mt-2 mb-0 text-text-secondary/55">Desarrollado por Mar Digital_</p>
     </div>
   </div>
 </footer>
