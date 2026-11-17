@@ -59,6 +59,12 @@ pnpm editor
 
 Abrir `http://127.0.0.1:4388`. El panel carga una copia de trabajo de todos los módulos, lista las imágenes existentes de `public/images/` y conserva los cambios en el navegador hasta pulsar **Guardar todos los cambios**. El guardado valida los contratos, evita sobrescribir modificaciones externas y escribe los archivos afectados como una operación coordinada con restauración ante fallos. Después corresponde revisar `git diff`, probar `pnpm dev` y publicar manualmente con Git cuando proceda.
 
+### Añadir presentaciones
+
+En Vivo no se almacena como un único arreglo. Cada presentación ocupa su propio archivo `src/content/shows/<id>.json` y el contenido de ese archivo es un objeto. Para agregarla manualmente, crea un archivo nuevo con un ID único y utiliza exactamente el mismo valor en su campo `id`; no añadas otro evento dentro de un archivo existente.
+
+El editor local presenta esos archivos como un arreglo para que cada show sea un elemento independiente y resulte sencillo agregar, editar o eliminar presentaciones. Al usar **Guardar todos los cambios**, el campo `id` de cada elemento determina su archivo `src/content/shows/<id>.json`. Astro carga después todos esos archivos como una colección y los clasifica por fecha para próximas presentaciones e historial.
+
 Si `4388` está ocupado por otro proceso local, se puede usar un puerto alternativo, por ejemplo `EDITOR_PORT=4390 pnpm editor`, y abrir la misma dirección con ese puerto.
 
 El dominio configurado en Astro se usa solamente para URLs canónicas, sitemap y metadatos sociales del build. `pnpm dev` continúa sirviendo la web en `http://localhost:4321` y no redirige navegación, recursos ni llamadas locales al dominio público.

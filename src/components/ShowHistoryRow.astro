@@ -1,0 +1,47 @@
+---
+import type { Show } from '../lib/contracts';
+import { parseCivilDate } from '../lib/civil-date';
+
+interface Props {
+  show: Show;
+}
+
+const { show } = Astro.props;
+const civilDate = parseCivilDate(show.date);
+
+if (!civilDate) throw new RangeError(`Fecha inválida en la tocata ${show.id}.`);
+
+const dateAtUtcNoon = new Date(Date.UTC(civilDate.year, civilDate.month - 1, civilDate.day, 12));
+const weekday = new Intl.DateTimeFormat('es-CL', {
+  weekday: 'long',
+  timeZone: 'UTC',
+}).format(dateAtUtcNoon);
+const day = new Intl.DateTimeFormat('es-CL', {
+  day: '2-digit',
+  timeZone: 'UTC',
+}).format(dateAtUtcNoon);
+const month = new Intl.DateTimeFormat('es-CL', {
+  month: 'short',
+  timeZone: 'UTC',
+}).format(dateAtUtcNoon).replace(/[.-]/g, '');
+---
+
+<article class="grid min-w-0 grid-cols-[5.75rem_minmax(0,1fr)] items-center gap-4 border border-l-2 border-border-subtle border-l-accent-petrol bg-surface-raised px-4 py-4 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-5 sm:px-5 md:min-h-[6.5rem] md:grid-cols-[7.25rem_minmax(0,1fr)] md:gap-6 lg:min-h-[7rem] lg:px-6">
+  <div class="min-w-0 border-r border-border-strong pr-3 sm:pr-5">
+    <p data-display-type class="mb-1 text-[0.6875rem] leading-none tracking-[0.1em] text-accent-interactive uppercase sm:text-xs">
+      {weekday}
+    </p>
+    <p data-display-type class="whitespace-nowrap text-[1.625rem] leading-none tracking-[0.01em] text-text-primary uppercase sm:text-[2rem]">
+      {day} {month}
+    </p>
+    <p data-display-type class="mt-1 text-xs leading-none tracking-[0.08em] text-text-secondary sm:text-sm">
+      {civilDate.year}
+    </p>
+  </div>
+  <div class="min-w-0 py-0.5">
+    <h4 class="mb-2 text-xl leading-[1.05] uppercase sm:text-2xl">{show.title}</h4>
+    <p class="text-sm leading-snug text-text-secondary sm:text-base">
+      {show.venue}<span aria-hidden="true"> · </span>{show.city}
+    </p>
+  </div>
+</article>

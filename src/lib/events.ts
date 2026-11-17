@@ -25,6 +25,13 @@ export interface ShowClassification<T extends ClassifiableShow> {
   nextShow: T | null;
 }
 
+export interface HomePastShows<T extends ClassifiableShow> {
+  items: T[];
+  hasMore: boolean;
+}
+
+export const HOME_PAST_SHOW_LIMIT = 3;
+
 function compareDateAndTime<T extends ClassifiableShow>(left: T, right: T): number {
   return compareCivilDates(left.date, right.date) || left.time.localeCompare(right.time);
 }
@@ -57,6 +64,15 @@ export function classifyShows<T extends ClassifiableShow>(
     cancelled,
     rescheduled,
     nextShow: upcoming[0] ?? null,
+  };
+}
+
+export function getHomePastShows<T extends ClassifiableShow>(
+  classification: Pick<ShowClassification<T>, 'past'>,
+): HomePastShows<T> {
+  return {
+    items: classification.past.slice(0, HOME_PAST_SHOW_LIMIT),
+    hasMore: classification.past.length > HOME_PAST_SHOW_LIMIT,
   };
 }
 

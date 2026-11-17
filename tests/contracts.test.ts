@@ -9,6 +9,7 @@ import {
   imagePathSchema,
   localTimeSchema,
   mediaSchema,
+  showSchema,
   slugSchema,
   youtubeVideoUrlSchema,
 } from '../src/lib/contracts.ts';
@@ -51,6 +52,24 @@ test('acepta solamente URLs HTTP/HTTPS', () => {
   assert.equal(httpUrlSchema.safeParse('ftp://example.com/recurso').success, false);
   assert.equal(httpUrlSchema.safeParse('javascript:alert(1)').success, false);
   assert.equal(httpUrlSchema.safeParse('sin-protocolo.example').success, false);
+});
+
+test('ticketUrl es opcional en tocatas y, cuando existe, exige HTTP/HTTPS', () => {
+  const show = {
+    id: 'tocata-confirmada',
+    title: 'Tocata confirmada',
+    date: '2026-11-28',
+    time: '21:00',
+    venue: 'Lugar confirmado',
+    city: 'Talcahuano',
+    poster: '/images/shows/Flyer Zalsi Nov 2026.png',
+    status: 'scheduled',
+    visible: true,
+  };
+
+  assert.equal(showSchema.safeParse(show).success, true);
+  assert.equal(showSchema.safeParse({ ...show, ticketUrl: 'https://example.com/entradas' }).success, true);
+  assert.equal(showSchema.safeParse({ ...show, ticketUrl: 'ftp://example.com/entradas' }).success, false);
 });
 
 test('valida URLs de videos YouTube y rechaza otros hosts o recursos', () => {

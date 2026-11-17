@@ -6,6 +6,7 @@ import {
 } from '../src/lib/civil-date.ts';
 import {
   classifyShows,
+  getHomePastShows,
   type ClassifiableShow,
   watchShowClassification,
 } from '../src/lib/events.ts';
@@ -70,6 +71,39 @@ test('una scheduled pasa al historial al cambiar el día civil chileno', () => {
 
   assert.equal(classifyShows(shows, '2026-11-15').upcoming.length, 1);
   assert.equal(classifyShows(shows, '2026-11-16').past.length, 1);
+});
+
+test('el resumen del Inicio muestra entre cero y tres pasadas y enlaza solo cuando hay más', () => {
+  for (const count of [0, 1, 2, 3, 4]) {
+    const shows: ClassifiableShow[] = Array.from({ length: count }, (_, index) => ({
+      id: `pasada-${index + 1}`,
+      date: `2026-11-${String(index + 1).padStart(2, '0')}`,
+      time: '21:00',
+      status: 'scheduled',
+      visible: true,
+    }));
+    const preview = getHomePastShows(classifyShows(shows, '2026-11-15'));
+
+    assert.equal(preview.items.length, Math.min(count, 3), `cantidad: ${count}`);
+    assert.equal(preview.hasMore, count > 3, `cantidad: ${count}`);
+  }
+});
+
+test('el resumen del Inicio conserva orden descendente y excluye ocultas y estados especiales', () => {
+  const shows: ClassifiableShow[] = [
+    { id: 'antigua', date: '2026-11-01', time: '22:00', status: 'scheduled', visible: true },
+    { id: 'reciente', date: '2026-11-14', time: '20:00', status: 'scheduled', visible: true },
+    { id: 'intermedia', date: '2026-11-10', time: '21:00', status: 'scheduled', visible: true },
+    { id: 'hoy', date: '2026-11-15', time: '00:01', status: 'scheduled', visible: true },
+    { id: 'oculta', date: '2026-11-13', time: '21:00', status: 'scheduled', visible: false },
+    { id: 'cancelada', date: '2026-11-12', time: '21:00', status: 'cancelled', visible: true },
+    { id: 'reprogramada', date: '2026-11-11', time: '21:00', status: 'rescheduled', visible: true },
+  ];
+
+  const preview = getHomePastShows(classifyShows(shows, '2026-11-15'));
+
+  assert.deepEqual(preview.items.map(({ id }) => id), ['reciente', 'intermedia', 'antigua']);
+  assert.equal(preview.hasMore, false);
 });
 
 test('el reloj ligero reclasifica cuando cambia el día chileno', () => {

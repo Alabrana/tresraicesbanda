@@ -1,0 +1,18 @@
+{
+  "id": "agudos-gritos-icebar",
+  "title": "Agudos gritos en el Icebar",
+  "date": "2026-10-20",
+  "time": "19:00",
+  "venue": "Ice Bar - Concepción",
+  "city": "Concepción",
+  "address": "Ongolmo 1305",
+  "description": "Apertura de puertas a las 19:30. Preventa: $3.000 CLP. Entrada general: $4.000 CLP.",
+  "poster": "/images/shows/iceBar.webp",
+  "guestBands": [
+    "Silvestre",
+    "FoxTerrier",
+    "Cami La Guitarrera"
+  ],
+  "status": "scheduled",
+  "visible": true
+}

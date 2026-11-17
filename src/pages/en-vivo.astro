@@ -37,7 +37,7 @@ const showClassification = classifyShows(shows);
           <h2 class="tr-section-title" id="past-shows-title">Fechas pasadas</h2>
         </div>
         <div class="space-y-4 sm:space-y-5" data-show-list="past">
-          {showClassification.past.map((show) => <ShowCard show={show} />)}
+          {showClassification.past.map((show) => <ShowCard show={show} showTicket={false} />)}
         </div>
       </section>
 
@@ -89,7 +89,11 @@ const showClassification = classifyShows(shows);
 
       list.replaceChildren(...items.flatMap((show) => {
         const template = livePage.querySelector<HTMLTemplateElement>(`[data-show-template="${show.id}"]`);
-        return template ? [template.content.cloneNode(true)] : [];
+        if (!template) return [];
+
+        const card = template.content.cloneNode(true) as DocumentFragment;
+        if (name !== 'upcoming') card.querySelector<HTMLElement>('[data-show-ticket]')?.remove();
+        return [card];
       }));
       section.hidden = items.length === 0;
     };

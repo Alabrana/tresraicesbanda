@@ -4,14 +4,16 @@ import GrungeDivider from '../components/GrungeDivider.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
+import ShowHistoryRow from '../components/ShowHistoryRow.astro';
 import VideoModal from '../components/VideoModal.astro';
 import { band, collaborators, gallery, media } from '../data/content';
 import { getCollection } from 'astro:content';
-import { classifyShows } from '../lib/events';
+import { classifyShows, getHomePastShows } from '../lib/events';
 
 const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
 const shows = showEntries.map((show) => show.data);
 const showClassification = classifyShows(shows);
+const homePastShows = getHomePastShows(showClassification);
 const shortShowDateFormatter = new Intl.DateTimeFormat('es-CL', {
   day: '2-digit',
   month: 'short',
@@ -85,8 +87,8 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
     </div>
   </section>
 
-  {showClassification.nextShow && (
-    <section class="tr-container-editorial tr-section-featured" data-home-live>
+  {shows.length > 0 && (
+    <section class="tr-container-editorial tr-section-featured" data-home-live hidden={!showClassification.nextShow}>
       <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div>
           <p class="tr-eyebrow">En vivo</p>
@@ -95,9 +97,28 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         </div>
         <a class="tr-text-link" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
       </div>
-      <div data-home-live-card><ShowCard show={showClassification.nextShow} featured /></div>
+      <div data-home-live-card>
+        {showClassification.nextShow && <ShowCard show={showClassification.nextShow} featured />}
+      </div>
       {shows.map((show) => (
         <template data-home-show-template={show.id}><ShowCard show={show} featured /></template>
+      ))}
+      <div class="mt-8 border-t border-border-subtle pt-8 sm:mt-10 sm:pt-10" data-home-history hidden={homePastShows.items.length === 0}>
+        <div class="mb-4 sm:mb-5">
+          <h3 class="text-xl leading-none uppercase sm:text-2xl" id="home-past-shows-title">Presentaciones anteriores</h3>
+          <GrungeDivider class="mt-2" width="medium" />
+        </div>
+        <div aria-labelledby="home-past-shows-title">
+          <div class="space-y-2.5" data-home-history-list>
+            {homePastShows.items.map((show) => <ShowHistoryRow show={show} />)}
+          </div>
+        </div>
+        <a class="tr-text-link mt-3 inline-flex min-h-11 items-center" href="/en-vivo/" data-home-history-link hidden={!homePastShows.hasMore}>
+          Ver todas las presentaciones <span class="ml-2" aria-hidden="true">→</span>
+        </a>
+      </div>
+      {shows.map((show) => (
+        <template data-home-history-show-template={show.id}><ShowHistoryRow show={show} /></template>
       ))}
     </section>
   )}
@@ -180,7 +201,7 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
 </BaseLayout>
 
 <script>
-  import { classifyShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
+  import { classifyShows, getHomePastShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
 
   const homeLive = document.querySelector<HTMLElement>('[data-home-live]');
   const heroLive = document.querySelector<HTMLElement>('[data-home-hero-live]');
@@ -202,6 +223,20 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         const card = homeLive.querySelector<HTMLElement>('[data-home-live-card]');
         const template = nextShow ? homeLive.querySelector<HTMLTemplateElement>(`[data-home-show-template="${nextShow.id}"]`) : null;
         if (card && template) card.replaceChildren(template.content.cloneNode(true));
+
+        const history = homeLive.querySelector<HTMLElement>('[data-home-history]');
+        const historyList = homeLive.querySelector<HTMLElement>('[data-home-history-list]');
+        const historyLink = homeLive.querySelector<HTMLElement>('[data-home-history-link]');
+        const pastShows = getHomePastShows(classification);
+
+        if (historyList) {
+          historyList.replaceChildren(...pastShows.items.flatMap((show) => {
+            const historyTemplate = homeLive.querySelector<HTMLTemplateElement>(`[data-home-history-show-template="${show.id}"]`);
+            return historyTemplate ? [historyTemplate.content.cloneNode(true)] : [];
+          }));
+        }
+        if (history) history.hidden = pastShows.items.length === 0;
+        if (historyLink) historyLink.hidden = !pastShows.hasMore;
         homeLive.hidden = !nextShow;
       }
     };

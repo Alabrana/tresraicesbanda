@@ -6,10 +6,15 @@ interface Props {
   show: Show;
   showId?: string;
   featured?: boolean;
+  showTicket?: boolean;
 }
 
-const { show, showId, featured = false } = Astro.props;
+const { show, showId, featured = false, showTicket = true } = Astro.props;
 const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 'rescheduled' ? 'Reprogramada' : null;
+const descriptionParagraphs = show.description
+  ?.split(/\r?\n\s*\r?\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
 ---
 
 <article class:list={['relative min-w-0 overflow-hidden border border-border-subtle bg-surface-raised', featured && 'border-l-2 border-l-accent-petrol md:mx-auto md:max-w-[60rem]']} data-show-card={showId}>
@@ -27,10 +32,14 @@ const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 
       <h3 class="mb-2 text-2xl leading-none font-bold uppercase sm:text-3xl">{show.title}</h3>
       <p class="mb-1 text-sm text-ash-100 sm:text-base">{show.venue} · {show.city}</p>
       {show.address && <p class="mb-3 text-sm text-ash-400">{show.address}</p>}
-      {show.description && <p class="mb-3 text-sm text-ash-400">{show.description}</p>}
+      {descriptionParagraphs && descriptionParagraphs.length > 0 && (
+        <div class="mb-3 space-y-3 text-sm text-ash-400">
+          {descriptionParagraphs.map((paragraph) => <p class="whitespace-pre-line">{paragraph}</p>)}
+        </div>
+      )}
       {show.guestBands && show.guestBands.length > 0 && <p class="mb-3 text-sm text-ash-400">Junto a {show.guestBands.join(', ')}.</p>}
-      {show.ticketUrl && show.status === 'scheduled' && (
-        <a class="tr-button-primary px-4" href={show.ticketUrl} target="_blank" rel="noreferrer">
+      {showTicket && show.ticketUrl && show.status === 'scheduled' && (
+        <a class="tr-button-primary px-4" href={show.ticketUrl} target="_blank" rel="noreferrer" data-show-ticket>
           Entradas <span class="ml-2" aria-hidden="true">↗</span>
         </a>
       )}

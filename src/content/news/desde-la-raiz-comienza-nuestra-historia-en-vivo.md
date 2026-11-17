@@ -16,4 +16,4 @@ Gracias a todos los que siguen creyendo en esta banda y acompañándonos en cada
 
 ¡Nos vemos en Zalsipuedes!
 
-Tres Raíces — Rock desde Talcahuano.
+Tres Raíces — Rock & Roll del Puerto.
