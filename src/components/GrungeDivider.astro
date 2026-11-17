@@ -1,0 +1,44 @@
+---
+interface Props {
+  class?: string;
+  width?: 'short' | 'medium' | 'long';
+}
+
+const { class: className, width = 'medium' } = Astro.props;
+const widths = {
+  short: 'w-16',
+  medium: 'w-28',
+  long: 'w-40',
+};
+---
+
+<span
+  class:list={['block h-2 max-w-full overflow-hidden text-accent-interactive', widths[width], className]}
+  aria-hidden="true"
+>
+  <svg class="block size-full" viewBox="0 0 160 8" preserveAspectRatio="none" focusable="false">
+    <path
+      d="M1 3.8 10 3.3 18 4.1 30 3.5 41 3.9 51 3.2 62 3.8 73 3.4 83 4 96 3.3 108 3.7 118 3.1 130 3.8 141 3.3 159 3.6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.65"
+      vector-effect="non-scaling-stroke"
+    />
+    <path
+      d="M3 5.7 21 5.2 M25 5.6 47 5.1 M51 5.5 78 5.2 M84 5.7 103 5.1 M108 5.5 135 5 M140 5.4 157 5.1"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="0.65"
+      opacity="0.58"
+      vector-effect="non-scaling-stroke"
+    />
+    <path
+      d="M12 2.1 34 1.8 M39 2.2 68 1.9 M75 2.1 91 1.8 M99 2.2 124 1.9 M132 2.1 151 1.8"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="0.45"
+      opacity="0.42"
+      vector-effect="non-scaling-stroke"
+    />
+  </svg>
+</span>

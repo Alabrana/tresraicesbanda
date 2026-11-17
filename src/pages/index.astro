@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import GrungeDivider from '../components/GrungeDivider.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
@@ -90,6 +91,7 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         <div>
           <p class="tr-eyebrow">En vivo</p>
           <h2 class="tr-section-title">Próxima fecha</h2>
+          <GrungeDivider class="mt-2" width="medium" />
         </div>
         <a class="tr-text-link" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
       </div>
@@ -119,7 +121,8 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
         <img class="aspect-4/3 w-full object-cover" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />
         <div>
           <p class="tr-eyebrow">La Banda</p>
-          <h2 class="tr-section-title mb-4">Tres Raíces</h2>
+          <h2 class="tr-section-title">Tres Raíces</h2>
+          <GrungeDivider class="mt-2 mb-4" width="short" />
           <p class="mb-5 max-w-[58ch] text-base leading-relaxed text-text-secondary">{band.intro}</p>
           <a class="tr-button-secondary" href="/banda/">Conocer a la banda <span class="ml-2" aria-hidden="true">→</span></a>
         </div>
@@ -134,6 +137,7 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
           <div>
             <p class="tr-eyebrow">News</p>
             <h2 class="tr-section-title">Última noticia</h2>
+            <GrungeDivider class="mt-2" width="long" />
           </div>
           <a class="tr-text-link" href="/news/">Ver todas <span aria-hidden="true">→</span></a>
         </div>

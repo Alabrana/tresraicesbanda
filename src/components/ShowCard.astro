@@ -12,7 +12,7 @@ const { show, showId, featured = false } = Astro.props;
 const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 'rescheduled' ? 'Reprogramada' : null;
 ---
 
-<article class:list={['relative min-w-0 overflow-hidden border border-border-subtle bg-surface-raised', featured && 'md:mx-auto md:max-w-[60rem]']} data-show-card={showId}>
+<article class:list={['relative min-w-0 overflow-hidden border border-border-subtle bg-surface-raised', featured && 'border-l-2 border-l-accent-petrol md:mx-auto md:max-w-[60rem]']} data-show-card={showId}>
   {statusLabel && (
     <p class="absolute top-5 -right-10 z-10 m-0 w-40 rotate-45 border-y border-ash-100/45 bg-coal-950/95 py-1 text-center text-xs font-bold tracking-[0.1em] text-ash-100 uppercase">
       {statusLabel}
