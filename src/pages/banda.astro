@@ -6,37 +6,38 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout title="La Banda">
   <PageHeader eyebrow="Tres Raíces" title="La Banda" description="Víctor, Alex y Pato: rock desde Talcahuano." />
-  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    <div class="space-y-10 sm:space-y-14">
+  <section class="tr-container-editorial tr-section-standard">
+    <div class="space-y-12 sm:space-y-16">
       {(band.intro || band.history || band.groupPhoto) && (
-        <section class="grid gap-6 border-b border-iron-700 pb-10 md:grid-cols-[minmax(16rem,0.9fr)_1fr] md:items-center md:gap-10 sm:pb-14" aria-labelledby="band-history-title">
-          {band.groupPhoto && <img class="aspect-4/3 w-full bg-coal-950 object-contain" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />}
+        <section class="grid gap-6 border-b border-border-subtle pb-12 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10 sm:pb-16" aria-labelledby="band-history-title">
+          {band.groupPhoto && <img class="aspect-4/3 w-full bg-surface-canvas object-contain" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />}
           <div>
-            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Talcahuano, Chile</p>
-            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="band-history-title">Nuestra historia</h2>
-            {band.intro && <p class="mb-4 text-sm text-ash-100 sm:text-base">{band.intro}</p>}
-            {band.history && <p class="mb-0 whitespace-pre-line text-sm text-ash-400 sm:text-base">{band.history}</p>}
+            <p class="tr-eyebrow">Talcahuano, Chile</p>
+            <h2 class="tr-section-title mb-4" id="band-history-title">Nuestra historia</h2>
+            {band.intro && <p class="mb-4 max-w-[62ch] text-base leading-relaxed text-text-primary">{band.intro}</p>}
+            {band.history && <p class="mb-0 max-w-[62ch] whitespace-pre-line text-base leading-relaxed text-text-secondary md:text-[1.0625rem]">{band.history}</p>}
           </div>
         </section>
       )}
 
       <section aria-labelledby="members-title">
-        <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Integrantes</p>
-        <h2 class="mb-5 text-3xl leading-none font-bold uppercase sm:mb-6 sm:text-4xl" id="members-title">Tres Raíces</h2>
+        <p class="tr-eyebrow">Integrantes</p>
+        <h2 class="tr-section-title mb-6" id="members-title">Tres Raíces</h2>
         <div class="space-y-5 sm:space-y-7">
           {band.members.map((member, index) => (
             <article class:list={[
-              'grid min-w-0 overflow-hidden border border-iron-700 bg-iron-900 md:grid-cols-2',
-              index % 2 === 1 && 'md:[&>img]:order-2',
+              'grid min-w-0 overflow-hidden border border-border-subtle bg-surface-raised md:grid-cols-[minmax(16rem,42%)_1fr]',
             ]}>
-              <img class="aspect-4/3 h-full w-full bg-coal-950 object-contain md:aspect-auto" src={member.photo} width="768" height="1024" alt={`${member.name}, ${member.instrument}`} loading="lazy" />
-              <div class="flex min-w-0 flex-col justify-center p-5 sm:p-7">
-                <p data-display-type class="mb-2 text-sm tracking-[0.1em] text-petrol-500 uppercase">{member.instrument}</p>
-                <h3 class="mb-3 text-3xl leading-none font-bold uppercase sm:text-4xl">{member.name}</h3>
+              <div class:list={['h-[22rem] bg-surface-canvas sm:h-[26rem] md:h-[30rem]', index % 2 === 1 && 'md:order-2']}>
+                <img class="size-full object-contain" src={member.photo} width="768" height="1024" alt={`${member.name}, ${member.instrument}`} loading="lazy" />
+              </div>
+              <div class="flex min-w-0 flex-col justify-center p-5 sm:p-7 md:p-8">
+                <p class="tr-eyebrow mb-2">{member.instrument}</p>
+                <h3 class="mb-3 text-[clamp(1.75rem,7vw,2.25rem)] leading-none font-bold uppercase">{member.name}</h3>
                 {member.bio ? (
-                  <p class="mb-0 text-sm text-ash-400 sm:text-base">{member.bio}</p>
+                  <p class="mb-0 max-w-[62ch] text-base leading-relaxed text-text-secondary">{member.bio}</p>
                 ) : (
-                  <p class="mb-0 text-sm text-ash-400 sm:text-base">Biografía en preparación.</p>
+                  <p class="mb-0 text-base text-text-secondary">Biografía en preparación.</p>
                 )}
               </div>
             </article>

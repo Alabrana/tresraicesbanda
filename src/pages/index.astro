@@ -16,77 +16,86 @@ const latestVideo = media.videos
   .filter((video) => video.visible)
   .sort((left, right) => (right.date ?? '').localeCompare(left.date ?? ''))[0];
 const galleryPreview = gallery.photos.filter((photo) => photo.visible).slice(0, 3);
-const visibleCollaborators = collaborators.collaborators.filter((collaborator) => collaborator.visible);
+const visibleCollaborators = collaborators.collaborators.filter((collaborator) => {
+  if (!collaborator.visible) return false;
+  const isPlaceholderName = /^nombre del colaborador/i.test(collaborator.name.trim());
+  const isPlaceholderUrl = collaborator.url ? new URL(collaborator.url).hostname === 'ejemplo.cl' : false;
+  return !isPlaceholderName && !isPlaceholderUrl;
+});
 const hasBandPreview = Boolean(band.intro && band.groupPhoto);
 ---
 
 <BaseLayout title="Inicio">
   {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
-  <section class="border-b border-iron-700 py-8 sm:py-10 md:py-14 lg:py-16">
-    <div class="mx-auto grid w-full max-w-[70rem] items-center gap-6 px-4 sm:px-6 md:grid-cols-[minmax(220px,0.75fr)_1fr] md:gap-10 lg:gap-16 lg:px-8">
-      <img class="mx-auto h-auto w-full max-w-56 sm:max-w-64 md:max-w-none" src="/images/logos/logoprincipalHorizontal.webp" width="1620" height="971" alt="Tres Raíces" />
+  <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[40rem]">
+    <img class="absolute inset-0 -z-20 size-full object-cover object-center" src={band.groupPhoto} width="2048" height="1366" alt="" aria-hidden="true" />
+    <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.82)_48%,rgba(16,18,19,0.58)_100%)]" aria-hidden="true"></div>
+    <div class="tr-container-wide grid items-center gap-6 py-14 md:grid-cols-[minmax(12rem,0.65fr)_1fr] md:gap-10 md:py-16 lg:gap-16">
+      <img class="mx-auto h-auto w-full max-w-52 drop-shadow-[0_6px_20px_rgba(0,0,0,0.45)] sm:max-w-60 md:max-w-[18rem]" src="/images/logos/logoprincipalHorizontal.webp" width="1620" height="971" alt="Tres Raíces" />
       <div class="text-center md:text-left">
-        <p data-display-type class="mb-2 text-[0.8rem] font-bold tracking-[0.12em] text-ash-400 uppercase">Talcahuano · Chile</p>
-        <h1 class="mx-auto mb-3 max-w-[12ch] text-[clamp(2.15rem,10.5vw,3.25rem)] leading-[0.94] font-bold uppercase md:mx-0 md:mb-4 md:text-[clamp(3.25rem,6vw,6rem)]">Rock desde Talcahuano</h1>
-        <p class="mx-auto mb-5 max-w-[38rem] text-sm text-ash-400 sm:text-base md:mx-0">Rock desde el puerto, el barrio y las raíces de Talcahuano.</p>
+        <p class="tr-eyebrow mb-2 text-text-secondary">Talcahuano · Chile</p>
+        <h1 class="mx-auto mb-4 max-w-[12ch] text-[clamp(2.625rem,10vw,3.25rem)] leading-[0.94] font-bold uppercase md:mx-0 md:text-[clamp(4rem,5.4vw,5rem)]">Rock desde Talcahuano</h1>
+        <p class="mx-auto mb-6 max-w-[38rem] text-base leading-relaxed text-text-secondary md:mx-0 md:text-lg">Rock desde el puerto, el barrio y las raíces de Talcahuano.</p>
         <div class="flex flex-col justify-center gap-3 sm:flex-row md:justify-start">
-          <a class="inline-flex min-h-11 items-center justify-center border border-petrol-500 bg-petrol-500 px-5 text-sm font-bold tracking-[0.04em] text-coal-950 no-underline transition-colors hover:bg-transparent hover:text-ash-100" href="/en-vivo/">Ver fechas</a>
-          <a class="inline-flex min-h-11 items-center justify-center border border-iron-700 px-5 text-sm font-bold tracking-[0.04em] text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/media/">Escuchar y mirar</a>
+          <a class="tr-button-primary" href="/en-vivo/">Ver fechas</a>
+          <a class="tr-button-secondary bg-surface-canvas/60" href="/media/">Escuchar y mirar</a>
         </div>
       </div>
     </div>
   </section>
 
   {showClassification.nextShow && (
-    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20" data-home-live>
+    <section class="tr-container-editorial tr-section-featured" data-home-live>
       <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div>
-          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">En vivo</p>
-          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Próxima fecha</h2>
+          <p class="tr-eyebrow">En vivo</p>
+          <h2 class="tr-section-title">Próxima fecha</h2>
         </div>
-        <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
+        <a class="tr-text-link" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
       </div>
-      <div data-home-live-card><ShowCard show={showClassification.nextShow} /></div>
+      <div data-home-live-card><ShowCard show={showClassification.nextShow} featured /></div>
       {shows.map((show) => (
-        <template data-home-show-template={show.id}><ShowCard show={show} /></template>
+        <template data-home-show-template={show.id}><ShowCard show={show} featured /></template>
       ))}
     </section>
   )}
 
   {latestVideo && (
-    <section class="border-y border-iron-700 bg-iron-900/60">
-      <div class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-        <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Media</p>
-        <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl">Último video</h2>
-        <VideoModal videos={[latestVideo]} />
-        <a class="mt-5 inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/media/">Ver Media <span class="ml-2" aria-hidden="true">→</span></a>
+    <section class="border-y border-border-subtle bg-surface-raised/60">
+      <div class="tr-container-editorial tr-section-featured">
+        <div class="text-center">
+          <p class="tr-eyebrow">Media</p>
+          <h2 class="tr-section-title mb-5">Último video</h2>
+        </div>
+        <VideoModal videos={[latestVideo]} featured />
+        <div class="mt-5 text-center"><a class="tr-button-secondary" href="/media/">Ver Media <span class="ml-2" aria-hidden="true">→</span></a></div>
       </div>
     </section>
   )}
 
   {hasBandPreview && (
-    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <section class="tr-container-editorial tr-section-standard">
       <div class="grid gap-6 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10">
         <img class="aspect-4/3 w-full object-cover" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />
         <div>
-          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">La Banda</p>
-          <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl">Tres Raíces</h2>
-          <p class="mb-5 text-sm text-ash-400 sm:text-base">{band.intro}</p>
-          <a class="inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href="/banda/">Conocer a la banda <span class="ml-2" aria-hidden="true">→</span></a>
+          <p class="tr-eyebrow">La Banda</p>
+          <h2 class="tr-section-title mb-4">Tres Raíces</h2>
+          <p class="mb-5 max-w-[58ch] text-base leading-relaxed text-text-secondary">{band.intro}</p>
+          <a class="tr-button-secondary" href="/banda/">Conocer a la banda <span class="ml-2" aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
   )}
 
   {latestArticle && (
-    <section class="border-y border-iron-700 bg-iron-900/60">
-      <div class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <section class="border-y border-border-subtle">
+      <div class="tr-container-editorial tr-section-featured">
         <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
           <div>
-            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">News</p>
-            <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Última noticia</h2>
+            <p class="tr-eyebrow">News</p>
+            <h2 class="tr-section-title">Última noticia</h2>
           </div>
-          <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/news/">Ver todas <span aria-hidden="true">→</span></a>
+          <a class="tr-text-link" href="/news/">Ver todas <span aria-hidden="true">→</span></a>
         </div>
         <NewsCard article={latestArticle} featured />
       </div>
@@ -94,17 +103,17 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
   )}
 
   {galleryPreview.length > 0 && (
-    <section class="mx-auto w-full max-w-[70rem] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+    <section class="tr-container-editorial tr-section-standard">
       <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div>
-          <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Galería</p>
-          <h2 class="mb-0 text-3xl leading-none font-bold uppercase sm:text-4xl">Momentos</h2>
+          <p class="tr-eyebrow">Galería</p>
+          <h2 class="tr-section-title">Momentos</h2>
         </div>
-        <a class="text-sm font-bold text-ash-100 transition-colors hover:text-petrol-500" href="/galeria/">Ver galería <span aria-hidden="true">→</span></a>
+        <a class="tr-text-link" href="/galeria/">Ver galería <span aria-hidden="true">→</span></a>
       </div>
       <div class="grid gap-4 sm:grid-cols-3 sm:gap-5">
         {galleryPreview.map((photo) => (
-          <div class="aspect-[4/5] bg-coal-950">
+          <div class="aspect-[3/4] max-h-[25rem] bg-surface-canvas">
             <img class="h-full w-full object-contain" src={photo.image} alt={photo.description} loading="lazy" />
           </div>
         ))}
@@ -113,8 +122,8 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
   )}
 
   {visibleCollaborators.length > 0 && (
-    <section class="border-t border-iron-700 bg-iron-900/60">
-      <div class="mx-auto w-full max-w-[70rem] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+    <section class="border-t border-border-subtle bg-surface-raised/60">
+      <div class="tr-container-wide tr-section-compact">
         <p data-display-type class="mb-4 text-center text-xs tracking-[0.12em] text-ash-400 uppercase">Colaboran</p>
         <div class="flex flex-wrap items-center justify-center gap-5 sm:gap-8">
           {visibleCollaborators.map((collaborator) => collaborator.url ? (

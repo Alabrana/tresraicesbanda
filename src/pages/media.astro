@@ -13,32 +13,36 @@ const youtubeChannel = site.socialLinks.find((socialLink) => socialLink.id === '
 
 <BaseLayout title="Media">
   <PageHeader title="Media" description="Música y videos de Tres Raíces." />
-  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
+  <section class="tr-container-editorial tr-section-standard">
     {platforms.length === 0 && videos.length === 0 && !youtubeChannel ? (
       <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Aún no hay música ni videos confirmados para publicar.</p>
     ) : (
-      <div class="space-y-12 sm:space-y-16">
-        {youtubeChannel && (
-          <section aria-labelledby="youtube-channel-title">
-            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Canal oficial</p>
-            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="youtube-channel-title">YouTube</h2>
-            <a class="inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href={youtubeChannel.url} target="_blank" rel="noreferrer">Visitar canal oficial <span class="ml-2" aria-hidden="true">↗</span></a>
-          </section>
-        )}
-        {platforms.length > 0 && (
-          <section aria-labelledby="platforms-title">
-            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Escuchar</p>
-            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="platforms-title">Plataformas</h2>
+      <div class="space-y-12 sm:space-y-14">
+        {(youtubeChannel || platforms.length > 0) && (
+          <div class="grid gap-8 border-b border-border-subtle pb-10 sm:grid-cols-2 sm:pb-12">
+            {youtubeChannel && (
+              <section aria-labelledby="youtube-channel-title">
+                <p class="tr-eyebrow">Canal oficial</p>
+                <h2 class="tr-section-title mb-4" id="youtube-channel-title">YouTube</h2>
+                <a class="tr-button-secondary" href={youtubeChannel.url} target="_blank" rel="noreferrer">Visitar canal oficial <span class="ml-2" aria-hidden="true">↗</span></a>
+              </section>
+            )}
+            {platforms.length > 0 && (
+              <section aria-labelledby="platforms-title">
+                <p class="tr-eyebrow">Escuchar</p>
+                <h2 class="tr-section-title mb-4" id="platforms-title">Plataformas</h2>
             <ul class="flex flex-wrap gap-3 p-0" role="list">
-              {platforms.map((platform) => <li><a class="inline-flex min-h-11 items-center border border-iron-700 px-4 text-sm font-bold text-ash-100 no-underline transition-colors hover:border-petrol-500 hover:text-petrol-500" href={platform.url} target="_blank" rel="noreferrer">{platform.name} <span class="ml-2" aria-hidden="true">↗</span></a></li>)}
+                  {platforms.map((platform) => <li><a class="tr-button-secondary" href={platform.url} target="_blank" rel="noreferrer">{platform.name} <span class="ml-2" aria-hidden="true">↗</span></a></li>)}
             </ul>
-          </section>
+              </section>
+            )}
+          </div>
         )}
         {videos.length > 0 && (
           <section aria-labelledby="videos-title">
-            <p data-display-type class="mb-1 text-xs tracking-[0.12em] text-petrol-500 uppercase">Mirar</p>
-            <h2 class="mb-4 text-3xl leading-none font-bold uppercase sm:text-4xl" id="videos-title">Videos</h2>
-            <VideoModal videos={videos} />
+            <p class="tr-eyebrow">Mirar</p>
+            <h2 class="tr-section-title mb-5" id="videos-title">Videos</h2>
+            <VideoModal videos={videos} featured={videos.length === 1} />
           </section>
         )}
       </div>

@@ -2,43 +2,34 @@
 import SocialIcon from './SocialIcon.astro';
 import { site } from '../data/content';
 
-const links = [
-  ['Inicio', '/'],
-  ['La Banda', '/banda/'],
-  ['Media', '/media/'],
-  ['En Vivo', '/en-vivo/'],
-  ['News', '/news/'],
-  ['Galería', '/galeria/'],
-  ['Network', '/network/'],
-];
+const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-iron-700 py-8 text-ash-400 sm:py-10">
-  <div class="mx-auto grid w-full max-w-[70rem] gap-7 px-4 sm:px-6 md:grid-cols-[1fr_auto] md:items-end lg:px-8">
-    <div>
-      <p class="mb-1 text-sm sm:text-base"><strong class="text-ash-100">Tres Raíces</strong> · Talcahuano, Chile</p>
-      <p class="mb-3 text-sm">Contacto y contrataciones</p>
-      <ul class="flex flex-wrap gap-x-4 gap-y-3 p-0 text-sm" role="list" aria-label="Redes sociales y contacto">
-        <li>
-          <a class="inline-flex min-h-11 items-center gap-2 text-ash-100 transition-colors hover:text-petrol-500" href={`mailto:${site.contactEmail}`} aria-label="Enviar correo a Tres Raíces">
-            <SocialIcon id="email" />
-            <span>Correo</span>
-          </a>
-        </li>
+<footer class="border-t border-border-subtle bg-surface-raised/35 text-text-secondary">
+  <div class="tr-container-wide py-8 sm:py-10">
+    <ul class="flex flex-wrap items-center gap-2 p-0 sm:gap-3" role="list" aria-label="Tres Raíces en redes sociales y contacto">
+      <li>
+        <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href="/" title="Inicio" aria-label="Tres Raíces — Inicio">
+          <img class="size-8 object-contain" src="/images/logos/logoredondo.webp" width="300" height="300" alt="" />
+        </a>
+      </li>
         {site.socialLinks.map((socialLink) => (
           <li>
-            <a class="inline-flex min-h-11 items-center gap-2 text-ash-100 transition-colors hover:text-petrol-500" href={socialLink.url} target="_blank" rel="noreferrer" aria-label={`${socialLink.name} de Tres Raíces (sitio externo)`}>
+            <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href={socialLink.url} target="_blank" rel="noreferrer" title={socialLink.name} aria-label={`${socialLink.name} de Tres Raíces (sitio externo)`}>
               <SocialIcon id={socialLink.id} />
-              <span>{socialLink.name}</span>
             </a>
           </li>
         ))}
-      </ul>
+      <li>
+        <a class="inline-flex size-11 items-center justify-center text-text-primary transition-colors hover:text-accent-interactive" href={`mailto:${site.contactEmail}`} title="Correo" aria-label={`Enviar correo a ${site.contactEmail}`}>
+          <SocialIcon id="email" />
+        </a>
+      </li>
+    </ul>
+
+    <div class="mt-6 flex flex-col gap-2 border-t border-border-subtle pt-5 text-xs tracking-[0.03em] sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+      <p class="mb-0">© {currentYear} Tres Raíces. Todos los derechos reservados.</p>
+      <p class="mb-0 text-text-primary">Rock desde Talcahuano.</p>
     </div>
-    <nav aria-label="Navegación del pie de página">
-      <ul class="flex max-w-md flex-wrap gap-x-4 gap-y-2 p-0 text-sm" role="list">
-        {links.map(([label, href]) => <li><a class="transition-colors hover:text-petrol-500" href={href}>{label}</a></li>)}
-      </ul>
-    </nav>
   </div>
 </footer>

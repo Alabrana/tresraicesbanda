@@ -29,12 +29,12 @@ const { Content } = await render(article);
   imageAlt={`Portada: ${article.data.title}`}
   ogType="article"
 >
-  <article class="mx-auto min-h-[48vh] w-full max-w-[52rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
-    <p data-display-type class="mb-2 text-[0.8rem] font-bold tracking-[0.12em] text-ash-400 uppercase">News</p>
-    <h1 class="mb-4 text-[clamp(2rem,10vw,3rem)] leading-[1.05] font-bold md:text-[clamp(3rem,6vw,4.5rem)]">{article.data.title}</h1>
-    <time class="text-sm text-ash-400 sm:text-base" datetime={article.data.date}>{formatCivilDate(article.data.date)}</time>
-    <img class="my-6 max-h-[75dvh] w-full bg-coal-950 object-contain sm:my-8" src={article.data.cover} width="1600" height="900" alt={`Portada: ${article.data.title}`} />
-    <div class="mb-10 space-y-4 text-sm sm:mb-12 sm:text-base [&_a]:text-petrol-500 [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold sm:[&_h2]:text-2xl [&_h3]:mt-6 [&_h3]:text-lg [&_h3]:font-bold sm:[&_h3]:text-xl [&_ol]:ml-5 [&_ol]:list-decimal [&_ul]:ml-5 [&_ul]:list-disc"><Content /></div>
+  <article class="tr-container-reading tr-section-standard">
+    <p class="tr-eyebrow mb-2 text-text-secondary">News</p>
+    <h1 class="mb-4 max-w-[18ch] text-[clamp(2.25rem,9vw,3rem)] leading-[1.05] font-bold md:text-[clamp(3rem,5vw,4rem)]">{article.data.title}</h1>
+    <time class="text-sm text-accent-interactive sm:text-[0.9375rem]" datetime={article.data.date}>{formatCivilDate(article.data.date)}</time>
+    <img class="my-7 max-h-[38rem] w-full bg-surface-canvas object-contain sm:my-9" src={article.data.cover} width="1600" height="900" alt={`Portada: ${article.data.title}`} />
+    <div class="mb-10 space-y-5 text-base leading-[1.7] text-text-primary sm:mb-12 md:text-[1.0625rem] [&_a]:text-accent-interactive [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mt-9 [&_h2]:text-2xl [&_h2]:leading-tight [&_h2]:font-bold [&_h3]:mt-7 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:ml-5 [&_ol]:list-decimal [&_ul]:ml-5 [&_ul]:list-disc"><Content /></div>
     {article.data.images && article.data.images.length > 0 && (
       <section aria-labelledby="additional-images">
         <h2 class="mb-4 text-2xl font-bold" id="additional-images">Imágenes</h2>

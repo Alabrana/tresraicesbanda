@@ -36,7 +36,7 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
 
       <button
         type="button"
-        class="flex size-11 shrink-0 items-center justify-center border border-iron-700 bg-iron-900 text-ash-100 transition-colors hover:border-petrol-500 hover:text-white md:hidden"
+        class="flex size-11 shrink-0 items-center justify-center border border-border-subtle bg-surface-raised text-text-primary transition-colors hover:border-accent-interactive hover:text-accent-interactive md:hidden"
         aria-label="Abrir menú principal"
         aria-expanded="false"
         aria-controls="mobile-navigation"
@@ -52,7 +52,7 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
         <ul class="flex items-center gap-3 lg:gap-5">
           {links.map(([label, href]) => (
             <li>
-              <a class:list={['block py-3 text-xs no-underline transition-colors hover:text-ash-100 lg:text-sm', isCurrent(href) ? 'text-ash-100' : 'text-ash-400']} href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+              <a class:list={['block border-b py-3 text-xs no-underline transition-colors hover:text-ash-100 lg:text-sm', isCurrent(href) ? 'border-accent-interactive text-ash-100' : 'border-transparent text-ash-400']} href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
             </li>
           ))}
         </ul>
@@ -70,7 +70,7 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
     <ul class="mx-auto w-full max-w-[70rem] px-4 py-3 sm:px-6">
       {links.map(([label, href]) => (
         <li class="border-b border-iron-700/70 last:border-b-0">
-          <a class:list={['block min-h-12 py-3 text-base font-bold tracking-[0.04em] no-underline transition-colors hover:text-petrol-500', isCurrent(href) ? 'text-petrol-500' : 'text-ash-100']} href={href} aria-current={isCurrent(href) ? 'page' : undefined} data-mobile-link>{label}</a>
+          <a class:list={['block min-h-12 py-3 text-base font-bold tracking-[0.04em] no-underline transition-colors hover:text-accent-interactive', isCurrent(href) ? 'text-accent-interactive' : 'text-ash-100']} href={href} aria-current={isCurrent(href) ? 'page' : undefined} data-mobile-link>{label}</a>
         </li>
       ))}
     </ul>

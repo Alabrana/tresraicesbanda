@@ -15,7 +15,7 @@ const serializedPhotos = JSON.stringify(photos).replaceAll('<', '\\u003c');
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-gallery>
   {photos.map((photo, index) => (
-    <button class="group relative flex aspect-[4/5] min-w-0 items-center justify-center overflow-hidden border border-iron-700 bg-coal-950 text-left" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
+    <button class="group relative flex aspect-[3/4] max-h-[28rem] min-w-0 items-center justify-center overflow-hidden border border-border-subtle bg-surface-canvas text-left" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
       <img class="h-full w-full object-contain" src={photo.image} alt={photo.description} loading="lazy" />
       <span class="absolute inset-x-0 bottom-0 bg-coal-950/80 p-3 text-sm text-ash-100 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">{photo.description}</span>
     </button>
@@ -26,12 +26,12 @@ const serializedPhotos = JSON.stringify(photos).replaceAll('<', '\\u003c');
 <dialog class="m-auto w-[min(100%-2rem,78rem)] border border-iron-700 bg-coal-950 p-0 text-ash-100 shadow-2xl backdrop:bg-coal-950/85" aria-labelledby="gallery-lightbox-title" data-gallery-dialog>
   <div class="flex items-center justify-between gap-4 border-b border-iron-700 p-3 sm:p-4">
     <p class="mb-0 min-w-0 truncate text-sm text-ash-400" id="gallery-lightbox-title" data-gallery-description></p>
-    <button class="flex size-11 shrink-0 items-center justify-center border border-iron-700 text-xl transition-colors hover:border-petrol-500 hover:text-petrol-500" type="button" aria-label="Cerrar fotografía" data-gallery-close>×</button>
+    <button class="flex size-11 shrink-0 items-center justify-center border border-border-subtle text-xl transition-colors hover:border-accent-interactive hover:text-accent-interactive" type="button" aria-label="Cerrar fotografía" data-gallery-close>×</button>
   </div>
   <div class="relative flex min-h-64 items-center justify-center bg-black sm:min-h-96">
     <img class="max-h-[75dvh] w-auto max-w-full object-contain" data-gallery-image alt="" />
-    <button class="absolute left-3 flex size-11 items-center justify-center border border-iron-700 bg-coal-950/90 text-ash-100 transition-colors hover:border-petrol-500" type="button" aria-label="Fotografía anterior" data-gallery-previous>←</button>
-    <button class="absolute right-3 flex size-11 items-center justify-center border border-iron-700 bg-coal-950/90 text-ash-100 transition-colors hover:border-petrol-500" type="button" aria-label="Fotografía siguiente" data-gallery-next>→</button>
+    <button class="absolute left-3 flex size-11 items-center justify-center border border-border-subtle bg-coal-950/90 text-ash-100 transition-colors hover:border-accent-interactive hover:text-accent-interactive" type="button" aria-label="Fotografía anterior" data-gallery-previous>←</button>
+    <button class="absolute right-3 flex size-11 items-center justify-center border border-border-subtle bg-coal-950/90 text-ash-100 transition-colors hover:border-accent-interactive hover:text-accent-interactive" type="button" aria-label="Fotografía siguiente" data-gallery-next>→</button>
   </div>
 </dialog>
 

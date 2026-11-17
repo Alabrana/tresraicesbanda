@@ -3,26 +3,31 @@ import PageHeader from '../components/PageHeader.astro';
 import { network } from '../data/content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const bands = network.bands.filter((band) => band.visible);
+const bands = network.bands.filter((band) => {
+  if (!band.visible) return false;
+  const isPlaceholderName = /^nombre de la banda/i.test(band.name.trim());
+  const isPlaceholderUrl = band.url ? new URL(band.url).hostname === 'ejemplo.cl' : false;
+  return !isPlaceholderName && !isPlaceholderUrl;
+});
 ---
 
 <BaseLayout title="Network">
   <PageHeader eyebrow="Bandas amigas" title="Network" description="Vínculos de la escena y bandas amigas." />
-  <section class="mx-auto min-h-[48vh] w-full max-w-[70rem] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-16 lg:px-8 lg:pt-12 lg:pb-20">
+  <section class="tr-container-editorial tr-section-standard">
     {bands.length === 0 ? (
       <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Las bandas amigas se incorporarán cuando sus datos y logos sean confirmados.</p>
     ) : (
       <ul class="grid grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" role="list">
         {bands.map((band) => (
-          <li class="min-w-0 border border-iron-700 bg-iron-900">
+          <li class="min-w-0 border border-border-subtle bg-surface-raised">
             {band.url ? (
-              <a class="group flex min-h-52 flex-col items-center justify-center gap-4 p-5 text-center no-underline transition-colors hover:bg-iron-700/35" href={band.url} target="_blank" rel="noreferrer" aria-label={`${band.name} (sitio externo)`}>
-                <img class="max-h-28 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
-                <span class="text-sm font-bold text-ash-100 transition-colors group-hover:text-petrol-500">{band.name} <span aria-hidden="true">↗</span></span>
+              <a class="group flex min-h-48 flex-col items-center justify-center gap-4 p-5 text-center no-underline transition-colors hover:bg-iron-700/35" href={band.url} target="_blank" rel="noreferrer" aria-label={`${band.name} (sitio externo)`}>
+                <img class="max-h-24 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
+                <span class="text-sm font-bold text-ash-100 transition-colors group-hover:text-accent-interactive">{band.name} <span aria-hidden="true">↗</span></span>
               </a>
             ) : (
-              <div class="flex min-h-52 flex-col items-center justify-center gap-4 p-5 text-center">
-                <img class="max-h-28 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
+              <div class="flex min-h-48 flex-col items-center justify-center gap-4 p-5 text-center">
+                <img class="max-h-24 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
                 <p class="mb-0 text-sm font-bold text-ash-100">{band.name}</p>
               </div>
             )}
