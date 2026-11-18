@@ -1,0 +1,14 @@
+{
+  "id": "puerto-vivo-3",
+  "title": "Festival Puerto Vivo III",
+  "date": "2026-10-11",
+  "time": "14:00",
+  "venue": "Bar Kutral KO",
+  "city": "Concepción",
+  "address": "Paicaví 723",
+  "description": "Presentación en festival Puerto Vivo versión III.",
+  "poster": "/images/shows/kutralKo1.webp",
+  "guestBands": [],
+  "status": "scheduled",
+  "visible": true
+}

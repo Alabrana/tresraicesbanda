@@ -1,21 +1,21 @@
 {
   "photos": [
     {
-      "id": "ensayo-victor",
-      "image": "/images/gallery/ensayando-victor.jpeg",
-      "description": "Víctor durante un ensayo de Tres Raíces.",
+      "id": "vic1",
+      "image": "/images/gallery/tresraicesVictor.webp",
+      "description": "Víctor retumbando el bajo.",
       "visible": true
     },
     {
-      "id": "ensayo-alex",
-      "image": "/images/gallery/ensayando-alex.jpeg",
-      "description": "Alex trabajando las guitarras en la sala de ensayo.",
+      "id": "alex1",
+      "image": "/images/gallery/tresRaicesAlex.webp",
+      "description": "Alexis en plena presentación.",
       "visible": true
     },
     {
-      "id": "ensayo-pato",
-      "image": "/images/gallery/ensayando-pato.jpeg",
-      "description": "Pato detrás de la batería durante una sesión de ensayo.",
+      "id": "pato1",
+      "image": "/images/gallery/tresRaicesPato.webp",
+      "description": "Pato detrás de la batería dandolo todo.",
       "visible": true
     }
   ]

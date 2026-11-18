@@ -9,41 +9,75 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="tr-container-editorial tr-section-standard">
     <div class="space-y-12 sm:space-y-16">
       {(band.intro || band.history || band.groupPhoto) && (
-        <section class="grid gap-6 border-b border-border-subtle pb-12 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10 sm:pb-16" aria-labelledby="band-history-title">
-          {band.groupPhoto && <img class="aspect-4/3 w-full bg-surface-canvas object-contain" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />}
-          <div>
+        <section class="grid gap-6 border-b border-border-subtle pb-12 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10 lg:grid-cols-1 lg:justify-items-center lg:gap-10 sm:pb-16" aria-labelledby="band-history-title">
+          {band.groupPhoto && <img class="aspect-4/3 w-full bg-surface-canvas object-contain lg:order-2 lg:aspect-[3/2] lg:max-w-[56rem]" src={band.groupPhoto} width="1535" height="1024" alt="Tres Raíces" loading="lazy" />}
+          <div class="lg:order-1 lg:w-full lg:max-w-[48rem] lg:text-center">
             <p class="tr-eyebrow">Talcahuano, Chile</p>
             <h2 class="tr-section-title mb-4" id="band-history-title">Nuestra historia</h2>
-            {band.intro && <p class="mb-4 max-w-[62ch] text-base leading-relaxed text-text-primary">{band.intro}</p>}
-            {band.history && <p class="mb-0 max-w-[62ch] whitespace-pre-line text-base leading-relaxed text-text-secondary md:text-[1.0625rem]">{band.history}</p>}
+            {band.intro && <p class="mb-4 max-w-[62ch] text-base leading-relaxed text-text-primary lg:mx-auto">{band.intro}</p>}
+            {band.history && <p class="mb-0 max-w-[62ch] whitespace-pre-line text-base leading-relaxed text-text-secondary md:text-[1.0625rem] lg:mx-auto lg:text-left">{band.history}</p>}
           </div>
         </section>
       )}
 
       <section aria-labelledby="members-title">
-        <p class="tr-eyebrow">Integrantes</p>
-        <h2 class="tr-section-title mb-6" id="members-title">Tres Raíces</h2>
-        <div class="space-y-5 sm:space-y-7">
-          {band.members.map((member, index) => (
-            <article class:list={[
-              'grid min-w-0 overflow-hidden border border-border-subtle bg-surface-raised md:grid-cols-[minmax(16rem,42%)_1fr]',
-            ]}>
-              <div class:list={['h-[22rem] bg-surface-canvas sm:h-[26rem] md:h-[30rem]', index % 2 === 1 && 'md:order-2']}>
-                <img class="size-full object-contain" src={member.photo} width="768" height="1024" alt={`${member.name}, ${member.instrument}`} loading="lazy" />
-              </div>
-              <div class="flex min-w-0 flex-col justify-center p-5 sm:p-7 md:p-8">
-                <p class="tr-eyebrow mb-2">{member.instrument}</p>
-                <h3 class="mb-3 text-[clamp(1.75rem,7vw,2.25rem)] leading-none font-bold uppercase">{member.name}</h3>
-                {member.bio ? (
-                  <p class="mb-0 max-w-[62ch] text-base leading-relaxed text-text-secondary">{member.bio}</p>
-                ) : (
-                  <p class="mb-0 text-base text-text-secondary">Biografía en preparación.</p>
-                )}
-              </div>
-            </article>
-          ))}
+        <div class="md:mx-auto md:max-w-[56rem]">
+          <p class="tr-eyebrow">Integrantes</p>
+          <h2 class="tr-section-title mb-6" id="members-title">Tres Raíces</h2>
+          <div class="space-y-5 sm:space-y-7">
+            {band.members.map((member, index) => (
+              <article class:list={[
+                'grid min-w-0 overflow-hidden border border-border-subtle bg-surface-raised md:grid-cols-[minmax(15rem,38%)_1fr]',
+              ]}>
+                <div class:list={['group/photo relative isolate h-[22rem] overflow-hidden bg-surface-raised sm:h-[26rem] md:h-[26rem] lg:h-[27rem]', index % 2 === 1 && 'md:order-2']}>
+                  <img
+                    class:list={[
+                      'member-photo size-full object-contain',
+                      index % 2 === 1 ? 'md:origin-right md:object-right' : 'md:origin-left md:object-left',
+                    ]}
+                    src={member.photo}
+                    width="768"
+                    height="1024"
+                    alt={`${member.name}, ${member.instrument}`}
+                    loading="lazy"
+                  />
+                  <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(24,28,30,0.92)_0%,transparent_9%,transparent_91%,rgba(24,28,30,0.92)_100%)]" aria-hidden="true"></span>
+                  <span class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(24,28,30,0.72)_0%,transparent_6%,transparent_94%,rgba(24,28,30,0.72)_100%)]" aria-hidden="true"></span>
+                </div>
+                <div class="flex min-w-0 flex-col justify-center p-5 sm:p-6 md:p-7">
+                  <p class="tr-eyebrow mb-2">{member.instrument}</p>
+                  <h3 class="mb-3 text-[clamp(1.75rem,7vw,2.25rem)] leading-none font-bold uppercase">{member.name}</h3>
+                  {member.bio ? (
+                    <p class="mb-0 max-w-[62ch] text-base leading-relaxed text-text-secondary">{member.bio}</p>
+                  ) : (
+                    <p class="mb-0 text-base text-text-secondary">Biografía en preparación.</p>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .member-photo {
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group\/photo:hover .member-photo {
+    transform: scale(1.025);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .member-photo {
+      transition: none;
+    }
+
+    .group\/photo:hover .member-photo {
+      transform: none;
+    }
+  }
+</style>

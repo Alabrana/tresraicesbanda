@@ -17,17 +17,17 @@ const bands = network.bands.filter((band) => {
     {bands.length === 0 ? (
       <p class="mb-0 max-w-[46rem] border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">Las bandas amigas se incorporarán cuando sus datos y logos sean confirmados.</p>
     ) : (
-      <ul class="grid grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" role="list">
+      <ul class="flex flex-wrap justify-center gap-x-5 gap-y-8 p-0 sm:gap-x-6" role="list">
         {bands.map((band) => (
-          <li class="min-w-0 border border-border-subtle bg-surface-raised">
+          <li class="network-item w-full max-w-[16rem] min-w-0 sm:w-56">
             {band.url ? (
-              <a class="group flex min-h-48 flex-col items-center justify-center gap-4 p-5 text-center no-underline transition-colors hover:bg-iron-700/35" href={band.url} target="_blank" rel="noreferrer" aria-label={`${band.name} (sitio externo)`}>
-                <img class="max-h-24 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
+              <a class="group flex min-h-44 flex-col items-center justify-center gap-4 p-4 text-center no-underline" href={band.url} target="_blank" rel="noreferrer" aria-label={`${band.name} (sitio externo)`}>
+                <img class="network-logo max-h-28 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
                 <span class="text-sm font-bold text-ash-100 transition-colors group-hover:text-accent-interactive">{band.name} <span aria-hidden="true">↗</span></span>
               </a>
             ) : (
-              <div class="flex min-h-48 flex-col items-center justify-center gap-4 p-5 text-center">
-                <img class="max-h-24 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
+              <div class="flex min-h-44 flex-col items-center justify-center gap-4 p-4 text-center">
+                <img class="network-logo max-h-28 max-w-full object-contain" src={band.logo} alt={band.name} loading="lazy" />
                 <p class="mb-0 text-sm font-bold text-ash-100">{band.name}</p>
               </div>
             )}
@@ -37,3 +37,25 @@ const bands = network.bands.filter((band) => {
     )}
   </section>
 </BaseLayout>
+
+<style>
+  .network-logo {
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .network-item:hover .network-logo,
+  .network-item:focus-within .network-logo {
+    transform: translateY(-0.25rem) scale(1.04);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .network-logo {
+      transition: none;
+    }
+
+    .network-item:hover .network-logo,
+    .network-item:focus-within .network-logo {
+      transform: none;
+    }
+  }
+</style>

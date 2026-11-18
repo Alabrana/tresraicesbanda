@@ -1,28 +1,28 @@
 {
   "intro": "Tres Raíces es una banda de rock oriunda de Talcahuano, nacida del encuentro de tres músicos unidos por la fuerza de la música en vivo.",
   "history": "La historia comenzó en el Liceo Industrial A-23 de Las Higueras, cuando tres estudiantes de Máquinas y Herramientas compartieron por primera vez un escenario.\n\nAquellos primeros años los llevaron a diversas presentaciones, incluyendo dos actuaciones en el Gimnasio La Tortuga de Talcahuano, tras ganar sus respectivas audiciones.\n\nDespués de cerca de 15 años siguiendo caminos distintos, Víctor, Alexis y Patricio vuelven a reunirse bajo el nombre de Tres Raíces: tres músicos, tres historias y un mismo territorio, con raíces profundamente ligadas al mar y al puerto. Con el Rock & Roll como base, la banda vuelve a los escenarios con canciones propias, energía y una identidad marcada por sus orígenes choreros.\n\nPropuesta musical\n\nTres Raíces lleva el Rock & Roll como esencia, con guitarras poderosas, bases rítmicas sólidas y una energía que se hace sentir sobre el escenario.Su sonido recoge influencias del punk, el ska y el reggae, combinando distintos ritmos y dinámicas sin perder la fuerza ni la actitud del rock. Con canciones propias, la banda busca transmitir experiencias, emociones y una mirada crítica de lo que nos rodea, manteniendo un sonido auténtico, directo y sin demasiados adornos.",
-  "groupPhoto": "/images/band/Grupal.webp",
+  "groupPhoto": "/images/band/tresRaices1.webp",
   "members": [
     {
       "id": "victor",
       "name": "Víctor",
       "instrument": "Bajo y voz",
-      "photo": "/images/band/Victor.webp",
-      "bio": ""
+      "photo": "/images/band/tresRaicesVictor.webp",
+      "bio": "Con el bajo y la voz al frente, Víctor aporta fuerza, ritmo y carácter a Tres Raíces. Su conexión con el rock se refleja en cada canción, combinando bases sólidas con la energía necesaria para hacer vibrar el escenario."
     },
     {
       "id": "alex",
       "name": "Alex",
       "instrument": "Guitarra y 2da voz",
-      "photo": "/images/band/Alex.webp",
-      "bio": ""
+      "photo": "/images/band/TresRaicesAlex.webp",
+      "bio": "Marcado por el hard rock y el heavy metal, con influencias muy rock&rolleras. Alexis lleva a Tres Raíces riffs potentes, solos con carácter y una guitarra que busca transmitir fuerza, intensidad y emoción en cada presentación."
     },
     {
       "id": "pato",
       "name": "Patricio (Pato)",
       "instrument": "Batería",
-      "photo": "/images/band/Pato.webp",
-      "bio": ""
+      "photo": "/images/band/TresRaicesPato.webp",
+      "bio": "Detrás de la batería, Pato entrega el pulso y la energía que sostiene a Tres Raíces. Con una interpretación directa y potente, aporta dinámicas, precisión y actitud a cada canción, manteniendo siempre vivo el espíritu del rock."
     }
   ]
 }

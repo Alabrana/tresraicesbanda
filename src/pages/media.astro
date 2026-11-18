@@ -40,7 +40,7 @@ const youtubeChannel = site.socialLinks.find((socialLink) => socialLink.id === '
         )}
         {videos.length > 0 && (
           <section aria-labelledby="videos-title">
-            <p class="tr-eyebrow">Mirar</p>
+            <p class="tr-eyebrow">Algunos</p>
             <h2 class="tr-section-title mb-5" id="videos-title">Videos</h2>
             <VideoModal videos={videos} featured={videos.length === 1} />
           </section>
