@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
+
 const links = [
   ['La Banda', '/banda/'],
   ['Media', '/media/'],
@@ -25,11 +27,10 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
   <div class="mx-auto w-full max-w-[70rem] px-4 sm:px-6 lg:px-8">
     <div class="flex min-h-16 items-center justify-between gap-4 transition-[min-height] duration-300 group-data-[scrolled=true]:min-h-14 md:min-h-20 md:gap-8 md:group-data-[scrolled=true]:min-h-16">
       <a class="shrink-0" href="/" aria-label="Tres Raíces — Inicio">
-        <img
+        <ResponsiveImage
           class="h-auto w-28 transition-[width] duration-300 group-data-[scrolled=true]:w-24 md:w-32 md:group-data-[scrolled=true]:w-28"
           src="/images/logos/logoprincipalHorizontal.webp"
-          width="1620"
-          height="971"
+          sizes="(min-width: 768px) 128px, 112px"
           alt="Tres Raíces"
         />
       </a>

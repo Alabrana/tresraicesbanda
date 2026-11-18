@@ -1,13 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatCivilDate } from '../lib/civil-date';
+import ResponsiveImage from './ResponsiveImage.astro';
 
 interface Props {
   article: CollectionEntry<'news'>;
   featured?: boolean;
+  priority?: boolean;
 }
 
-const { article, featured = false } = Astro.props;
+const { article, featured = false, priority = false } = Astro.props;
 const href = `/news/${article.id}/`;
 ---
 
@@ -24,13 +26,13 @@ const href = `/news/${article.id}/`;
       href={href}
       aria-label={`Leer: ${article.data.title}`}
     >
-      <img
+      <ResponsiveImage
         class="h-full w-full object-contain"
         src={article.data.cover}
-        width="1200"
-        height="900"
+        sizes={featured ? '(min-width: 768px) 304px, (min-width: 640px) 42vw, calc(100vw - 2.25rem)' : '(min-width: 1024px) 304px, (min-width: 640px) 48vw, calc(100vw - 2.25rem)'}
         alt={`Portada: ${article.data.title}`}
-        loading={featured ? 'eager' : 'lazy'}
+        loading="lazy"
+        priority={priority}
       />
     </a>
     <div class="min-w-0 p-4 sm:p-5">

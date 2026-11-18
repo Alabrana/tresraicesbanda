@@ -18,7 +18,7 @@ const {
   title,
   description = 'Sitio oficial de Tres Raíces, rock desde Talcahuano.',
   noIndex = false,
-  image = '/images/logos/logoredondo.webp',
+  image = '/images/logos/logocirculartresraices.png',
   imageAlt = 'Tres Raíces',
   ogType = 'website',
 } = Astro.props;
@@ -50,7 +50,7 @@ const imageUrl = new URL(image, publicBaseUrl);
     <meta name="generator" content={Astro.generator} />
     <link rel="preload" href={oswaldUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href={ibmPlexSansUrl} as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="icon" type="image/webp" href="/images/logos/logoredondo.webp" />
+    <link rel="icon" type="image/webp" href="/images/logos/logocirculartresraices.png" />
     <title>{title} | Tres Raíces</title>
   </head>
   <body>

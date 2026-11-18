@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { getImageProfile } from '../lib/image-variants';
+
+interface Props extends Omit<HTMLAttributes<'img'>, 'src' | 'srcset' | 'width' | 'height' | 'loading'> {
+  src: string;
+  alt: string;
+  sizes?: string;
+  width?: number | string;
+  height?: number | string;
+  loading?: 'eager' | 'lazy';
+  priority?: boolean;
+}
+
+const {
+  src,
+  alt,
+  sizes,
+  width,
+  height,
+  loading,
+  priority = false,
+  ...attributes
+} = Astro.props;
+const profile = getImageProfile(src);
+---
+
+<img
+  {...attributes}
+  src={src}
+  srcset={profile?.srcset}
+  sizes={profile?.srcset ? sizes : undefined}
+  width={width ?? profile?.width}
+  height={height ?? profile?.height}
+  alt={alt}
+  loading={priority ? 'eager' : loading}
+  fetchpriority={priority ? 'high' : attributes.fetchpriority}
+/>

@@ -30,6 +30,7 @@
 | D-024 | `site.json` centraliza correo de contacto y redes oficiales. Footer y enlace al canal de Media consumen esa fuente; las plataformas musicales permanecen en `media.json`. | Aprobada |
 | D-025 | La fecha de un video en `media.json` es opcional. Si se informa, se valida como fecha civil y determina el orden; los videos sin fecha permanecen publicables después de los fechados. | Aprobada |
 | D-026 | El editor local usa Node.js nativo y JavaScript sin dependencias adicionales; se inicia con `pnpm editor`, escucha únicamente en `127.0.0.1:4322` y queda fuera de Astro y de `dist`. | Aprobada |
+| D-027 | El rendimiento se audita con PageSpeed Insights API en producción y Lighthouse CLI sobre `dist` local. Los JSON voluminosos se ignoran en Git, se conservan resúmenes puntuales y las imágenes web pueden tener derivados responsivos sin modificar los originales. | Aprobada |
 
 ## Por definir antes o durante implementación
 

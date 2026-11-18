@@ -1,15 +1,17 @@
 ---
 import type { Show } from '../lib/contracts';
 import { formatCivilDate } from '../lib/civil-date';
+import ResponsiveImage from './ResponsiveImage.astro';
 
 interface Props {
   show: Show;
   showId?: string;
   featured?: boolean;
   showTicket?: boolean;
+  priority?: boolean;
 }
 
-const { show, showId, featured = false, showTicket = true } = Astro.props;
+const { show, showId, featured = false, showTicket = true, priority = false } = Astro.props;
 const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 'rescheduled' ? 'Reprogramada' : null;
 const descriptionParagraphs = show.description
   ?.split(/\r?\n\s*\r?\n/)
@@ -25,7 +27,14 @@ const descriptionParagraphs = show.description
   )}
   <div class:list={['grid min-w-0 sm:grid-cols-[minmax(10rem,0.7fr)_1fr]', featured && 'md:grid-cols-[minmax(15rem,19rem)_1fr]']}>
     <div class:list={['aspect-[4/5] bg-surface-canvas sm:h-full sm:aspect-auto', featured && 'md:max-h-[27rem]']}>
-      <img class="h-full w-full object-contain" src={show.poster} width="1200" height="900" alt={`Afiche de ${show.title}`} loading="lazy" />
+      <ResponsiveImage
+        class="h-full w-full object-contain"
+        src={show.poster}
+        sizes="(min-width: 768px) 304px, (min-width: 640px) 42vw, calc(100vw - 2.25rem)"
+        alt={`Afiche de ${show.title}`}
+        loading="lazy"
+        priority={priority}
+      />
     </div>
     <div class="min-w-0 p-4 sm:p-5">
       <p data-display-type class="mb-2 text-sm tracking-[0.08em] text-accent-interactive uppercase">{formatCivilDate(show.date)} · {show.time}</p>

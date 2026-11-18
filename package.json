@@ -14,6 +14,9 @@
     "test": "node --experimental-strip-types --test tests/contracts.test.ts tests/events.test.ts tests/fixtures.test.ts tests/editor.test.ts",
     "build": "pnpm run check && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "perf:production": "node scripts/performance/pagespeed.mjs",
+    "perf:local": "pnpm run build && node scripts/performance/lighthouse-local.mjs",
+    "perf:compare": "node scripts/performance/compare.mjs",
     "validate": "pnpm run test && pnpm run build"
   },
   "dependencies": {
@@ -24,6 +27,7 @@
     "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.3.5",
     "@types/node": "^26.6.6",
+    "lighthouse": "^13.6.0",
     "tailwindcss": "^4.3.5",
     "typescript": "^6.0.3"
   }

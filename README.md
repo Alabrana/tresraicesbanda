@@ -24,6 +24,7 @@ Repositorio base de planificación para la web oficial de **Tres Raíces**, band
 5. [`docs/ARQUITECTURA_Y_EDITOR_LOCAL.md`](docs/ARQUITECTURA_Y_EDITOR_LOCAL.md): restricciones técnicas.
 6. [`docs/HOJA_DE_RUTA.md`](docs/HOJA_DE_RUTA.md): entregas y criterios de aceptación.
 7. [`docs/DECISIONES.md`](docs/DECISIONES.md): decisiones y pendientes.
+8. [`docs/PERFORMANCE_V1.md`](docs/PERFORMANCE_V1.md): PageSpeed, Lighthouse, baseline y comparación de rendimiento.
 
 `docs/PROMPTS_OFICIALES_TRES_RAICES.md` aporta contexto creativo complementario.
 
@@ -48,6 +49,18 @@ pnpm dev
 ```
 
 El contenido se mantiene en `src/content/` y `src/data/`; las copias web de imágenes viven en `public/images/`. Tailwind CSS 4 compone la base visual mediante utilidades y tokens en `src/styles/global.css`.
+
+## Rendimiento
+
+La auditoría local siempre mide el build estático de producción, no `pnpm dev`:
+
+```bash
+pnpm perf:production  # PageSpeed Insights API sobre el dominio oficial
+pnpm perf:local       # build + Lighthouse móvil/escritorio, tres repeticiones
+pnpm perf:compare     # compara los dos reportes locales más recientes
+```
+
+`PAGESPEED_API_KEY` es opcional y nunca debe guardarse en el repositorio. La configuración, argumentos, resultados iniciales y limitaciones están en [`docs/PERFORMANCE_V1.md`](docs/PERFORMANCE_V1.md).
 
 ## Editor local
 

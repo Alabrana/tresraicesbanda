@@ -62,7 +62,7 @@ test('ticketUrl es opcional en tocatas y, cuando existe, exige HTTP/HTTPS', () =
     time: '21:00',
     venue: 'Lugar confirmado',
     city: 'Talcahuano',
-    poster: '/images/shows/Flyer Zalsi Nov 2026.png',
+    poster: '/images/shows/tresRaicesZalsipuedes.webp',
     status: 'scheduled',
     visible: true,
   };

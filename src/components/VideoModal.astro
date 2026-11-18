@@ -5,20 +5,29 @@ import { formatCivilDate } from '../lib/civil-date';
 interface Props {
   videos: MediaVideo[];
   featured?: boolean;
+  priorityFirst?: boolean;
 }
 
-const { videos, featured = false } = Astro.props;
+const { videos, featured = false, priorityFirst = false } = Astro.props;
 ---
 
 <div class={featured ? 'mx-auto grid max-w-[52rem] grid-cols-1 gap-4' : 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6'} data-video-gallery>
-  {videos.map((video) => {
+  {videos.map((video, index) => {
     const youtubeId = getYouTubeVideoId(video.youtubeUrl);
     if (!youtubeId) return null;
 
     return (
       <article class:list={['min-w-0 overflow-hidden border border-iron-700 bg-iron-900', featured && 'text-center']}>
         <button class="group relative block w-full overflow-hidden text-left" type="button" data-video-open={youtubeId} data-video-title={video.title} aria-haspopup="dialog">
-          <img class="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} width="480" height="360" alt={`Reproducir ${video.title}`} loading="lazy" />
+          <img
+            class="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`}
+            width="480"
+            height="360"
+            alt={`Reproducir ${video.title}`}
+            loading={priorityFirst && index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={priorityFirst && index === 0 ? 'high' : undefined}
+          />
           <span class="absolute inset-0 flex items-center justify-center bg-coal-950/35 transition-colors group-hover:bg-coal-950/15" aria-hidden="true">
             <span class="flex size-14 items-center justify-center border border-ash-100 bg-coal-950/90 text-xl text-ash-100">▶</span>
           </span>

@@ -21,7 +21,7 @@ const [featuredArticle, ...remainingArticles] = articles;
           <section aria-labelledby="latest-news-title">
             <p class="tr-eyebrow">Lo último</p>
             <h2 class="tr-section-title mb-5" id="latest-news-title">Última noticia</h2>
-            <div class="max-w-[58rem]"><NewsCard article={featuredArticle} featured /></div>
+            <div class="max-w-[58rem]"><NewsCard article={featuredArticle} featured priority /></div>
           </section>
         )}
         {remainingArticles.length > 0 && (

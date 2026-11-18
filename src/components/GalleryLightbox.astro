@@ -1,4 +1,6 @@
 ---
+import ResponsiveImage from './ResponsiveImage.astro';
+
 interface GalleryPhoto {
   id: string;
   image: string;
@@ -16,7 +18,13 @@ const serializedPhotos = JSON.stringify(photos).replaceAll('<', '\\u003c');
 <div class="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-gallery>
   {photos.map((photo, index) => (
     <button class="group relative flex aspect-[3/4] w-full max-w-[21rem] min-w-0 items-center justify-center overflow-hidden border border-border-subtle bg-surface-canvas text-left sm:max-w-none" type="button" data-gallery-open={index} aria-haspopup="dialog" aria-label={`Ampliar fotografía: ${photo.description}`}>
-      <img class="size-full object-cover" src={photo.image} alt={photo.description} loading="lazy" />
+      <ResponsiveImage
+        class="size-full object-cover"
+        src={photo.image}
+        sizes="(min-width: 1024px) 320px, (min-width: 640px) 48vw, calc(100vw - 2rem)"
+        alt={photo.description}
+        loading="lazy"
+      />
       <span class="absolute inset-x-0 bottom-0 bg-coal-950/80 p-3 text-sm text-ash-100 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">{photo.description}</span>
     </button>
   ))}

@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { formatCivilDate } from '../../lib/civil-date';
 import { slugSchema } from '../../lib/contracts';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('news');
@@ -33,13 +34,19 @@ const { Content } = await render(article);
     <p class="tr-eyebrow mb-2 text-text-secondary">News</p>
     <h1 class="mb-4 text-[clamp(2.25rem,9vw,3rem)] leading-[1.05] font-bold md:text-[clamp(3rem,5vw,4rem)]">{article.data.title}</h1>
     <time class="text-sm text-accent-interactive sm:text-[0.9375rem]" datetime={article.data.date}>{formatCivilDate(article.data.date)}</time>
-    <img class="mx-auto my-7 max-h-[38rem] w-auto max-w-full bg-surface-canvas object-contain sm:my-9" src={article.data.cover} width="1600" height="900" alt={`Portada: ${article.data.title}`} />
+    <ResponsiveImage
+      class="mx-auto my-7 max-h-[38rem] w-auto max-w-full bg-surface-canvas object-contain sm:my-9"
+      src={article.data.cover}
+      sizes="(min-width: 640px) 480px, calc(100vw - 2rem)"
+      alt={`Portada: ${article.data.title}`}
+      priority
+    />
     <div class="mb-10 space-y-5 text-base leading-[1.7] text-text-primary sm:mb-12 sm:text-justify sm:[hyphens:auto] md:text-[1.0625rem] [&_a]:text-accent-interactive [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mt-9 [&_h2]:text-2xl [&_h2]:leading-tight [&_h2]:font-bold [&_h3]:mt-7 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:ml-5 [&_ol]:list-decimal [&_ul]:ml-5 [&_ul]:list-disc"><Content /></div>
     {article.data.images && article.data.images.length > 0 && (
       <section aria-labelledby="additional-images">
         <h2 class="mb-4 text-2xl font-bold" id="additional-images">Imágenes</h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {article.data.images.map((image) => <img src={image} alt="" loading="lazy" />)}
+          {article.data.images.map((image) => <ResponsiveImage src={image} sizes="(min-width: 640px) 368px, calc(100vw - 2rem)" alt="" loading="lazy" />)}
         </div>
       </section>
     )}

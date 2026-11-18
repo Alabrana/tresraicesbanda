@@ -2,7 +2,7 @@
 title: "Desde la Raíz: comienza nuestra historia en vivo"
 date: "2026-11-16"
 summary: "Tres Raíces prepara una nueva noche de rock en Talcahuano. Este 28 de noviembre nos reuniremos en Zalsipuedes junto a Lucius Band y Santos en la Corte para dar inicio a esta nueva etapa."
-cover: "/images/shows/Flyer Zalsi Nov 2026.png"
+cover: "/images/news/tresRaicesZalsipuedes.webp"
 ---
 
 El rock sigue sonando fuerte desde Talcahuano.

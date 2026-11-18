@@ -8,6 +8,10 @@ import { classifyShows } from '../lib/events';
 
 const shows = (await getCollection('shows')).map((show) => show.data);
 const showClassification = classifyShows(shows);
+const priorityShow = showClassification.upcoming[0]
+  ?? showClassification.past[0]
+  ?? showClassification.cancelled[0]
+  ?? showClassification.rescheduled[0];
 ---
 
 <BaseLayout title="En Vivo">
@@ -27,7 +31,7 @@ const showClassification = classifyShows(shows);
           </div>
         </div>
         <div class="space-y-4 sm:space-y-5" data-show-list="upcoming">
-          {showClassification.upcoming.map((show) => <ShowCard show={show} />)}
+          {showClassification.upcoming.map((show) => <ShowCard show={show} showId={show.id} priority={show.id === priorityShow?.id} />)}
         </div>
       </section>
 
@@ -37,7 +41,7 @@ const showClassification = classifyShows(shows);
           <h2 class="tr-section-title" id="past-shows-title">Fechas pasadas</h2>
         </div>
         <div class="space-y-4 sm:space-y-5" data-show-list="past">
-          {showClassification.past.map((show) => <ShowCard show={show} showTicket={false} />)}
+          {showClassification.past.map((show) => <ShowCard show={show} showId={show.id} showTicket={false} priority={show.id === priorityShow?.id} />)}
         </div>
       </section>
 
@@ -47,15 +51,15 @@ const showClassification = classifyShows(shows);
           <h2 class="tr-section-title" id="special-shows-title">Cambios de agenda</h2>
         </div>
         <div class="space-y-4 sm:space-y-5" data-show-list="special">
-          {showClassification.cancelled.map((show) => <ShowCard show={show} />)}
-          {showClassification.rescheduled.map((show) => <ShowCard show={show} />)}
+          {showClassification.cancelled.map((show) => <ShowCard show={show} showId={show.id} priority={show.id === priorityShow?.id} />)}
+          {showClassification.rescheduled.map((show) => <ShowCard show={show} showId={show.id} priority={show.id === priorityShow?.id} />)}
         </div>
       </section>
     </div>
 
     {shows.map((show) => (
       <template data-show-template={show.id}>
-        <ShowCard show={show} showId={show.id} />
+        <ShowCard show={show} showId={show.id} priority={show.id === priorityShow?.id} />
       </template>
     ))}
   </section>
@@ -87,14 +91,22 @@ const showClassification = classifyShows(shows);
       const section = sections[name === 'special' ? 'special' : name];
       if (!list || !section) return;
 
-      list.replaceChildren(...items.flatMap((show) => {
-        const template = livePage.querySelector<HTMLTemplateElement>(`[data-show-template="${show.id}"]`);
-        if (!template) return [];
+      const currentIds = [...list.querySelectorAll<HTMLElement>('[data-show-card]')]
+        .map((card) => card.dataset.showCard);
+      const nextIds = items.map((show) => show.id);
+      const needsUpdate = currentIds.length !== nextIds.length
+        || currentIds.some((id, index) => id !== nextIds[index]);
 
-        const card = template.content.cloneNode(true) as DocumentFragment;
-        if (name !== 'upcoming') card.querySelector<HTMLElement>('[data-show-ticket]')?.remove();
-        return [card];
-      }));
+      if (needsUpdate) {
+        list.replaceChildren(...items.flatMap((show) => {
+          const template = livePage.querySelector<HTMLTemplateElement>(`[data-show-template="${show.id}"]`);
+          if (!template) return [];
+
+          const card = template.content.cloneNode(true) as DocumentFragment;
+          if (name !== 'upcoming') card.querySelector<HTMLElement>('[data-show-ticket]')?.remove();
+          return [card];
+        }));
+      }
       section.hidden = items.length === 0;
     };
 

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import GrungeDivider from '../components/GrungeDivider.astro';
 import NewsCard from '../components/NewsCard.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
 import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
 import ShowHistoryRow from '../components/ShowHistoryRow.astro';
@@ -42,7 +43,14 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
 <BaseLayout title="Inicio">
   {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
   <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[38rem]">
-    <img class="absolute inset-0 -z-30 size-full object-cover object-[68%_42%] sm:object-[62%_42%] lg:object-[center_42%]" src={band.groupPhoto} width="2048" height="1366" alt="" aria-hidden="true" />
+    <ResponsiveImage
+      class="absolute inset-0 -z-30 size-full object-cover object-[68%_42%] sm:object-[62%_42%] lg:object-[center_42%]"
+      src={band.groupPhoto}
+      sizes="100vw"
+      alt=""
+      aria-hidden="true"
+      priority
+    />
     <div class="absolute inset-0 -z-20 bg-surface-canvas/35" aria-hidden="true"></div>
     <div class="absolute inset-0 -z-20 bg-accent-petrol/10" aria-hidden="true"></div>
     <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.86)_42%,rgba(16,18,19,0.48)_72%,rgba(16,18,19,0.34)_100%)] sm:bg-[linear-gradient(90deg,rgba(16,18,19,0.96)_0%,rgba(16,18,19,0.84)_46%,rgba(16,18,19,0.4)_76%,rgba(16,18,19,0.3)_100%)]" aria-hidden="true"></div>
@@ -139,7 +147,7 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
   {hasBandPreview && (
     <section class="tr-container-editorial tr-section-standard">
       <div class="grid gap-6 md:grid-cols-[minmax(16rem,0.85fr)_1fr] md:items-center md:gap-10">
-        <img class="aspect-4/3 w-full object-cover" src={band.groupPhoto} width="1200" height="900" alt="Tres Raíces" loading="lazy" />
+        <ResponsiveImage class="aspect-4/3 w-full object-cover" src={band.groupPhoto} sizes="(min-width: 1024px) 432px, (min-width: 768px) 42vw, calc(100vw - 2rem)" alt="Tres Raíces" loading="lazy" />
         <div>
           <p class="tr-eyebrow">La Banda</p>
           <h2 class="tr-section-title">Tres Raíces</h2>
@@ -179,7 +187,7 @@ const hasBandPreview = Boolean(band.intro && band.groupPhoto);
       <div class="grid justify-items-center gap-4 sm:grid-cols-3 sm:gap-5">
         {galleryPreview.map((photo) => (
           <div class="aspect-[3/4] w-full max-w-[21rem] overflow-hidden bg-surface-canvas sm:max-w-none">
-            <img class="size-full object-cover" src={photo.image} alt={photo.description} loading="lazy" />
+            <ResponsiveImage class="size-full object-cover" src={photo.image} sizes="(min-width: 640px) 33vw, calc(100vw - 2rem)" alt={photo.description} loading="lazy" />
           </div>
         ))}
       </div>
