@@ -17,6 +17,7 @@ export const siteSeo = {
   lang: 'es-CL',
   ogLocale: 'es_CL',
   themeColor: '#101213',
+  websiteId: 'https://tresraicesbanda.cl/#website',
   musicGroupId: 'https://tresraicesbanda.cl/#musicgroup',
   defaultImage: {
     src: '/images/seo/tres-raices-og.webp',
@@ -29,8 +30,8 @@ export const siteSeo = {
 
 export const pageSeo = {
   home: {
-    title: 'Tres Raíces | Banda de rock de Talcahuano',
-    description: 'Sitio oficial de Tres Raíces, banda de rock chileno oriunda de Talcahuano. Conoce nuestra música, historia, videos, noticias y próximas presentaciones en vivo.',
+    title: 'Tres Raíces | Rock desde Talcahuano',
+    description: 'Sitio oficial de Tres Raíces, banda de rock chileno oriunda de Talcahuano. Conoce nuestra música, historia, videos y próximas presentaciones en vivo.',
   },
   band: {
     title: 'La Banda | Tres Raíces, rock desde Talcahuano',

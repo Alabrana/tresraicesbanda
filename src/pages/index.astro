@@ -39,8 +39,15 @@ const visibleCollaborators = collaborators.collaborators.filter((collaborator) =
   return !isPlaceholderName && !isPlaceholderUrl;
 });
 const hasBandPreview = Boolean(band.intro && band.groupPhoto);
+const websiteJsonLd = {
+  '@type': 'WebSite',
+  '@id': siteSeo.websiteId,
+  url: siteSeo.url,
+  name: siteSeo.name,
+  inLanguage: siteSeo.lang,
+  publisher: { '@id': siteSeo.musicGroupId },
+};
 const musicGroupJsonLd = {
-  '@context': 'https://schema.org',
   '@type': 'MusicGroup',
   '@id': siteSeo.musicGroupId,
   name: siteSeo.name,
@@ -66,9 +73,13 @@ const musicGroupJsonLd = {
     { '@type': 'Person', name: 'Patricio', description: 'Batería' },
   ],
 };
+const homeStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [websiteJsonLd, musicGroupJsonLd],
+};
 ---
 
-<BaseLayout {...pageSeo.home} structuredData={musicGroupJsonLd}>
+<BaseLayout {...pageSeo.home} structuredData={homeStructuredData}>
   {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
   <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[38rem]">
     <ResponsiveImage

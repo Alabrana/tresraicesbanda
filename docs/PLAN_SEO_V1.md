@@ -14,7 +14,7 @@ Se implementó el lote técnico de metadatos definitivos aprobado. La auditoría
 - Titles y descriptions finales y únicos para Inicio, Banda, En Vivo, Media, News, Galería y Network, sin sufijos duplicados.
 - Metadata compartida centralizada en `src/lib/seo.ts`: nombre del sitio, URL principal, `lang`, locale Open Graph, color de tema, identificador estable de la banda, fallback social y textos por ruta.
 - `BaseLayout.astro` conserva canonical autorreferente y añade `og:locale`, dimensiones/tipo cuando se conocen, alt para Open Graph y Twitter, `theme-color` y fecha editorial para artículos.
-- Inicio incluye un único JSON-LD `MusicGroup`, con Talcahuano, Rock, correo, redes oficiales, logo, fotografía y los tres integrantes confirmados.
+- Inicio incluye un único bloque JSON-LD con `WebSite` y `MusicGroup`, enlazados mediante identificadores estables; la banda conserva Talcahuano, Rock, correo, redes oficiales, logo, fotografía y los tres integrantes confirmados.
 - Cada detalle de noticia construye title, description, canonical, Open Graph, `article:published_time` y `BlogPosting` desde el Markdown real. El mismo bloque JSON-LD incluye `BreadcrumbList` para evitar scripts duplicados.
 - Se conservaron Astro SSG, sitemap, `robots.txt`, 404 con `noindex`, H1 visibles, diseño, navegación, contratos de eventos y contratos editoriales.
 - No se implementó `Event`, `dateModified`, hora de publicación, autor personal, keywords, geolocalización artificial, backend ni servicios externos.
@@ -23,7 +23,7 @@ Se implementó el lote técnico de metadatos definitivos aprobado. La auditoría
 
 | Ruta | Title anterior | Title definitivo | Description |
 |---|---|---|---|
-| `/` | `Inicio \| Tres Raíces` | `Tres Raíces \| Banda de rock de Talcahuano` | Sitio oficial de Tres Raíces, banda de rock chileno oriunda de Talcahuano. Conoce nuestra música, historia, videos, noticias y próximas presentaciones en vivo. |
+| `/` | `Inicio \| Tres Raíces` | `Tres Raíces \| Rock desde Talcahuano` | Sitio oficial de Tres Raíces, banda de rock chileno oriunda de Talcahuano. Conoce nuestra música, historia, videos y próximas presentaciones en vivo. |
 | `/banda/` | `La Banda \| Tres Raíces` | `La Banda \| Tres Raíces, rock desde Talcahuano` | Conoce la historia de Tres Raíces, banda de rock de Talcahuano, y a sus integrantes: Víctor en bajo y voz, Alexis en guitarra y Patricio en batería. |
 | `/en-vivo/` | `En Vivo \| Tres Raíces` | `En Vivo \| Presentaciones de Tres Raíces` | Revisa las próximas tocatas de Tres Raíces, sus fechas, lugares y entradas disponibles. Conoce también nuestras presentaciones anteriores. |
 | `/media/` | `Media \| Tres Raíces` | `Música y Videos \| Tres Raíces` | Mira videos y registros en vivo de Tres Raíces, banda de rock oriunda de Talcahuano. Encuentra nuestro canal oficial de YouTube y plataformas musicales. |
@@ -31,6 +31,33 @@ Se implementó el lote técnico de metadatos definitivos aprobado. La auditoría
 | `/galeria/` | `Galería \| Tres Raíces` | `Galería \| Fotos de Tres Raíces` | Fotografías de Tres Raíces en ensayos, escenarios y presentaciones en vivo. Imágenes de nuestra historia y el rock que hacemos desde Talcahuano. |
 | `/network/` | `Network \| Tres Raíces` | `Network \| Bandas Amigas de Tres Raíces` | Conoce las bandas amigas y los vínculos musicales de Tres Raíces, compartiendo escenarios y rock desde Talcahuano y la escena chilena. |
 | Detalle de noticia | Título editorial con sufijo | Sin cambio visible | Summary real de cada Markdown. |
+
+### Estrategia de palabras clave por página
+
+La estrategia se organiza por intención de búsqueda para evitar que todas las rutas compitan por las mismas frases. Las palabras clave son una guía editorial y semántica: no se exige repetirlas literalmente cuando el title, la description y el contenido visible ya expresan la misma intención con lenguaje natural. No se añade `<meta name="keywords">`.
+
+| Ruta | Intención principal | Término principal asignado | Términos relacionados | Respaldo visible actual | Decisión sobre metadata |
+|---|---|---|---|---|---|
+| `/` | Encontrar el sitio oficial y reconocer origen y género | `Tres Raíces` / `banda de rock de Talcahuano` | `Tres Raíces banda`, `Tres Raíces Talcahuano`, `Tres Raíces Rock`, `Tres Raíces Chile`, `rock chileno`, `rock desde Talcahuano` | Hero con `Talcahuano · Chile`, H1 `Rock & Roll del puerto`, presentación de la banda y accesos a música, noticias y fechas | El title y la description aprobados ya cubren marca, género, origen y contenidos principales. No cambiar. |
+| `/banda/` | Conocer la historia, identidad e integrantes | `rock desde Talcahuano` | `rock chorero`, `rock del puerto`, `banda de rock de Talcahuano`, `banda de rock & roll`, `Tres Raíces Talcahuano` | Encabezado `Talcahuano, Chile`; historia ligada al mar, puerto y orígenes choreros; Rock & Roll como base; integrantes e instrumentos | El title prioriza `rock desde Talcahuano` y la description identifica banda, ciudad e integrantes. Los términos choreros quedan respaldados por el cuerpo, sin repetirlos artificialmente en metadata. |
+| `/en-vivo/` | Consultar próximas fechas y actuaciones anteriores | `Tres Raíces en vivo` | `tocatas de Tres Raíces`, `presentaciones de Tres Raíces`, `rock en vivo` | H1 `En Vivo`, próxima fecha, historial, recintos, ciudades y entradas cuando existen | El title expresa En Vivo y presentaciones; la description contiene `próximas tocatas de Tres Raíces`. No cambiar. |
+| `/media/` | Encontrar música, videos y canales oficiales | `música de Tres Raíces` | `videos de Tres Raíces`, `Tres Raíces Rock`, `rock chileno`, `registros en vivo` | Encabezado `Música y videos de Tres Raíces`, canal oficial de YouTube, plataformas y videos publicados | El title y la description cubren música, videos, registros en vivo, origen y canales oficiales. No cambiar. |
+| `/news/` | Consultar novedades oficiales de la banda | `noticias de Tres Raíces` | `Tres Raíces banda`, `nuevas canciones`, `presentaciones de Tres Raíces`, `videos de Tres Raíces` | H1 `News`, noticia destacada y archivo de publicaciones reales | El title identifica noticias de marca y la description delimita canciones, presentaciones y videos. No introducir términos ajenos a cada noticia. |
+| `/news/[slug]/` | Resolver la búsqueda concreta de una novedad, canción o presentación | Título editorial y tema real de cada noticia | Marca `Tres Raíces` más términos presentes en su summary y cuerpo; por ejemplo, `Tres Raíces en vivo` o `rock desde Talcahuano` cuando correspondan | H1, summary, fecha, portada y cuerpo procedentes del Markdown real | Metadata dinámica desde Markdown con sufijo de marca. No imponer una frase fija a todas las noticias ni crear nuevos campos obligatorios. |
+| `/galeria/` | Buscar imágenes auténticas de la banda | `fotografías de Tres Raíces` | `fotos de Tres Raíces`, `Tres Raíces en vivo`, `rock desde Talcahuano` | H1 `Galería`, fotografías seleccionadas y descripciones reales | El title usa la variante natural `Fotos de Tres Raíces` y la description contiene `Fotografías de Tres Raíces`. No cambiar. |
+| `/network/` | Conocer vínculos musicales y bandas amigas | `bandas amigas de Tres Raíces` | `vínculos musicales`, `escena chilena`, `rock desde Talcahuano` | H1 `Network`, eyebrow `Bandas amigas` y tarjetas de vínculos confirmados | Mantener intención propia. No convertir esta ruta en una landing genérica de rock chileno ni añadir nombres de otras agrupaciones como palabras clave. |
+| `/404/` | Recuperación de navegación, sin intención de posicionamiento | Ninguno | Ninguno | Mensaje de página no encontrada y enlace a Inicio | Mantener `noindex`; no optimizar para palabras clave. |
+
+#### Distribución de los grupos prioritarios
+
+- **Marca:** Inicio concentra `Tres Raíces` y sus variantes principales. Las páginas interiores combinan la marca con su función específica para evitar competencia interna.
+- **Identidad:** Banda desarrolla `rock desde Talcahuano`, `rock chorero`, `rock del puerto` y `banda de rock & roll`; Inicio resume origen y género.
+- **Contenido:** En Vivo concentra tocatas y presentaciones; Media concentra música y videos; Galería concentra fotografías; News trabaja novedades reales sin forzar una frase fija.
+- **Variantes semánticas:** `fotos`/`fotografías`, `tocatas`/`presentaciones` y `rock & roll`/`rock` se tratan como lenguaje natural relacionado, no como cadenas que deban repetirse juntas.
+
+#### Evaluación editorial
+
+El contenido visible actual respalda las asignaciones principales. No se modifican H1 ni textos visibles en este lote. Las oportunidades futuras deben surgir de información real —nuevas canciones, videos, tocatas o noticias— y no de páginas creadas solo para posicionar términos. Cualquier cambio de copy visible requiere aprobación editorial previa.
 
 ### Imagen social oficial configurada
 
