@@ -2,8 +2,56 @@
 
 **Fecha de auditoría:** 18 de noviembre de 2026  
 **Sitio oficial:** <https://tresraicesbanda.cl>  
-**Alcance:** auditoría y plan; no se implementaron cambios de código, contenido, diseño, DNS ni despliegue.  
+**Alcance:** auditoría, plan e implementación local de metadatos definitivos; sin cambios de diseño, contenido visible, DNS ni despliegue.
 **Arquitectura respetada:** Astro SSG (`output: 'static'`) en Cloudflare Pages, sin backend, SSR, base de datos ni servicios de pago.
+
+## Actualización de implementación — 18 de noviembre de 2026
+
+Se implementó el lote técnico de metadatos definitivos aprobado. La auditoría original se conserva debajo como registro del estado anterior; esta sección representa el estado actual del código y prevalece cuando una observación histórica indica que una función todavía no existía.
+
+### Cambios completados
+
+- Titles y descriptions finales y únicos para Inicio, Banda, En Vivo, Media, News, Galería y Network, sin sufijos duplicados.
+- Metadata compartida centralizada en `src/lib/seo.ts`: nombre del sitio, URL principal, `lang`, locale Open Graph, color de tema, identificador estable de la banda, fallback social y textos por ruta.
+- `BaseLayout.astro` conserva canonical autorreferente y añade `og:locale`, dimensiones/tipo cuando se conocen, alt para Open Graph y Twitter, `theme-color` y fecha editorial para artículos.
+- Inicio incluye un único JSON-LD `MusicGroup`, con Talcahuano, Rock, correo, redes oficiales, logo, fotografía y los tres integrantes confirmados.
+- Cada detalle de noticia construye title, description, canonical, Open Graph, `article:published_time` y `BlogPosting` desde el Markdown real. El mismo bloque JSON-LD incluye `BreadcrumbList` para evitar scripts duplicados.
+- Se conservaron Astro SSG, sitemap, `robots.txt`, 404 con `noindex`, H1 visibles, diseño, navegación, contratos de eventos y contratos editoriales.
+- No se implementó `Event`, `dateModified`, hora de publicación, autor personal, keywords, geolocalización artificial, backend ni servicios externos.
+
+### Comparación de metadatos renderizados
+
+| Ruta | Title anterior | Title definitivo | Description |
+|---|---|---|---|
+| `/` | `Inicio \| Tres Raíces` | `Tres Raíces \| Banda de rock de Talcahuano` | Sitio oficial de Tres Raíces, banda de rock chileno oriunda de Talcahuano. Conoce nuestra música, historia, videos, noticias y próximas presentaciones en vivo. |
+| `/banda/` | `La Banda \| Tres Raíces` | `La Banda \| Tres Raíces, rock desde Talcahuano` | Conoce la historia de Tres Raíces, banda de rock de Talcahuano, y a sus integrantes: Víctor en bajo y voz, Alexis en guitarra y Patricio en batería. |
+| `/en-vivo/` | `En Vivo \| Tres Raíces` | `En Vivo \| Presentaciones de Tres Raíces` | Revisa las próximas tocatas de Tres Raíces, sus fechas, lugares y entradas disponibles. Conoce también nuestras presentaciones anteriores. |
+| `/media/` | `Media \| Tres Raíces` | `Música y Videos \| Tres Raíces` | Mira videos y registros en vivo de Tres Raíces, banda de rock oriunda de Talcahuano. Encuentra nuestro canal oficial de YouTube y plataformas musicales. |
+| `/news/` | `News \| Tres Raíces` | `News \| Noticias de Tres Raíces` | Noticias y novedades de Tres Raíces: nuevas canciones, presentaciones, videos y experiencias de una banda de rock nacida en Talcahuano. |
+| `/galeria/` | `Galería \| Tres Raíces` | `Galería \| Fotos de Tres Raíces` | Fotografías de Tres Raíces en ensayos, escenarios y presentaciones en vivo. Imágenes de nuestra historia y el rock que hacemos desde Talcahuano. |
+| `/network/` | `Network \| Tres Raíces` | `Network \| Bandas Amigas de Tres Raíces` | Conoce las bandas amigas y los vínculos musicales de Tres Raíces, compartiendo escenarios y rock desde Talcahuano y la escena chilena. |
+| Detalle de noticia | Título editorial con sufijo | Sin cambio visible | Summary real de cada Markdown. |
+
+### Imagen social oficial configurada
+
+El archivo `public/images/seo/tres-raices-og.webp` fue ajustado a **1200 × 630 px exactos**, conserva la fotografía auténtica de los tres integrantes e incorpora el logo horizontal oficial sin redibujarlo ni alterar su tipografía. Su MIME real es WebP y pesa 125.826 bytes. Está configurado como imagen predeterminada de Open Graph y Twitter mediante URL absoluta, con `og:image:width=1200`, `og:image:height=630`, `og:image:type=image/webp` y texto alternativo descriptivo. Las portadas específicas de noticias se mantienen cuando existen.
+
+La comprobación HTTP `200` de la nueva imagen social queda pendiente hasta desplegar esta versión y verificar la URL pública.
+
+### Validación local posterior
+
+- `pnpm run check` y `pnpm run build`: no pudieron ejecutar sus scripts porque pnpm rechazó su propia identidad al no poder verificarla contra el registro (`ERR_PNPM_PNPM_ENGINE_IDENTITY_UNVERIFIABLE`).
+- Binario local `astro check` con Node 22.23.4: 43 archivos, 0 errores, 0 warnings y 0 hints.
+- Pruebas existentes con Node 22.23.4: 24 aprobadas, 0 fallidas.
+- Build estático con Node 22.23.4: 9 páginas generadas y sitemap creado correctamente.
+- HTML generado: un title, una description y un canonical por salida; 8 rutas públicas en sitemap; ninguna URL `pages.dev`; JSON-LD parseable; 404 con `noindex`; editor y admin ausentes de `dist`.
+- `robots.txt` conserva rastreo permitido y referencia al sitemap oficial.
+
+### Pendientes externos o de aprobación
+
+1. Tras desplegar, comprobar respuesta HTTP `200`, `Content-Type: image/webp` y previews de Open Graph/Twitter.
+2. Validar el HTML publicado con Schema Markup Validator y Rich Results Test.
+3. Mantener las comprobaciones manuales de hosts alternativos y Search Console descritas en este plan.
 
 ## Resumen ejecutivo
 

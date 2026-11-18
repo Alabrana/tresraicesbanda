@@ -7,9 +7,10 @@ import ShowCard from '../components/ShowCard.astro';
 import ShowClassificationState from '../components/ShowClassificationState.astro';
 import ShowHistoryRow from '../components/ShowHistoryRow.astro';
 import VideoModal from '../components/VideoModal.astro';
-import { band, collaborators, gallery, media } from '../data/content';
+import { band, collaborators, gallery, media, site } from '../data/content';
 import { getCollection } from 'astro:content';
 import { classifyShows, getHomePastShows } from '../lib/events';
+import { pageSeo, siteSeo, toAbsoluteUrl } from '../lib/seo';
 
 const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
 const shows = showEntries.map((show) => show.data);
@@ -38,9 +39,36 @@ const visibleCollaborators = collaborators.collaborators.filter((collaborator) =
   return !isPlaceholderName && !isPlaceholderUrl;
 });
 const hasBandPreview = Boolean(band.intro && band.groupPhoto);
+const musicGroupJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  '@id': siteSeo.musicGroupId,
+  name: siteSeo.name,
+  url: siteSeo.url,
+  description: 'Banda de rock oriunda de Talcahuano, Chile.',
+  genre: 'Rock',
+  email: site.contactEmail,
+  foundingLocation: {
+    '@type': 'Place',
+    name: 'Talcahuano, Chile',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Talcahuano',
+      addressCountry: 'CL',
+    },
+  },
+  logo: toAbsoluteUrl('/images/logos/logoredondo.webp'),
+  image: toAbsoluteUrl(band.groupPhoto),
+  sameAs: site.socialLinks.map((socialLink) => socialLink.url),
+  member: [
+    { '@type': 'Person', name: 'Víctor', description: 'Bajo y voz' },
+    { '@type': 'Person', name: 'Alexis', description: 'Guitarra' },
+    { '@type': 'Person', name: 'Patricio', description: 'Batería' },
+  ],
+};
 ---
 
-<BaseLayout title="Inicio">
+<BaseLayout {...pageSeo.home} structuredData={musicGroupJsonLd}>
   {shows.length > 0 && <ShowClassificationState scope="home" shows={shows} />}
   <section class="relative isolate flex min-h-[32rem] items-center overflow-hidden border-b border-border-subtle md:min-h-[36rem] lg:min-h-[38rem]">
     <ResponsiveImage

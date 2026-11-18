@@ -3,6 +3,7 @@ import PageHeader from '../components/PageHeader.astro';
 import VideoModal from '../components/VideoModal.astro';
 import { media, site } from '../data/content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageSeo } from '../lib/seo';
 
 const platforms = media.platforms.filter((platform) => platform.visible);
 const videos = media.videos
@@ -11,7 +12,7 @@ const videos = media.videos
 const youtubeChannel = site.socialLinks.find((socialLink) => socialLink.id === 'youtube');
 ---
 
-<BaseLayout title="Media">
+<BaseLayout {...pageSeo.media}>
   <PageHeader title="Media" description="Música y videos de Tres Raíces." />
   <section class="tr-container-editorial tr-section-standard">
     {platforms.length === 0 && videos.length === 0 && !youtubeChannel ? (

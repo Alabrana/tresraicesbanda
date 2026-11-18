@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import NewsCard from '../../components/NewsCard.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { pageSeo } from '../../lib/seo';
 
 const articles = (await getCollection('news')).sort((a, b) =>
   b.data.date.localeCompare(a.data.date),
@@ -10,7 +11,7 @@ const articles = (await getCollection('news')).sort((a, b) =>
 const [featuredArticle, ...remainingArticles] = articles;
 ---
 
-<BaseLayout title="News">
+<BaseLayout {...pageSeo.news}>
   <PageHeader title="News" description="Noticias de Tres Raíces." />
   <section class="tr-container-editorial tr-section-standard">
     {articles.length === 0 ? (

@@ -2,6 +2,7 @@
 import PageHeader from '../components/PageHeader.astro';
 import { network } from '../data/content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageSeo } from '../lib/seo';
 
 const bands = network.bands.filter((band) => {
   if (!band.visible) return false;
@@ -11,7 +12,7 @@ const bands = network.bands.filter((band) => {
 });
 ---
 
-<BaseLayout title="Network">
+<BaseLayout {...pageSeo.network}>
   <PageHeader eyebrow="Bandas amigas" title="Network" description="Vínculos de la escena y bandas amigas." />
   <section class="tr-container-editorial tr-section-standard">
     {bands.length === 0 ? (

@@ -5,6 +5,7 @@ import ShowClassificationState from '../components/ShowClassificationState.astro
 import ShowCard from '../components/ShowCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { classifyShows } from '../lib/events';
+import { pageSeo } from '../lib/seo';
 
 const shows = (await getCollection('shows')).map((show) => show.data);
 const showClassification = classifyShows(shows);
@@ -14,7 +15,7 @@ const priorityShow = showClassification.upcoming[0]
   ?? showClassification.rescheduled[0];
 ---
 
-<BaseLayout title="En Vivo">
+<BaseLayout {...pageSeo.live}>
   {shows.length > 0 && <ShowClassificationState scope="shows" shows={shows} />}
   <PageHeader title="En Vivo" description="Próximas fechas e historial de actuaciones." />
   <section class="tr-container-editorial tr-section-standard" data-live-page>
