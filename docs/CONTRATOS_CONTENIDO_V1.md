@@ -13,7 +13,7 @@
 | Galería | `src/data/gallery.json` | `photos[]` |
 | Network | `src/data/network.json` | `bands[]` |
 | Colaboradores | `src/data/collaborators.json` | `collaborators[]` |
-| Configuración | `src/data/site.json` | `contactEmail` y `socialLinks[]` oficiales |
+| Configuración | `src/data/site.json` | `contactEmail`, `contactPhone` y `socialLinks[]` oficiales |
 
 ## En Vivo
 
@@ -45,7 +45,7 @@ Nombre de archivo define slug permanente. Frontmatter obligatorio: `title`, `dat
 
 ## Configuración global
 
-`site.json` contiene `contactEmail` y `socialLinks[]`. Cada red incluye `id` (`instagram`, `facebook`, `youtube` o `tiktok`), `name` y `url` HTTP/HTTPS. Es la única fuente para los enlaces mostrados en el footer; el correo se convierte en `mailto:` dentro del componente.
+`site.json` contiene `contactEmail`, `contactPhone` y `socialLinks[]`. El teléfono usa el formato chileno `+56 9XXXXXXXX`. Cada red incluye `id` (`instagram`, `facebook`, `youtube` o `tiktok`), `name` y `url` HTTP/HTTPS. Es la única fuente para los datos de contacto y enlaces mostrados en el footer; el correo se convierte en `mailto:` y el teléfono en `tel:` dentro del componente.
 
 ## Convenciones globales
 

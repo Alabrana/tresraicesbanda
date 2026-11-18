@@ -31,6 +31,7 @@
 | D-025 | La fecha de un video en `media.json` es opcional. Si se informa, se valida como fecha civil y determina el orden; los videos sin fecha permanecen publicables después de los fechados. | Aprobada |
 | D-026 | El editor local usa Node.js nativo y JavaScript sin dependencias adicionales; se inicia con `pnpm editor`, escucha únicamente en `127.0.0.1:4322` y queda fuera de Astro y de `dist`. | Aprobada |
 | D-027 | El rendimiento se audita con PageSpeed Insights API en producción y Lighthouse CLI sobre `dist` local. Los JSON voluminosos se ignoran en Git, se conservan resúmenes puntuales y las imágenes web pueden tener derivados responsivos sin modificar los originales. | Aprobada |
+| D-028 | `site.json` incorpora el teléfono oficial `contactPhone`, validado en formato chileno y mostrado como enlace `tel:` debajo del correo en el footer. | Aprobada |
 
 ## Por definir antes o durante implementación
 

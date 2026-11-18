@@ -1,14 +1,6 @@
 ---
 import ResponsiveImage from './ResponsiveImage.astro';
-
-const links = [
-  ['La Banda', '/banda/'],
-  ['Media', '/media/'],
-  ['En Vivo', '/en-vivo/'],
-  ['News', '/news/'],
-  ['Galería', '/galeria/'],
-  ['Network', '/network/'],
-];
+import { publicNavigation, siteIdentity } from '../data/content';
 
 const isHome = Astro.url.pathname === '/';
 const currentPath = Astro.url.pathname;
@@ -26,12 +18,12 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
 >
   <div class="mx-auto w-full max-w-[70rem] px-4 sm:px-6 lg:px-8">
     <div class="flex min-h-16 items-center justify-between gap-4 transition-[min-height] duration-300 group-data-[scrolled=true]:min-h-14 md:min-h-20 md:gap-8 md:group-data-[scrolled=true]:min-h-16">
-      <a class="shrink-0" href="/" aria-label="Tres Raíces — Inicio">
+      <a class="shrink-0" href="/" aria-label={`${siteIdentity.name} — Inicio`}>
         <ResponsiveImage
           class="h-auto w-28 transition-[width] duration-300 group-data-[scrolled=true]:w-24 md:w-32 md:group-data-[scrolled=true]:w-28"
           src="/images/logos/logoprincipalHorizontal.webp"
           sizes="(min-width: 768px) 128px, 112px"
-          alt="Tres Raíces"
+          alt={`Logo oficial de ${siteIdentity.name}`}
         />
       </a>
 
@@ -51,7 +43,7 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
 
       <nav class="hidden md:block" aria-label="Navegación principal">
         <ul class="flex items-center gap-3 lg:gap-5">
-          {links.map(([label, href]) => (
+          {publicNavigation.map(({ label, href }) => (
             <li>
               <a class:list={['block border-b py-3 text-xs no-underline transition-colors hover:text-ash-100 lg:text-sm', isCurrent(href) ? 'border-accent-interactive text-ash-100' : 'border-transparent text-ash-400']} href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
             </li>
@@ -69,7 +61,7 @@ const isCurrent = (href: string) => href === '/' ? currentPath === href : curren
     data-mobile-navigation
   >
     <ul class="mx-auto w-full max-w-[70rem] px-4 py-3 sm:px-6">
-      {links.map(([label, href]) => (
+      {publicNavigation.map(({ label, href }) => (
         <li class="border-b border-iron-700/70 last:border-b-0">
           <a class:list={['block min-h-12 py-3 text-base font-bold tracking-[0.04em] no-underline transition-colors hover:text-accent-interactive', isCurrent(href) ? 'text-accent-interactive' : 'text-ash-100']} href={href} aria-current={isCurrent(href) ? 'page' : undefined} data-mobile-link>{label}</a>
         </li>

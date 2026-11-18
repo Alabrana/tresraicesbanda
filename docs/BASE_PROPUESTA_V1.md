@@ -143,7 +143,7 @@ La información del video se ingresa **manualmente**. `date` es opcional: si exi
 
 ### 5.8. Datos globales — `src/data/site.json`
 
-Configuración mínima compartida: `contactEmail` y `socialLinks[]` oficiales. Cada red conserva `id`, nombre y URL HTTP/HTTPS; el footer consume esta única fuente. Se podrán agregar plataformas musicales confirmadas en `media.json` cuando corresponda.
+Configuración mínima compartida: `contactEmail`, `contactPhone` y `socialLinks[]` oficiales. El teléfono usa el formato chileno `+56 9XXXXXXXX`. Cada red conserva `id`, nombre y URL HTTP/HTTPS; el footer consume esta única fuente. Se podrán agregar plataformas musicales confirmadas en `media.json` cuando corresponda.
 
 ### 5.9. Convenciones
 

@@ -19,3 +19,24 @@ export const gallery = gallerySchema.parse(gallerySource);
 export const network = networkSchema.parse(networkSource);
 export const collaborators = collaboratorsSchema.parse(collaboratorsSource);
 export const site = siteSchema.parse(siteSource);
+
+export const siteIdentity = {
+  name: 'Tres Raíces',
+  location: 'Talcahuano, Chile',
+  locationLabel: 'TALCAHUANO · CHILE',
+  statement: 'ROCK DEL PUERTO.',
+  descriptor: 'Tres músicos. Tres historias. La misma raíz.',
+} as const;
+
+export const publicNavigation = [
+  { label: 'La Banda', href: '/banda/', footerOrder: 0 },
+  { label: 'Media', href: '/media/', footerOrder: 2 },
+  { label: 'En Vivo', href: '/en-vivo/', footerOrder: 1 },
+  { label: 'News', href: '/news/', footerOrder: 3 },
+  { label: 'Galería', href: '/galeria/', footerOrder: 4 },
+  { label: 'Network', href: '/network/', footerOrder: 5 },
+] as const;
+
+export const footerNavigation = [...publicNavigation].sort(
+  (left, right) => left.footerOrder - right.footerOrder,
+);

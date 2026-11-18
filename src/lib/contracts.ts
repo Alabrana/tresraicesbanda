@@ -267,6 +267,10 @@ const socialLinkSchema = z
 export const siteSchema = z
   .object({
     contactEmail: z.email(),
+    contactPhone: z
+      .string()
+      .trim()
+      .regex(/^\+56 9\d{8}$/, 'El teléfono debe usar el formato chileno +56 9XXXXXXXX.'),
     socialLinks: uniqueIdArray(socialLinkSchema),
   })
   .strict();
