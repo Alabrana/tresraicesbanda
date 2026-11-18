@@ -1,18 +1,3 @@
 {
-  "collaborators": [
-    {
-      "id": "1",
-      "name": "Delicias del Mar Tumbes",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://www.deliciasdelmartumbes.cl",
-      "visible": true
-    },
-    {
-      "id": "2",
-      "name": "Gutierres Arquitectos",
-      "logo": "/images/logos/logoredondo.webp",
-      "url": "https://www.google.cl",
-      "visible": true
-    }
-  ]
+  "collaborators": []
 }
