@@ -67,11 +67,11 @@ const musicGroupJsonLd = {
   logo: toAbsoluteUrl('/images/logos/logoredondo.webp'),
   image: toAbsoluteUrl(band.groupPhoto),
   sameAs: site.socialLinks.map((socialLink) => socialLink.url),
-  member: [
-    { '@type': 'Person', name: 'Víctor', description: 'Bajo y voz' },
-    { '@type': 'Person', name: 'Alexis', description: 'Guitarra' },
-    { '@type': 'Person', name: 'Patricio', description: 'Batería' },
-  ],
+  member: band.members.map((member) => ({
+    '@type': 'Person',
+    name: member.name,
+    description: member.instrument,
+  })),
 };
 const homeStructuredData = {
   '@context': 'https://schema.org',

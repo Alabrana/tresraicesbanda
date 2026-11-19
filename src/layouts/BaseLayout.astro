@@ -64,7 +64,9 @@ const imageUrl = new URL(image.src, publicBaseUrl);
     <meta name="generator" content={Astro.generator} />
     <link rel="preload" href={oswaldUrl} as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="preload" href={ibmPlexSansUrl} as="font" type="font/woff2" crossorigin="anonymous" />
-    <link rel="icon" type="image/png" href="/images/logos/logocirculartresraices.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/logos/favicon-tr-48.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/logos/favicon-tr-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/images/logos/favicon-tr-512.png" />
     {structuredData && <script type="application/ld+json" set:html={serializeJsonLd(structuredData)} />}
     <title>{title}</title>
   </head>
