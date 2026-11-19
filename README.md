@@ -107,6 +107,20 @@ La configuración del repositorio está preparada para publicar desde la rama `m
 
 No se realizaron cambios de DNS, conexiones a Cloudflare ni despliegues desde este repositorio.
 
+## Analítica y consentimiento
+
+El sitio integra el contenedor de Google Tag Manager `GTM-TM4VWKFF` desde el layout público compartido. El identificador está fijado en código porque corresponde a un único sitio y no es un secreto; no requiere una variable de entorno en Cloudflare Pages.
+
+La etiqueta remota de Google no se descarga en desarrollo local, en hosts distintos del dominio oficial ni antes de una aceptación explícita. La preferencia se conserva en `localStorage`. El visitante puede cambiarla desde **Preferencias de analítica** en el footer; al retirar un consentimiento ya activo, la web deniega almacenamiento analítico, elimina las cookies analíticas accesibles y se recarga para detener el contenedor evaluado.
+
+La instalación del contenedor no demuestra por sí sola que GA4 reciba datos. Antes de publicar:
+
+1. Abrir el contenedor `GTM-TM4VWKFF` en Google Tag Manager.
+2. Confirmar que contiene una etiqueta de Google asociada al flujo web GA4 correcto, que respeta el consentimiento de analítica y que no habilita Google Ads, remarketing ni publicidad personalizada.
+3. Publicar esa configuración del contenedor.
+4. Tras desplegar la web, usar [Google Tag Assistant](https://tagassistant.google.com/) sobre `https://tresraicesbanda.cl`: rechazar primero y comprobar que el contenedor no aparece; aceptar después y comprobar una sola detección de `GTM-TM4VWKFF`, sin errores ni eventos `page_view` duplicados.
+5. En GA4, abrir **Informes → Tiempo real**, visitar varias rutas públicas en una ventana privada después de aceptar y verificar la visita, la página, el origen y el dispositivo. La aparición puede tardar unos minutos.
+
 ## Preparar GitHub
 
 ### Preparar Git y GitHub (en Terminal de VS Code)

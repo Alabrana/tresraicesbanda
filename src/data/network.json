@@ -13,6 +13,13 @@
       "logo": "/images/network/logoPuertoVivo.avif",
       "url": "https://www.instagram.com/puertovivotalcahuano/",
       "visible": true
+    },
+    {
+      "id": "3",
+      "name": "Revista - 360 OH! Magazine",
+      "logo": "/images/network/ohblancologo.webp",
+      "url": "https://www.instagram.com/360oh/",
+      "visible": true
     }
   ]
 }

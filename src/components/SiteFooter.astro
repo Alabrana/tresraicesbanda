@@ -104,6 +104,13 @@ const contactPhoneHref = `tel:${site.contactPhone.replace(/\s/g, '')}`;
 
     <div class="mt-3 flex flex-col items-center gap-1 border-t border-border-subtle pt-3 text-center text-sm leading-snug tracking-[0.02em]">
       <p class="m-0">© {currentYear} {siteIdentity.name} · {siteIdentity.location}</p>
+      <button
+        class="min-h-9 border-0 bg-transparent p-0 text-text-secondary transition-colors hover:text-accent-interactive"
+        type="button"
+        data-analytics-settings
+      >
+        Preferencias de analítica
+      </button>
       <p class="m-0 text-text-secondary/85">
         Desarrollado por{' '}
         <a
