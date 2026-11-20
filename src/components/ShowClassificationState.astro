@@ -17,6 +17,16 @@ const serializedShows = JSON.stringify(shows).replaceAll('<', '\\u003c');
   set:html={serializedShows}
 ></script>
 
+<script is:inline>
+  document.documentElement.dataset.showsPending = 'true';
+</script>
+
+<style is:global>
+  html[data-shows-pending='true'] [data-show-dynamic] {
+    visibility: hidden;
+  }
+</style>
+
 <script>
   import type { ClassifiableShow } from '../lib/events';
   import { watchShowClassification } from '../lib/events';

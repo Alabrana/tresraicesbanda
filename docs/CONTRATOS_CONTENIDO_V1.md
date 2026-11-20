@@ -21,7 +21,7 @@ Campos: `id`, `title`, `date` (YYYY-MM-DD), `time` (HH:mm), `venue`, `city`, `ad
 
 `status`: `scheduled | cancelled | rescheduled`. Una fecha pasada `scheduled` se considera realizada automáticamente, sin persistir `completed`. **Reprogramada sin nueva fecha** conserva la fecha anterior, pero no se promociona como próxima; una vez confirmada la fecha, se edita `date` y vuelve a `scheduled`.
 
-Listado público: próximas confirmadas primero en orden ascendente; historial después en descendente. Estado cancelado/reprogramado siempre señalado en diagonal. Las fechas deben interpretarse en `America/Santiago` y mantenerse correctas sin compilar cada día.
+Listado público: próximas confirmadas primero en orden ascendente; historial después en descendente. Estado cancelado/reprogramado siempre señalado en diagonal. Las fechas deben interpretarse en `America/Santiago` y mantenerse correctas sin compilar cada día. Como V1 no incorpora una hora de término, una presentación `scheduled` permanece vigente durante todo su día civil chileno y pasa al historial en la medianoche siguiente. El navegador programa esa transición y también reevalúa al recuperar visibilidad o foco, sin consultas periódicas. Sin JavaScript se conserva el HTML útil generado con la clasificación vigente durante el último build.
 
 ## News
 

@@ -9,13 +9,13 @@ import ShowHistoryRow from '../components/ShowHistoryRow.astro';
 import VideoModal from '../components/VideoModal.astro';
 import { band, collaborators, gallery, media, site } from '../data/content';
 import { getCollection } from 'astro:content';
-import { classifyShows, getHomePastShows } from '../lib/events';
+import { classifyShows, getHomeShowSelection } from '../lib/events';
 import { pageSeo, siteSeo, toAbsoluteUrl } from '../lib/seo';
 
 const [articles, showEntries] = await Promise.all([getCollection('news'), getCollection('shows')]);
 const shows = showEntries.map((show) => show.data);
 const showClassification = classifyShows(shows);
-const homePastShows = getHomePastShows(showClassification);
+const homeShows = getHomeShowSelection(showClassification);
 const shortShowDateFormatter = new Intl.DateTimeFormat('es-CL', {
   day: '2-digit',
   month: 'short',
@@ -108,15 +108,16 @@ const homeStructuredData = {
         <div
           class="mt-6 border-l-2 border-accent-interactive/80 pl-3"
           data-home-hero-live
-          hidden={!showClassification.nextShow}
+          data-show-dynamic
+          hidden={!homeShows.featured}
         >
           <p class="mb-1 text-xs tracking-[0.1em] text-text-secondary uppercase" data-display-type>Próxima fecha</p>
           <div data-home-hero-live-value>
-            {showClassification.nextShow && (
+            {homeShows.featured && (
               <p class="text-sm leading-snug text-text-primary sm:text-[0.9375rem]">
-                <time datetime={showClassification.nextShow.date}>{formatShortShowDate(showClassification.nextShow.date)}</time>
-                <span aria-hidden="true"> · </span>{showClassification.nextShow.venue}
-                <span aria-hidden="true"> · </span>{showClassification.nextShow.city}
+                <time datetime={homeShows.featured.date}>{formatShortShowDate(homeShows.featured.date)}</time>
+                <span aria-hidden="true"> · </span>{homeShows.featured.venue}
+                <span aria-hidden="true"> · </span>{homeShows.featured.city}
               </p>
             )}
           </div>
@@ -135,7 +136,12 @@ const homeStructuredData = {
   </section>
 
   {shows.length > 0 && (
-    <section class="tr-container-editorial tr-section-featured" data-home-live hidden={!showClassification.nextShow}>
+    <section
+      class="tr-container-editorial tr-section-featured"
+      data-home-live
+      data-show-dynamic
+      hidden={!homeShows.featured && homeShows.past.length === 0}
+    >
       <div class="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div>
           <p class="tr-eyebrow">En vivo</p>
@@ -144,28 +150,44 @@ const homeStructuredData = {
         </div>
         <a class="tr-text-link" href="/en-vivo/">Ver todas <span aria-hidden="true">→</span></a>
       </div>
-      <div data-home-live-card>
-        {showClassification.nextShow && <ShowCard show={showClassification.nextShow} featured />}
+      <div data-home-live-card hidden={!homeShows.featured}>
+        {homeShows.featured && <ShowCard show={homeShows.featured} featured />}
       </div>
+      <p
+        class="border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base"
+        data-home-live-empty
+        hidden={Boolean(homeShows.featured)}
+      >
+        No hay una próxima fecha confirmada por ahora.
+      </p>
       {shows.map((show) => (
         <template data-home-show-template={show.id}><ShowCard show={show} featured /></template>
       ))}
-      <div class="mt-8 border-t border-border-subtle pt-8 sm:mt-10 sm:pt-10" data-home-history hidden={homePastShows.items.length === 0}>
+      <div class="mt-8 border-t border-border-subtle pt-8 sm:mt-10 sm:pt-10" data-home-upcoming hidden={homeShows.upcoming.length === 0}>
+        <div class="mb-4 sm:mb-5">
+          <h3 class="text-xl leading-none uppercase sm:text-2xl" id="home-upcoming-shows-title">Próximas presentaciones</h3>
+          <GrungeDivider class="mt-2" width="medium" />
+        </div>
+        <div class="space-y-2.5" data-home-upcoming-list aria-labelledby="home-upcoming-shows-title">
+          {homeShows.upcoming.map((show) => <ShowHistoryRow show={show} />)}
+        </div>
+      </div>
+      <div class="mt-8 border-t border-border-subtle pt-8 sm:mt-10 sm:pt-10" data-home-history hidden={homeShows.past.length === 0}>
         <div class="mb-4 sm:mb-5">
           <h3 class="text-xl leading-none uppercase sm:text-2xl" id="home-past-shows-title">Presentaciones anteriores</h3>
           <GrungeDivider class="mt-2" width="medium" />
         </div>
         <div aria-labelledby="home-past-shows-title">
           <div class="space-y-2.5" data-home-history-list>
-            {homePastShows.items.map((show) => <ShowHistoryRow show={show} />)}
+            {homeShows.past.map((show) => <ShowHistoryRow show={show} />)}
           </div>
         </div>
-        <a class="tr-text-link mt-3 inline-flex min-h-11 items-center" href="/en-vivo/" data-home-history-link hidden={!homePastShows.hasMore}>
+        <a class="tr-text-link mt-3 inline-flex min-h-11 items-center" href="/en-vivo/" data-home-history-link hidden={!homeShows.hasMorePast}>
           Ver todas las presentaciones <span class="ml-2" aria-hidden="true">→</span>
         </a>
       </div>
       {shows.map((show) => (
-        <template data-home-history-show-template={show.id}><ShowHistoryRow show={show} /></template>
+        <template data-home-list-show-template={show.id}><ShowHistoryRow show={show} /></template>
       ))}
     </section>
   )}
@@ -248,7 +270,7 @@ const homeStructuredData = {
 </BaseLayout>
 
 <script>
-  import { classifyShows, getHomePastShows, type ClassifiableShow, type ShowClassification } from '../lib/events';
+  import { classifyShows, getHomeShowSelection, type ClassifiableShow, type ShowClassification } from '../lib/events';
 
   const homeLive = document.querySelector<HTMLElement>('[data-home-live]');
   const heroLive = document.querySelector<HTMLElement>('[data-home-hero-live]');
@@ -257,7 +279,8 @@ const homeStructuredData = {
   if (source) {
     const shows = JSON.parse(source.textContent ?? '[]') as ClassifiableShow[];
     const render = (classification: ShowClassification<ClassifiableShow>) => {
-      const nextShow = classification.nextShow;
+      const selection = getHomeShowSelection(classification);
+      const nextShow = selection.featured;
 
       if (heroLive) {
         const value = heroLive.querySelector<HTMLElement>('[data-home-hero-live-value]');
@@ -268,24 +291,32 @@ const homeStructuredData = {
 
       if (homeLive) {
         const card = homeLive.querySelector<HTMLElement>('[data-home-live-card]');
+        const emptyState = homeLive.querySelector<HTMLElement>('[data-home-live-empty]');
         const template = nextShow ? homeLive.querySelector<HTMLTemplateElement>(`[data-home-show-template="${nextShow.id}"]`) : null;
         if (card && template) card.replaceChildren(template.content.cloneNode(true));
+        if (card) card.hidden = !nextShow;
+        if (emptyState) emptyState.hidden = Boolean(nextShow);
 
+        const upcoming = homeLive.querySelector<HTMLElement>('[data-home-upcoming]');
+        const upcomingList = homeLive.querySelector<HTMLElement>('[data-home-upcoming-list]');
         const history = homeLive.querySelector<HTMLElement>('[data-home-history]');
         const historyList = homeLive.querySelector<HTMLElement>('[data-home-history-list]');
         const historyLink = homeLive.querySelector<HTMLElement>('[data-home-history-link]');
-        const pastShows = getHomePastShows(classification);
 
-        if (historyList) {
-          historyList.replaceChildren(...pastShows.items.flatMap((show) => {
-            const historyTemplate = homeLive.querySelector<HTMLTemplateElement>(`[data-home-history-show-template="${show.id}"]`);
-            return historyTemplate ? [historyTemplate.content.cloneNode(true)] : [];
-          }));
-        }
-        if (history) history.hidden = pastShows.items.length === 0;
-        if (historyLink) historyLink.hidden = !pastShows.hasMore;
-        homeLive.hidden = !nextShow;
+        const listNodes = (items: ClassifiableShow[]) => items.flatMap((show) => {
+          const listTemplate = homeLive.querySelector<HTMLTemplateElement>(`[data-home-list-show-template="${show.id}"]`);
+          return listTemplate ? [listTemplate.content.cloneNode(true)] : [];
+        });
+
+        if (upcomingList) upcomingList.replaceChildren(...listNodes(selection.upcoming));
+        if (upcoming) upcoming.hidden = selection.upcoming.length === 0;
+        if (historyList) historyList.replaceChildren(...listNodes(selection.past));
+        if (history) history.hidden = selection.past.length === 0;
+        if (historyLink) historyLink.hidden = !selection.hasMorePast;
+        homeLive.hidden = !nextShow && selection.past.length === 0;
       }
+
+      delete document.documentElement.dataset.showsPending;
     };
 
     render(classifyShows(shows));

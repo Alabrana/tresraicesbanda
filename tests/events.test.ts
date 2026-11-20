@@ -6,7 +6,10 @@ import {
 } from '../src/lib/civil-date.ts';
 import {
   classifyShows,
+  getHomeShowSelection,
   getHomePastShows,
+  getNextCivilDateTransition,
+  getShowDetailUrl,
   type ClassifiableShow,
   watchShowClassification,
 } from '../src/lib/events.ts';
@@ -47,6 +50,22 @@ test('clasifica próximas y pasadas con el día actual vigente completo', () => 
   assert.equal(result.nextShow?.id, 'hoy');
 });
 
+test('ordena por fecha, hora e ID estable sin depender del orden del JSON', () => {
+  const shows: ClassifiableShow[] = [
+    { id: 'misma-hora-b', date: '2026-11-20', time: '21:00', status: 'scheduled', visible: true },
+    { id: 'fecha-posterior', date: '2026-11-21', time: '18:00', status: 'scheduled', visible: true },
+    { id: 'hora-temprana', date: '2026-11-20', time: '19:00', status: 'scheduled', visible: true },
+    { id: 'misma-hora-a', date: '2026-11-20', time: '21:00', status: 'scheduled', visible: true },
+  ];
+
+  const result = classifyShows(shows, '2026-11-15');
+
+  assert.deepEqual(
+    result.upcoming.map(({ id }) => id),
+    ['hora-temprana', 'misma-hora-a', 'misma-hora-b', 'fecha-posterior'],
+  );
+});
+
 test('separa canceladas y reprogramadas y nunca las destaca como próximas', () => {
   const shows: ClassifiableShow[] = [
     { id: 'cancelada', date: '2026-11-16', time: '20:00', status: 'cancelled', visible: true },
@@ -71,6 +90,62 @@ test('una scheduled pasa al historial al cambiar el día civil chileno', () => {
 
   assert.equal(classifyShows(shows, '2026-11-15').upcoming.length, 1);
   assert.equal(classifyShows(shows, '2026-11-16').past.length, 1);
+});
+
+test('una presentación sigue vigente durante todo su día y termina a medianoche en Chile', () => {
+  const shows: ClassifiableShow[] = [
+    { id: 'tocata', date: '2026-11-15', time: '21:30', status: 'scheduled', visible: true },
+  ];
+  const beforeStart = new Date('2026-11-15T23:00:00.000Z');
+  const duringShow = new Date('2026-11-16T00:31:00.000Z');
+  const afterCivilDay = new Date('2026-11-16T03:01:00.000Z');
+
+  assert.equal(classifyShows(shows, getCivilDateInTimeZone(beforeStart)).upcoming.length, 1);
+  assert.equal(classifyShows(shows, getCivilDateInTimeZone(duringShow)).upcoming.length, 1);
+  assert.equal(classifyShows(shows, getCivilDateInTimeZone(afterCivilDay)).past.length, 1);
+});
+
+test('selecciona destacado, tres próximas adicionales y tres pasadas sin duplicar', () => {
+  const shows: ClassifiableShow[] = [
+    ...Array.from({ length: 5 }, (_, index) => ({
+      id: `futura-${index + 1}`,
+      date: `2026-11-${String(index + 16).padStart(2, '0')}`,
+      time: '21:00',
+      status: 'scheduled' as const,
+      visible: true,
+    })),
+    ...Array.from({ length: 4 }, (_, index) => ({
+      id: `pasada-${index + 1}`,
+      date: `2026-11-${String(index + 1).padStart(2, '0')}`,
+      time: '21:00',
+      status: 'scheduled' as const,
+      visible: true,
+    })),
+  ];
+
+  const selection = getHomeShowSelection(classifyShows(shows, '2026-11-15'));
+
+  assert.equal(selection.featured?.id, 'futura-1');
+  assert.deepEqual(selection.upcoming.map(({ id }) => id), ['futura-2', 'futura-3', 'futura-4']);
+  assert.deepEqual(selection.past.map(({ id }) => id), ['pasada-4', 'pasada-3', 'pasada-2']);
+  assert.equal(selection.hasMorePast, true);
+  assert.equal(selection.upcoming.some(({ id }) => id === selection.featured?.id), false);
+});
+
+test('el Inicio aplica los estados vacíos y límites para cero a cinco futuras', () => {
+  for (let count = 0; count <= 5; count += 1) {
+    const shows: ClassifiableShow[] = Array.from({ length: count }, (_, index) => ({
+      id: `futura-${index + 1}`,
+      date: `2026-12-${String(index + 1).padStart(2, '0')}`,
+      time: '21:00',
+      status: 'scheduled',
+      visible: true,
+    }));
+    const selection = getHomeShowSelection(classifyShows(shows, '2026-11-15'));
+
+    assert.equal(selection.featured?.id ?? null, count === 0 ? null : 'futura-1', `cantidad: ${count}`);
+    assert.equal(selection.upcoming.length, Math.min(Math.max(count - 1, 0), 3), `cantidad: ${count}`);
+  }
 });
 
 test('el resumen del Inicio muestra entre cero y tres pasadas y enlaza solo cuando hay más', () => {
@@ -106,20 +181,62 @@ test('el resumen del Inicio conserva orden descendente y excluye ocultas y estad
   assert.equal(preview.hasMore, false);
 });
 
-test('el reloj ligero reclasifica cuando cambia el día chileno', () => {
+test('calcula la próxima medianoche chilena sin depender de la zona del visitante', () => {
+  assert.equal(
+    getNextCivilDateTransition(new Date('2026-11-16T02:30:00.000Z')).toISOString(),
+    '2026-11-16T03:00:00.000Z',
+  );
+  assert.equal(
+    getNextCivilDateTransition(new Date('2026-07-01T03:30:00.000Z')).toISOString(),
+    '2026-07-01T04:00:00.000Z',
+  );
+});
+
+test('acepta solo URLs HTTP/HTTPS no vacías para Ver detalle', () => {
+  assert.equal(
+    getShowDetailUrl({ status: 'scheduled', ticketUrl: ' https://example.com/evento ' }),
+    'https://example.com/evento',
+  );
+  assert.equal(
+    getShowDetailUrl({ status: 'scheduled', ticketUrl: 'http://example.com/gratis' }),
+    'http://example.com/gratis',
+  );
+  assert.equal(getShowDetailUrl({ status: 'scheduled', ticketUrl: '' }), null);
+  assert.equal(getShowDetailUrl({ status: 'scheduled', ticketUrl: '   ' }), null);
+  assert.equal(getShowDetailUrl({ status: 'scheduled' }), null);
+  assert.equal(getShowDetailUrl({ status: 'scheduled', ticketUrl: 'ftp://example.com/evento' }), null);
+  assert.equal(getShowDetailUrl({ status: 'scheduled', ticketUrl: 'sin-protocolo.example' }), null);
+  assert.equal(
+    getShowDetailUrl({ status: 'cancelled', ticketUrl: 'https://example.com/evento' }),
+    null,
+  );
+  assert.equal(
+    getShowDetailUrl({ status: 'rescheduled', ticketUrl: 'https://example.com/evento' }),
+    null,
+  );
+});
+
+test('el reloj ligero se programa una vez y reclasifica por transición, visibilidad y foco', () => {
   const originalWindow = Object.getOwnPropertyDescriptor(globalThis, 'window');
   const originalDocument = Object.getOwnPropertyDescriptor(globalThis, 'document');
-  let intervalCallback = () => {};
+  let timeoutCallback = () => {};
   let visibilityCallback = () => {};
+  let focusCallback = () => {};
   let instant = new Date('2026-11-16T02:30:00.000Z');
   const observedDates: string[] = [];
+  const observedDelays: number[] = [];
 
   Object.defineProperty(globalThis, 'window', {
     configurable: true,
     value: {
-      clearInterval: () => {},
-      setInterval: (callback: () => void) => {
-        intervalCallback = callback;
+      addEventListener: (_event: string, callback: () => void) => {
+        focusCallback = callback;
+      },
+      clearTimeout: () => {},
+      removeEventListener: () => {},
+      setTimeout: (callback: () => void, delay: number) => {
+        timeoutCallback = callback;
+        observedDelays.push(delay);
         return 1;
       },
     },
@@ -143,10 +260,16 @@ test('el reloj ligero reclasifica cuando cambia el día chileno', () => {
     );
 
     assert.deepEqual(observedDates, ['2026-11-15']);
-    intervalCallback();
+    assert.equal(observedDelays.length, 1);
+    assert.ok(observedDelays[0] >= 30 * 60 * 1000);
+
+    focusCallback();
     assert.deepEqual(observedDates, ['2026-11-15']);
 
     instant = new Date('2026-11-16T03:01:00.000Z');
+    timeoutCallback();
+    assert.deepEqual(observedDates, ['2026-11-15', '2026-11-16']);
+
     visibilityCallback();
     assert.deepEqual(observedDates, ['2026-11-15', '2026-11-16']);
     stop();

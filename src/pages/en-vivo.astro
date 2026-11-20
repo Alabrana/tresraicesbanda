@@ -18,7 +18,7 @@ const priorityShow = showClassification.upcoming[0]
 <BaseLayout {...pageSeo.live}>
   {shows.length > 0 && <ShowClassificationState scope="shows" shows={shows} />}
   <PageHeader title="En Vivo" description="Próximas fechas e historial de actuaciones." />
-  <section class="tr-container-editorial tr-section-standard" data-live-page>
+  <section class="tr-container-editorial tr-section-standard" data-live-page data-show-dynamic>
     <div class="max-w-3xl" data-live-empty hidden={showClassification.visible.length > 0}>
       <p class="mb-0 border border-iron-700 bg-iron-900 p-4 text-sm text-ash-400 sm:p-6 sm:text-base">No hay actuaciones confirmadas para publicar por ahora.</p>
     </div>
@@ -118,6 +118,7 @@ const priorityShow = showClassification.upcoming[0]
       const hasShows = classification.visible.length > 0;
       if (emptyState) emptyState.hidden = hasShows;
       if (content) content.hidden = !hasShows;
+      delete document.documentElement.dataset.showsPending;
     };
 
     render(classifyShows(shows));

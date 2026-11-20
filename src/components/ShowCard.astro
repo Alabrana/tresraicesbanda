@@ -1,6 +1,7 @@
 ---
 import type { Show } from '../lib/contracts';
 import { formatCivilDate } from '../lib/civil-date';
+import { getShowDetailUrl } from '../lib/events';
 import ResponsiveImage from './ResponsiveImage.astro';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 const { show, showId, featured = false, showTicket = true, priority = false } = Astro.props;
 const statusLabel = show.status === 'cancelled' ? 'Cancelada' : show.status === 'rescheduled' ? 'Reprogramada' : null;
+const detailUrl = getShowDetailUrl(show);
 const descriptionParagraphs = show.description
   ?.split(/\r?\n\s*\r?\n/)
   .map((paragraph) => paragraph.trim())
@@ -47,9 +49,9 @@ const descriptionParagraphs = show.description
         </div>
       )}
       {show.guestBands && show.guestBands.length > 0 && <p class="mb-3 text-sm text-ash-400">Junto a {show.guestBands.join(', ')}.</p>}
-      {showTicket && show.ticketUrl && show.status === 'scheduled' && (
-        <a class="tr-button-primary px-4" href={show.ticketUrl} target="_blank" rel="noreferrer" data-show-ticket>
-          Entradas <span class="ml-2" aria-hidden="true">↗</span>
+      {showTicket && detailUrl && (
+        <a class="tr-button-primary px-4" href={detailUrl} target="_blank" rel="noopener noreferrer" data-show-ticket>
+          Tickets / detalle <span class="ml-2" aria-hidden="true">↗</span>
         </a>
       )}
     </div>

@@ -33,6 +33,7 @@
 | D-027 | El rendimiento se audita con PageSpeed Insights API en producción y Lighthouse CLI sobre `dist` local. Los JSON voluminosos se ignoran en Git, se conservan resúmenes puntuales y las imágenes web pueden tener derivados responsivos sin modificar los originales. | Aprobada |
 | D-028 | `site.json` incorpora el teléfono oficial `contactPhone`, validado en formato chileno y mostrado como enlace `tel:` debajo del correo en el footer. | Aprobada |
 | D-029 | Google Tag Manager usa el contenedor oficial `GTM-TM4VWKFF`, fijado en código para este único sitio. Solo se carga en el dominio oficial y después de consentimiento explícito; rechazo y retirada impiden nuevas cargas, eliminan cookies analíticas accesibles y no habilitan publicidad. | Aprobada |
+| D-030 | Como V1 no tiene `endTime`, una presentación programada permanece vigente durante todo su día civil en `America/Santiago` y pasa al historial en la medianoche siguiente. El navegador programa esa transición y reevalúa al recuperar visibilidad/foco; sin JavaScript se usa la clasificación estática del último build. | Aprobada |
 
 ## Por definir antes o durante implementación
 

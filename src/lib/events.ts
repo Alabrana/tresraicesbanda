@@ -30,10 +30,20 @@ export interface HomePastShows<T extends ClassifiableShow> {
   hasMore: boolean;
 }
 
+export interface HomeShowSelection<T extends ClassifiableShow> {
+  featured: T | null;
+  upcoming: T[];
+  past: T[];
+  hasMorePast: boolean;
+}
+
+export const HOME_UPCOMING_SHOW_LIMIT = 3;
 export const HOME_PAST_SHOW_LIMIT = 3;
 
 function compareDateAndTime<T extends ClassifiableShow>(left: T, right: T): number {
-  return compareCivilDates(left.date, right.date) || left.time.localeCompare(right.time);
+  return compareCivilDates(left.date, right.date)
+    || left.time.localeCompare(right.time)
+    || left.id.localeCompare(right.id);
 }
 
 export function classifyShows<T extends ClassifiableShow>(
@@ -53,8 +63,8 @@ export function classifyShows<T extends ClassifiableShow>(
   const past = visible
     .filter((show) => show.status === 'scheduled' && compareCivilDates(show.date, today) < 0)
     .sort((left, right) => compareDateAndTime(right, left));
-  const cancelled = visible.filter((show) => show.status === 'cancelled');
-  const rescheduled = visible.filter((show) => show.status === 'rescheduled');
+  const cancelled = visible.filter((show) => show.status === 'cancelled').sort(compareDateAndTime);
+  const rescheduled = visible.filter((show) => show.status === 'rescheduled').sort(compareDateAndTime);
 
   return {
     today,
@@ -64,6 +74,17 @@ export function classifyShows<T extends ClassifiableShow>(
     cancelled,
     rescheduled,
     nextShow: upcoming[0] ?? null,
+  };
+}
+
+export function getHomeShowSelection<T extends ClassifiableShow>(
+  classification: Pick<ShowClassification<T>, 'upcoming' | 'past'>,
+): HomeShowSelection<T> {
+  return {
+    featured: classification.upcoming[0] ?? null,
+    upcoming: classification.upcoming.slice(1, HOME_UPCOMING_SHOW_LIMIT + 1),
+    past: classification.past.slice(0, HOME_PAST_SHOW_LIMIT),
+    hasMorePast: classification.past.length > HOME_PAST_SHOW_LIMIT,
   };
 }
 
@@ -77,20 +98,66 @@ export function getHomePastShows<T extends ClassifiableShow>(
 }
 
 interface WatchOptions {
-  intervalMs?: number;
   now?: () => Date;
+}
+
+const TRANSITION_SEARCH_WINDOW_MS = 30 * 60 * 60 * 1000;
+
+export function getNextCivilDateTransition(
+  instant = new Date(),
+  timeZone = CHILE_TIME_ZONE,
+): Date {
+  const currentDate = getCivilDateInTimeZone(instant, timeZone);
+  let lower = instant.getTime();
+  let upper = lower + TRANSITION_SEARCH_WINDOW_MS;
+
+  while (getCivilDateInTimeZone(new Date(upper), timeZone) === currentDate) {
+    upper += TRANSITION_SEARCH_WINDOW_MS;
+  }
+
+  while (upper - lower > 1) {
+    const middle = Math.floor((lower + upper) / 2);
+    if (getCivilDateInTimeZone(new Date(middle), timeZone) === currentDate) lower = middle;
+    else upper = middle;
+  }
+
+  return new Date(upper);
+}
+
+export function getShowDetailUrl(show: { status: ShowStatus; ticketUrl?: unknown }): string | null {
+  if (show.status !== 'scheduled') return null;
+
+  const value = show.ticketUrl;
+  if (typeof value !== 'string' || value.trim() === '') return null;
+
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
+  } catch {
+    return null;
+  }
 }
 
 export function watchShowClassification<T extends ClassifiableShow>(
   shows: readonly T[],
   onChange: (classification: ShowClassification<T>) => void,
-  { intervalMs = 60_000, now = () => new Date() }: WatchOptions = {},
+  { now = () => new Date() }: WatchOptions = {},
 ): () => void {
   if (typeof window === 'undefined' || typeof document === 'undefined') return () => {};
 
   let lastCivilDate = '';
+  let transitionTimer: number | undefined;
+
+  const scheduleNextTransition = (instant: Date) => {
+    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
+    const transition = getNextCivilDateTransition(instant, CHILE_TIME_ZONE);
+    const delay = Math.max(0, transition.getTime() - instant.getTime() + 50);
+    transitionTimer = window.setTimeout(() => refresh(), delay);
+  };
   const refresh = () => {
-    const currentCivilDate = getCivilDateInTimeZone(now(), CHILE_TIME_ZONE);
+    const instant = now();
+    const currentCivilDate = getCivilDateInTimeZone(instant, CHILE_TIME_ZONE);
+    scheduleNextTransition(instant);
     if (currentCivilDate === lastCivilDate) return;
 
     lastCivilDate = currentCivilDate;
@@ -101,11 +168,12 @@ export function watchShowClassification<T extends ClassifiableShow>(
   };
 
   refresh();
-  const intervalId = window.setInterval(refresh, intervalMs);
   document.addEventListener('visibilitychange', refreshWhenVisible);
+  window.addEventListener('focus', refresh);
 
   return () => {
-    window.clearInterval(intervalId);
+    if (transitionTimer !== undefined) window.clearTimeout(transitionTimer);
     document.removeEventListener('visibilitychange', refreshWhenVisible);
+    window.removeEventListener('focus', refresh);
   };
 }
