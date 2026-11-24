@@ -20,6 +20,13 @@
       "logo": "/images/network/ohblancologo.webp",
       "url": "https://www.instagram.com/360oh/",
       "visible": true
+    },
+    {
+      "id": "4",
+      "name": "Revista - Abre tu agenda.cl",
+      "logo": "/images/network/ats.png",
+      "url": "https://www.instagram.com/abretuagenda.cl/",
+      "visible": true
     }
   ]
 }
